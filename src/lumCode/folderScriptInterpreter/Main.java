@@ -21,24 +21,11 @@ public class Main {
 		script = args[0];
 		a = new Variable[args.length - 1];
 		for (int i = 1; i < args.length; i++) {
-			a[i - 1] = makeVariable(args[i]);
+			a[i - 1] = Variable.fromString(args[i]);
 		}
 	}
 
-	private static Variable makeVariable(String var) {
-		if (var.matches("^[0-9]{1,}$")) {
-			return new IntVariable(Integer.parseInt(var));
-		} else if (var.matches("^[0-9.]{1,}$")) {
-			return new DoubleVariable(Double.parseDouble(var));
-		} else if (var.matches("^[A-Z]{1}:(\\\\|\\/)")) {
-			if (var.contains(".")) {
-				return new FileVariable(new File(var));
-			} else {
-				return new FolderVariable(new File(var));
 			}
-		} else {
-			return new StringVariable(var);
 		}
 	}
-
 }

@@ -3,7 +3,13 @@ package lumCode.folderScriptInterpreter.variables;
 public class IntVariable extends Variable {
 	int var;
 
-	public IntVariable(int var) {
+	protected IntVariable(int var) {
+		super(VariableType.INT);
+		this.var = var;
+	}
+
+	protected IntVariable(String name, int var) {
+		super(VariableType.INT, name);
 		this.var = var;
 	}
 
