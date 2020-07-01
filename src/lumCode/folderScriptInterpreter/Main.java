@@ -1,18 +1,12 @@
 package lumCode.folderScriptInterpreter;
 
-import java.io.File;
 import java.util.ArrayList;
 
-import lumCode.folderScriptInterpreter.variables.DoubleVariable;
-import lumCode.folderScriptInterpreter.variables.FileVariable;
-import lumCode.folderScriptInterpreter.variables.FolderVariable;
-import lumCode.folderScriptInterpreter.variables.IntVariable;
-import lumCode.folderScriptInterpreter.variables.StringVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 
 public class Main {
-	public ArrayList<Variable> vars = new ArrayList<>();
-	public boolean overwrite = false;
+	public static ArrayList<Variable> vars = new ArrayList<>();
+	public static boolean overwrite = false;
 
 	public static String script = "";
 	public static Variable[] a;
@@ -25,7 +19,12 @@ public class Main {
 		}
 	}
 
+	public static Variable lookUpArgument(String name) {
+		for (Variable var : vars) {
+			if (var.name.equals(name)) {
+				return var;
 			}
 		}
+		return null;
 	}
 }
