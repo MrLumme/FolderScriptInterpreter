@@ -20,4 +20,9 @@ public class IntVariable extends Variable {
 	public void setVar(int var) {
 		this.var = var;
 	}
+
+	@Override
+	public String toString() {
+		return "" + var;
+	}
 }

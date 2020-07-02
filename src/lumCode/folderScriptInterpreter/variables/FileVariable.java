@@ -21,4 +21,9 @@ public class FileVariable extends FolderVariable {
 	public String getExtension() {
 		return var.getName().substring(var.getName().indexOf('.'));
 	}
+
+	@Override
+	public String toString() {
+		return var.getAbsolutePath();
+	}
 }

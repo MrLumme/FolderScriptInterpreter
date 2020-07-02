@@ -44,4 +44,9 @@ public class FolderVariable extends Variable {
 	public File getParent() {
 		return var.getParentFile();
 	}
+
+	@Override
+	public String toString() {
+		return var.getAbsolutePath();
+	}
 }

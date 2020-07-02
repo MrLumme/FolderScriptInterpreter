@@ -21,4 +21,8 @@ public class StringVariable extends Variable {
 		this.var = var;
 	}
 
+	@Override
+	public String toString() {
+		return var;
+	}
 }
