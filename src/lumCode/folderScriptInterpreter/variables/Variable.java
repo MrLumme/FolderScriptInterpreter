@@ -18,8 +18,6 @@ public class Variable {
 	public static Variable fromString(String var) {
 		if (var.matches("^[0-9]{1,}$")) {
 			return new IntVariable(Integer.parseInt(var));
-		} else if (var.matches("^[0-9.]{1,}$")) {
-			return new DoubleVariable(Double.parseDouble(var));
 		} else if (var.matches("^[A-Z]{1}:(\\\\|\\/)")) {
 			if (var.contains(".")) {
 				return new FileVariable(new File(var));

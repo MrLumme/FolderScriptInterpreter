@@ -38,7 +38,7 @@ public class CommandHandler {
 							+ "' which is not supported for the command '" + CommandType.toChar(type) + "'.");
 				}
 			} else if (type == CommandType.RANDOM) {
-				if (vars[i].type != VariableType.INT || vars[i].type != VariableType.DOUBLE) {
+				if (vars[i].type != VariableType.INT) {
 					throw new UnsupportedVariableTypeException("The variable '" + vars[i].toString() + "' at position "
 							+ i + " resolves to the type '" + vars[i].type.toString().toLowerCase()
 							+ "' which is not supported for the command '" + CommandType.toChar(type) + "'.");
