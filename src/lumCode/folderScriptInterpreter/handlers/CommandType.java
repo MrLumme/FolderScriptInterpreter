@@ -1,4 +1,4 @@
-package lumCode.folderScriptInterpreter.commands;
+package lumCode.folderScriptInterpreter.handlers;
 
 import lumCode.folderScriptInterpreter.exceptions.InvalidOperatorException;
 

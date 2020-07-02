@@ -1,4 +1,4 @@
-package lumCode.folderScriptInterpreter.commands;
+package lumCode.folderScriptInterpreter.handlers;
 
 import lumCode.folderScriptInterpreter.exceptions.IncorrentParameterAmountException;
 import lumCode.folderScriptInterpreter.exceptions.InvalidOperatorException;
@@ -6,7 +6,7 @@ import lumCode.folderScriptInterpreter.exceptions.UnsupportedVariableTypeExcepti
 import lumCode.folderScriptInterpreter.variables.Variable;
 import lumCode.folderScriptInterpreter.variables.VariableType;
 
-public class Command {
+public class CommandHandler {
 
 	public static void Interpret(char c, String params)
 			throws InvalidOperatorException, IncorrentParameterAmountException, UnsupportedVariableTypeException {
