@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import lumCode.folderScriptInterpreter.variables.Variable;
 
 public class Main {
-	public static ArrayList<Variable> vars = new ArrayList<>();
 	public static boolean overwrite = false;
-
 	public static String script = "";
 	public static Variable[] a;
+
+	public static ArrayList<Variable> vars = new ArrayList<>();
 
 	public static void main(String[] args) {
 		script = args[0];
@@ -19,7 +19,7 @@ public class Main {
 		}
 	}
 
-	public static Variable lookUpArgument(String name) {
+	public static Variable lookUpVariable(String name) {
 		for (Variable var : vars) {
 			if (var.name.equals(name)) {
 				return var;
