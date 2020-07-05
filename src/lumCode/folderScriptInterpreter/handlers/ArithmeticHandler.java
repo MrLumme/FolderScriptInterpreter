@@ -1,7 +1,11 @@
 package lumCode.folderScriptInterpreter.handlers;
 
+import java.io.File;
+
 import lumCode.folderScriptInterpreter.exceptions.UndefinedArithmeticException;
 import lumCode.folderScriptInterpreter.exceptions.UnsupportedArithmeticTypeException;
+import lumCode.folderScriptInterpreter.variables.FileVariable;
+import lumCode.folderScriptInterpreter.variables.FolderVariable;
 import lumCode.folderScriptInterpreter.variables.IntVariable;
 import lumCode.folderScriptInterpreter.variables.StringVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
@@ -13,98 +17,168 @@ public class ArithmeticHandler {
 			throws UnsupportedArithmeticTypeException, UndefinedArithmeticException {
 
 		if (left.type == VariableType.INT) {
-			if (left.type == VariableType.INT) {
-				return new IntVariable(numberArithmetic((IntVariable) left, operator, (IntVariable) right));
-			} else if (left.type == VariableType.STRING) {
-				return new IntVariable(numberArithmetic((IntVariable) left, operator, (StringVariable) right));
-			} else if (left.type == VariableType.FILE) {
-
-			} else if (left.type == VariableType.FOLDER) {
-
+			if (right.type == VariableType.INT) {
+				return new IntVariable(
+						numberArithmetic(((IntVariable) left).getVar(), operator, ((IntVariable) right).getVar()));
+			} else if (right.type == VariableType.STRING) {
+				return new StringVariable(stringArithmetic("" + ((IntVariable) left).getVar(), operator,
+						((StringVariable) right).getVar()));
+			} else if (right.type == VariableType.FILE) {
+				return new FileVariable(
+						fileArithmetic(((IntVariable) left).getVar(), operator, ((FileVariable) right).getVar()));
+			} else if (right.type == VariableType.FOLDER) {
+				return new FolderVariable(
+						folderArithmetic(((IntVariable) left).getVar(), operator, ((FolderVariable) right).getVar()));
 			}
 		} else if (left.type == VariableType.STRING) {
-			if (left.type == VariableType.INT) {
-				return new StringVariable(stringArithmetic((StringVariable) left, operator, (IntVariable) right));
-			} else if (left.type == VariableType.STRING) {
-				return new StringVariable(stringArithmetic((StringVariable) left, operator, (StringVariable) right));
-			} else if (left.type == VariableType.FILE) {
-
-			} else if (left.type == VariableType.FOLDER) {
-
+			if (right.type == VariableType.INT) {
+				return new StringVariable(stringArithmetic(((StringVariable) left).getVar(), operator,
+						"" + ((IntVariable) right).getVar()));
+			} else if (right.type == VariableType.STRING) {
+				return new StringVariable(stringArithmetic(((StringVariable) left).getVar(), operator,
+						((StringVariable) right).getVar()));
+			} else if (right.type == VariableType.FILE) {
+				return new IntVariable(
+						numberArithmetic(((IntVariable) left).getVar(), operator, ((FileVariable) right).getVar()));
+			} else if (right.type == VariableType.FOLDER) {
+				return new IntVariable(
+						numberArithmetic(((IntVariable) left).getVar(), operator, ((FolderVariable) right).getVar()));
 			}
 		} else if (left.type == VariableType.FILE) {
-			if (left.type == VariableType.INT) {
-
-			} else if (left.type == VariableType.STRING) {
-
-			} else if (left.type == VariableType.FILE) {
-
-			} else if (left.type == VariableType.FOLDER) {
-
+			if (right.type == VariableType.INT) {
+				return new FileVariable(
+						fileArithmetic(((FileVariable) left).getVar(), operator, "" + ((IntVariable) right).getVar()));
+			} else if (right.type == VariableType.STRING) {
+				return new FileVariable(
+						fileArithmetic(((FileVariable) left).getVar(), operator, ((StringVariable) right).getVar()));
+			} else if (right.type == VariableType.FILE) {
+				return new FileVariable(
+						fileArithmetic(((FileVariable) left).getVar(), operator, ((IntVariable) right).getVar()));
+			} else if (right.type == VariableType.FOLDER) {
+				return new FileVariable(
+						fileArithmetic(((FileVariable) right).getVar(), operator, ((FileVariable) left).getVar()));
 			}
 		} else if (left.type == VariableType.FOLDER) {
-			if (left.type == VariableType.INT) {
-
-			} else if (left.type == VariableType.STRING) {
-
-			} else if (left.type == VariableType.FILE) {
-
-			} else if (left.type == VariableType.FOLDER) {
-
+			if (right.type == VariableType.INT) {
+				return new FolderVariable(folderArithmetic(((FileVariable) left).getVar(), operator,
+						"" + ((IntVariable) right).getVar()));
+			} else if (right.type == VariableType.STRING) {
+				return new FolderVariable(
+						folderArithmetic(((FileVariable) left).getVar(), operator, ((StringVariable) right).getVar()));
+			} else if (right.type == VariableType.FILE) {
+				return new FileVariable(
+						fileArithmetic(((FileVariable) left).getVar(), operator, ((FileVariable) right).getVar()));
+			} else if (right.type == VariableType.FOLDER) {
+				return new FileVariable(
+						fileArithmetic(((FileVariable) left).getVar(), operator, ((FileVariable) right).getVar()));
 			}
 		}
 		throw new UndefinedArithmeticException("No arithmetic have been defined for setup '" + left.toString() + " "
 				+ ArithmeticType.toChar(operator) + " " + right.toString() + "'.");
 	}
 
-	private String stringArithmetic(StringVariable left, ArithmeticType operator, StringVariable right)
+	private String stringArithmetic(String left, ArithmeticType operator, String right)
+			throws UnsupportedArithmeticTypeException, UndefinedArithmeticException {
+		switch (operator) {
+		case ADDITION:
+			return left + right;
+		case SUBTRACTION:
+			return left.replace(right, "");
+		default:
+			throw new UndefinedArithmeticException("No arithmetic have been defined for setup '" + left + " "
+					+ ArithmeticType.toChar(operator) + " " + right + "'.");
+		}
+	}
+
+	private int numberArithmetic(int left, ArithmeticType operator, int right)
 			throws UnsupportedArithmeticTypeException {
 		switch (operator) {
 		case ADDITION:
-			return left.getVar() + right.getVar();
+			return left + right;
 		case DIVISION:
-			return left.getVar() / right.getVar();
+			return left / right;
 		case MODULO:
-			return left.getVar() % right.getVar();
+			return left % right;
 		case MULTIPLICATION:
-			return left.getVar() * right.getVar();
+			return left * right;
 		case SUBTRACTION:
-			return left.getVar().replace(right.getVar(), "");
+			return left - right;
+		default:
+			throw new UnsupportedArithmeticTypeException("The operator '" + operator.toString() + "' is unsupported.");
 		}
-		throw new UnsupportedArithmeticTypeException("The operator '" + operator.toString() + "' is unsupported.");
 	}
 
-	private VariableType numberArithmetic(IntVariable left, ArithmeticType operator, StringVariable right) {
+	private File fileArithmetic(File left, ArithmeticType operator, String right)
+			throws UnsupportedArithmeticTypeException, UndefinedArithmeticException {
+		String path = left.getParent();
+		String name = left.getName();
+		String ext = left.getName().substring(left.getName().indexOf('.'));
+
 		switch (operator) {
 		case ADDITION:
-			return left.getVar() + right.getVar();
-		case DIVISION:
-			return left.getVar() / right.getVar();
-		case MODULO:
-			return left.getVar() % right.getVar();
-		case MULTIPLICATION:
-			return left.getVar() * right.getVar();
-		case SUBTRACTION:
-			return left.getVar() - right.getVar();
+			return new File(path + "\\" + name + right + "." + ext);
+		default:
+			throw new UndefinedArithmeticException("No arithmetic have been defined for setup '"
+					+ left.getAbsolutePath() + " " + ArithmeticType.toChar(operator) + " " + right + "'.");
 		}
-		throw new UnsupportedArithmeticTypeException("The operator '" + operator.toString() + "' is unsupported.");
 	}
 
-	private int numberArithmetic(IntVariable left, ArithmeticType operator, IntVariable right)
-			throws UnsupportedArithmeticTypeException {
+	private File fileArithmetic(String left, ArithmeticType operator, File right)
+			throws UnsupportedArithmeticTypeException, UndefinedArithmeticException {
+		String path = right.getParent();
+		String name = right.getName();
+		String ext = right.getName().substring(right.getName().indexOf('.'));
+
 		switch (operator) {
 		case ADDITION:
-			return left.getVar() + right.getVar();
-		case DIVISION:
-			return left.getVar() / right.getVar();
-		case MODULO:
-			return left.getVar() % right.getVar();
-		case MULTIPLICATION:
-			return left.getVar() * right.getVar();
-		case SUBTRACTION:
-			return left.getVar() - right.getVar();
+			return new File(path + "\\" + left + name + "." + ext);
+		default:
+			throw new UndefinedArithmeticException("No arithmetic have been defined for setup '" + left + " "
+					+ ArithmeticType.toChar(operator) + " " + right.getAbsolutePath() + "'.");
 		}
-		throw new UnsupportedArithmeticTypeException("The operator '" + operator.toString() + "' is unsupported.");
+	}
+
+	private File fileArithmetic(File left, ArithmeticType operator, File right)
+			throws UnsupportedArithmeticTypeException, UndefinedArithmeticException {
+		String path = left.getAbsolutePath();
+		String name = right.getName();
+		String ext = right.getName().substring(right.getName().indexOf('.'));
+
+		switch (operator) {
+		case ADDITION:
+			return new File(path + "\\" + name + "." + ext);
+		default:
+			throw new UndefinedArithmeticException("No arithmetic have been defined for setup '" + left + " "
+					+ ArithmeticType.toChar(operator) + " " + right.getAbsolutePath() + "'.");
+		}
+	}
+
+	private File folderArithmetic(File left, ArithmeticType operator, String right)
+			throws UnsupportedArithmeticTypeException, UndefinedArithmeticException {
+		String path = left.getParent();
+		String name = left.getName();
+
+		switch (operator) {
+		case ADDITION:
+			return new File(path + "\\" + name + right);
+		default:
+			throw new UndefinedArithmeticException("No arithmetic have been defined for setup '"
+					+ left.getAbsolutePath() + " " + ArithmeticType.toChar(operator) + " " + right + "'.");
+		}
+	}
+
+	private File folderArithmetic(String left, ArithmeticType operator, File right)
+			throws UnsupportedArithmeticTypeException, UndefinedArithmeticException {
+		String path = right.getParent();
+		String name = right.getName();
+
+		switch (operator) {
+		case ADDITION:
+			return new File(path + "\\" + left + name);
+		default:
+			throw new UndefinedArithmeticException("No arithmetic have been defined for setup '" + left + " "
+					+ ArithmeticType.toChar(operator) + " " + right.getAbsolutePath() + "'.");
+		}
 	}
 
 }
