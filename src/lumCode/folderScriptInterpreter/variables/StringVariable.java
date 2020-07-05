@@ -3,7 +3,7 @@ package lumCode.folderScriptInterpreter.variables;
 public class StringVariable extends Variable {
 	String var;
 
-	protected StringVariable(String var) {
+	public StringVariable(String var) {
 		super(VariableType.STRING);
 		this.var = var;
 	}

@@ -5,7 +5,7 @@ import java.io.File;
 public class FileVariable extends FolderVariable {
 	File var;
 
-	protected FileVariable(File var) {
+	public FileVariable(File var) {
 		super(var, VariableType.FILE);
 	}
 
