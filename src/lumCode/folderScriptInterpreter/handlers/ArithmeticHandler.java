@@ -38,11 +38,11 @@ public class ArithmeticHandler {
 				return new StringVariable(stringArithmetic(((StringVariable) left).getVar(), operator,
 						((StringVariable) right).getVar()));
 			} else if (right.type == VariableType.FILE) {
-				return new IntVariable(
-						numberArithmetic(((IntVariable) left).getVar(), operator, ((FileVariable) right).getVar()));
+				return new StringVariable(
+						fileArithmetic(((StringVariable) left).getVar(), operator, ((FileVariable) right).getVar()));
 			} else if (right.type == VariableType.FOLDER) {
-				return new IntVariable(
-						numberArithmetic(((IntVariable) left).getVar(), operator, ((FolderVariable) right).getVar()));
+				return new IntVariable(folderArithmetic(((StringVariable) left).getVar(), operator,
+						((FolderVariable) right).getVar()));
 			}
 		} else if (left.type == VariableType.FILE) {
 			if (right.type == VariableType.INT) {
@@ -168,6 +168,20 @@ public class ArithmeticHandler {
 	}
 
 	private File folderArithmetic(String left, ArithmeticType operator, File right)
+			throws UnsupportedArithmeticTypeException, UndefinedArithmeticException {
+		String path = right.getParent();
+		String name = right.getName();
+
+		switch (operator) {
+		case ADDITION:
+			return new File(path + "\\" + left + name);
+		default:
+			throw new UndefinedArithmeticException("No arithmetic have been defined for setup '" + left + " "
+					+ ArithmeticType.toChar(operator) + " " + right.getAbsolutePath() + "'.");
+		}
+	}
+
+	private File folderArithmetic(int left, ArithmeticType operator, File right)
 			throws UnsupportedArithmeticTypeException, UndefinedArithmeticException {
 		String path = right.getParent();
 		String name = right.getName();
