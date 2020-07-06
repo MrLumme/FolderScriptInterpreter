@@ -24,8 +24,8 @@ public class ArithmeticHandler {
 				return new StringVariable(stringArithmetic("" + ((IntVariable) left).getVar(), operator,
 						((StringVariable) right).getVar()));
 			} else if (right.type == VariableType.FILE) {
-				return new FileVariable(
-						fileArithmetic(((IntVariable) left).getVar(), operator, ((FileVariable) right).getVar()));
+//				return new FileVariable(
+//						fileArithmetic(((IntVariable) left).getVar(), operator, ((FileVariable) right).getVar()));
 			} else if (right.type == VariableType.FOLDER) {
 				return new FolderVariable(
 						folderArithmetic(((IntVariable) left).getVar(), operator, ((FolderVariable) right).getVar()));
@@ -38,11 +38,11 @@ public class ArithmeticHandler {
 				return new StringVariable(stringArithmetic(((StringVariable) left).getVar(), operator,
 						((StringVariable) right).getVar()));
 			} else if (right.type == VariableType.FILE) {
-				return new StringVariable(
-						fileArithmetic(((StringVariable) left).getVar(), operator, ((FileVariable) right).getVar()));
+//				return new StringVariable(
+//						fileArithmetic(((StringVariable) left).getVar(), operator, ((FileVariable) right).getVar()));
 			} else if (right.type == VariableType.FOLDER) {
-				return new IntVariable(folderArithmetic(((StringVariable) left).getVar(), operator,
-						((FolderVariable) right).getVar()));
+//				return new IntVariable(folderArithmetic(((StringVariable) left).getVar(), operator,
+//						((FolderVariable) right).getVar()));
 			}
 		} else if (left.type == VariableType.FILE) {
 			if (right.type == VariableType.INT) {
@@ -52,11 +52,11 @@ public class ArithmeticHandler {
 				return new FileVariable(
 						fileArithmetic(((FileVariable) left).getVar(), operator, ((StringVariable) right).getVar()));
 			} else if (right.type == VariableType.FILE) {
-				return new FileVariable(
-						fileArithmetic(((FileVariable) left).getVar(), operator, ((IntVariable) right).getVar()));
+//				return new FileVariable(
+//						fileArithmetic(((FileVariable) left).getVar(), operator, ((IntVariable) right).getVar()));
 			} else if (right.type == VariableType.FOLDER) {
 				return new FileVariable(
-						fileArithmetic(((FileVariable) right).getVar(), operator, ((FileVariable) left).getVar()));
+						folderArithmetic(((FileVariable) right).getVar(), operator, ((FileVariable) left).getVar()));
 			}
 		} else if (left.type == VariableType.FOLDER) {
 			if (right.type == VariableType.INT) {
@@ -66,11 +66,11 @@ public class ArithmeticHandler {
 				return new FolderVariable(
 						folderArithmetic(((FileVariable) left).getVar(), operator, ((StringVariable) right).getVar()));
 			} else if (right.type == VariableType.FILE) {
-				return new FileVariable(
-						fileArithmetic(((FileVariable) left).getVar(), operator, ((FileVariable) right).getVar()));
+//				return new FileVariable(
+//						fileArithmetic(((FileVariable) left).getVar(), operator, ((FileVariable) right).getVar()));
 			} else if (right.type == VariableType.FOLDER) {
 				return new FileVariable(
-						fileArithmetic(((FileVariable) left).getVar(), operator, ((FileVariable) right).getVar()));
+						folderArithmetic(((FileVariable) left).getVar(), operator, ((FileVariable) right).getVar()));
 			}
 		}
 		throw new UndefinedArithmeticException("No arithmetic have been defined for setup '" + left.toString() + " "
@@ -138,7 +138,7 @@ public class ArithmeticHandler {
 		}
 	}
 
-	private File fileArithmetic(File left, ArithmeticType operator, File right)
+	private File folderArithmetic(File left, ArithmeticType operator, File right)
 			throws UnsupportedArithmeticTypeException, UndefinedArithmeticException {
 		String path = left.getAbsolutePath();
 		String name = right.getName();
