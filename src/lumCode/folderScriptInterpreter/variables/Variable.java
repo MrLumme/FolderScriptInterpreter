@@ -16,7 +16,7 @@ public class Variable {
 	}
 
 	public static Variable fromString(String var) {
-		if (var.matches("^[0-9]{1,}$")) {
+		if (var.matches("^-{0,1}[0-9]{1,}$")) {
 			return new IntVariable(Integer.parseInt(var));
 		} else if (var.matches("^[A-Z]{1}:(\\\\|\\/)")) {
 			if (var.contains(".")) {
