@@ -5,7 +5,6 @@ public class UnsupportedTypeException extends InterpreterException {
 
 	public UnsupportedTypeException(String message) {
 		super(message);
-		// TODO Auto-generated constructor stub
 	}
 
 }
