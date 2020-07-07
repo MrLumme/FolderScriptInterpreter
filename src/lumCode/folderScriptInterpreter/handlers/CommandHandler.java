@@ -1,15 +1,18 @@
 package lumCode.folderScriptInterpreter.handlers;
 
+import lumCode.folderScriptInterpreter.Main;
 import lumCode.folderScriptInterpreter.exceptions.IncorrentParameterAmountException;
 import lumCode.folderScriptInterpreter.exceptions.InvalidOperatorException;
+import lumCode.folderScriptInterpreter.exceptions.LogicConversionException;
 import lumCode.folderScriptInterpreter.exceptions.UnsupportedVariableTypeException;
+import lumCode.folderScriptInterpreter.variables.IntVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 import lumCode.folderScriptInterpreter.variables.VariableType;
 
 public class CommandHandler {
 
-	public static void Interpret(char c, String params)
-			throws InvalidOperatorException, IncorrentParameterAmountException, UnsupportedVariableTypeException {
+	public static Variable Interpret(char c, String params) throws InvalidOperatorException,
+			IncorrentParameterAmountException, UnsupportedVariableTypeException, LogicConversionException {
 		CommandType type = CommandType.fromChar(c);
 
 		String[] list = params.split(",");
@@ -17,6 +20,8 @@ public class CommandHandler {
 			throw new IncorrentParameterAmountException("The command '" + c + "' expects " + CommandType.varCount(type)
 					+ " inputs parameters, but has gotten " + list.length + ".");
 		}
+
+		// Make variables
 
 		Variable[] vars = new Variable[list.length];
 		for (int i = 0; i < list.length; i++) {
@@ -60,5 +65,14 @@ public class CommandHandler {
 		}
 
 		// Perform action
+
+		if (type == CommandType.OVERWRITE) {
+			Main.overwrite = ((IntVariable) vars[0]).asBoolean();
+			return null;
+		} else if (type == CommandType.RANDOM) {
+
+			Main.overwrite = ((IntVariable) vars[0]).asBoolean();
+			return new IntVariable(Math.random());
+		}
 	}
 }
