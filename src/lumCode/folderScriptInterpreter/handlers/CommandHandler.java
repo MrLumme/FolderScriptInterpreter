@@ -70,9 +70,9 @@ public class CommandHandler {
 			Main.overwrite = ((IntVariable) vars[0]).asBoolean();
 			return null;
 		} else if (type == CommandType.RANDOM) {
-
-			Main.overwrite = ((IntVariable) vars[0]).asBoolean();
-			return new IntVariable(Math.random());
+			double u = ((IntVariable) vars[0]).getVar()
+					+ (Math.random() * (((IntVariable) vars[1]).getVar() - ((IntVariable) vars[0]).getVar()));
+			return new IntVariable((int) Math.floor(u));
 		}
 	}
 }
