@@ -1,4 +1,4 @@
-package lumCode.folderScriptInterpreter.handlers;
+package lumCode.folderScriptInterpreter.handlers.arithmetic;
 
 import lumCode.folderScriptInterpreter.exceptions.UnsupportedArithmeticTypeException;
 
