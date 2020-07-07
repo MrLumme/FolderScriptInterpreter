@@ -1,5 +1,7 @@
 package lumCode.folderScriptInterpreter.variables;
 
+import lumCode.folderScriptInterpreter.exceptions.LogicConversionException;
+
 public class IntVariable extends Variable {
 	int var;
 
@@ -24,5 +26,15 @@ public class IntVariable extends Variable {
 	@Override
 	public String toString() {
 		return "" + var;
+	}
+
+	public boolean asBoolean() throws LogicConversionException {
+		if (var == 0) {
+			return false;
+		} else if (var == 1) {
+			return true;
+		}
+
+		throw new LogicConversionException("The value '" + var + "' can not be converted to boolean logic.");
 	}
 }
