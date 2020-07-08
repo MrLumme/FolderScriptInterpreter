@@ -58,12 +58,29 @@ public class CommandHandler {
 		// Perform action
 
 		if (type == CommandType.OVERWRITE) {
-			Main.overwrite = ((IntVariable) vars[0]).asBoolean();
+			overwriteCommand(type, vars);
 			return null;
 		} else if (type == CommandType.RANDOM) {
-			double u = ((IntVariable) vars[0]).getVar()
-					+ (Math.random() * (((IntVariable) vars[1]).getVar() - ((IntVariable) vars[0]).getVar()));
-			return new IntVariable((int) Math.floor(u));
+			return randomCommand(type, vars);
+		} else if (type == CommandType.IS_FILE) {
+			return isFileCommand(type, vars);
 		}
+		throw new UndefinedCommandException("The command '" + c + "(" + params + ")' is undefined.");
+	}
+
+	private static Variable isFileCommand(CommandType type, Variable[] vars) {
+		boolean isFile = false;
+
+		return new IntVariable(isFile ? 1 : 0);
+	}
+
+	private static void overwriteCommand(CommandType type, Variable[] vars) throws LogicConversionException {
+		Main.overwrite = ((IntVariable) vars[0]).asBoolean();
+	}
+
+	private static IntVariable randomCommand(CommandType type, Variable[] vars) {
+		double u = ((IntVariable) vars[0]).getVar()
+				+ (Math.random() * (((IntVariable) vars[1]).getVar() - ((IntVariable) vars[0]).getVar()));
+		return new IntVariable((int) Math.floor(u));
 	}
 }
