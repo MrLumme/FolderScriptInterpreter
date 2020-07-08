@@ -104,7 +104,7 @@ public class ArithmeticHandler {
 		case SUBTRACTION:
 			return left - right;
 		default:
-			throw new UnsupportedArithmeticTypeException("The operator '" + operator.toString() + "' is unsupported.");
+			throw new UnsupportedArithmeticTypeException(operator);
 		}
 	}
 

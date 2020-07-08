@@ -2,23 +2,24 @@ package lumCode.folderScriptInterpreter.handlers;
 
 import lumCode.folderScriptInterpreter.Main;
 import lumCode.folderScriptInterpreter.exceptions.IncorrentParameterAmountException;
-import lumCode.folderScriptInterpreter.exceptions.InvalidOperatorException;
 import lumCode.folderScriptInterpreter.exceptions.LogicConversionException;
-import lumCode.folderScriptInterpreter.exceptions.UnsupportedVariableTypeException;
+import lumCode.folderScriptInterpreter.exceptions.UndefinedCommandException;
+import lumCode.folderScriptInterpreter.exceptions.UnsupportedTypeException;
+import lumCode.folderScriptInterpreter.exceptions.IncorrectParameterTypeException;
 import lumCode.folderScriptInterpreter.variables.IntVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 import lumCode.folderScriptInterpreter.variables.VariableType;
 
 public class CommandHandler {
 
-	public static Variable Interpret(char c, String params) throws InvalidOperatorException,
-			IncorrentParameterAmountException, UnsupportedVariableTypeException, LogicConversionException {
+	public static Variable Interpret(char c, String params)
+			throws IncorrentParameterAmountException, IncorrectParameterTypeException, LogicConversionException,
+			UndefinedCommandException, UnsupportedTypeException {
 		CommandType type = CommandType.fromChar(c);
 
 		String[] list = params.split(",");
 		if (CommandType.varCount(type) != list.length) {
-			throw new IncorrentParameterAmountException("The command '" + c + "' expects " + CommandType.varCount(type)
-					+ " inputs parameters, but has gotten " + list.length + ".");
+			throw new IncorrentParameterAmountException(type, list.length);
 		}
 
 		// Make variables
@@ -32,34 +33,24 @@ public class CommandHandler {
 					|| type == CommandType.IS_AVAILABLE || type == CommandType.PARENT || type == CommandType.READ
 					|| (i == 1 && type == CommandType.PRINT) || (i == 0 && type == CommandType.LIST)) {
 				if (vars[i].type != VariableType.FILE && vars[i].type != VariableType.FOLDER) {
-					throw new UnsupportedVariableTypeException("The variable '" + vars[i].toString() + "' at position "
-							+ i + " resolves to the type '" + vars[i].type.toString().toLowerCase()
-							+ "' which is not supported for the command '" + CommandType.toChar(type) + "'.");
+					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
 			} else if (type == CommandType.REPLACE || type == CommandType.SUBSTRING) {
 				if (vars[i].type == VariableType.SPECIAL) {
-					throw new UnsupportedVariableTypeException("The variable '" + vars[i].toString() + "' at position "
-							+ i + " resolves to the type '" + vars[i].type.toString().toLowerCase()
-							+ "' which is not supported for the command '" + CommandType.toChar(type) + "'.");
+					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
 			} else if (type == CommandType.RANDOM) {
 				if (vars[i].type != VariableType.INT) {
-					throw new UnsupportedVariableTypeException("The variable '" + vars[i].toString() + "' at position "
-							+ i + " resolves to the type '" + vars[i].type.toString().toLowerCase()
-							+ "' which is not supported for the command '" + CommandType.toChar(type) + "'.");
+					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
 			} else if (i == 1 && type == CommandType.LIST) {
 				if (vars[i].type != VariableType.INT || vars[i].type != VariableType.SPECIAL) {
-					throw new UnsupportedVariableTypeException("The variable '" + vars[i].toString() + "' at position "
-							+ i + " resolves to the type '" + vars[i].type.toString().toLowerCase()
-							+ "' which is not supported for the command '" + CommandType.toChar(type) + "'.");
+					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
 
 			} else if (type == CommandType.OVERWRITE) {
 				if (vars[i].type != VariableType.INT) {
-					throw new UnsupportedVariableTypeException("The variable '" + vars[i].toString() + "' at position "
-							+ i + " resolves to the type '" + vars[i].type.toString().toLowerCase()
-							+ "' which is not supported for the command '" + CommandType.toChar(type) + "'.");
+					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
 			}
 		}

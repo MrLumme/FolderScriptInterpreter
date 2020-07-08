@@ -1,11 +1,12 @@
 package lumCode.folderScriptInterpreter.handlers.arithmetic;
 
 import lumCode.folderScriptInterpreter.exceptions.UnsupportedArithmeticTypeException;
+import lumCode.folderScriptInterpreter.exceptions.UnsupportedTypeException;
 
 public enum ArithmeticType {
 	ADDITION, SUBTRACTION, MULTIPLICATION, DIVISION, MODULO;
 
-	public static ArithmeticType fromChar(char c) throws UnsupportedArithmeticTypeException {
+	public static ArithmeticType fromChar(char c) throws UnsupportedTypeException {
 		switch (c) {
 		case '+':
 			return ADDITION;
@@ -18,7 +19,7 @@ public enum ArithmeticType {
 		case '-':
 			return SUBTRACTION;
 		}
-		throw new UnsupportedArithmeticTypeException("The operator '" + c + "' is not supported.");
+		throw new UnsupportedTypeException(c);
 	}
 
 	public static char toChar(ArithmeticType c) throws UnsupportedArithmeticTypeException {
@@ -34,6 +35,6 @@ public enum ArithmeticType {
 		case SUBTRACTION:
 			return '-';
 		}
-		throw new UnsupportedArithmeticTypeException("The operator '" + c.toString() + "' is not supported.");
+		throw new UnsupportedArithmeticTypeException(c);
 	}
 }

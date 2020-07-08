@@ -1,0 +1,13 @@
+package lumCode.folderScriptInterpreter.exceptions;
+
+import lumCode.folderScriptInterpreter.handlers.CommandType;
+import lumCode.folderScriptInterpreter.variables.Variable;
+
+public class IncorrectParameterTypeException extends InterpreterException {
+	private static final long serialVersionUID = 4295363097012846149L;
+
+	public IncorrectParameterTypeException(CommandType c, Variable v) throws UnsupportedCommandTypeException {
+		super("The variable '" + v.toString() + "' resolves to the type '" + v.type.toString().toLowerCase()
+				+ "' which is not supported for the command '" + CommandType.toChar(c) + "'.");
+	}
+}

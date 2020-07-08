@@ -1,11 +1,12 @@
 package lumCode.folderScriptInterpreter.handlers.logic;
 
 import lumCode.folderScriptInterpreter.exceptions.UnsupportedLogicTypeException;
+import lumCode.folderScriptInterpreter.exceptions.UnsupportedTypeException;
 
 public enum LogicType {
 	EQUAL, LESS, GREATER, NOT;
 
-	public static LogicType fromChar(char c) throws UnsupportedLogicTypeException {
+	public static LogicType fromChar(char c) throws UnsupportedTypeException {
 		switch (c) {
 		case '=':
 			return EQUAL;
@@ -16,7 +17,7 @@ public enum LogicType {
 		case '!':
 			return NOT;
 		}
-		throw new UnsupportedLogicTypeException("The operator '" + c + "' is not supported.");
+		throw new UnsupportedTypeException(c);
 	}
 
 	public static char toChar(LogicType c) throws UnsupportedLogicTypeException {
@@ -30,6 +31,6 @@ public enum LogicType {
 		case NOT:
 			return '!';
 		}
-		throw new UnsupportedLogicTypeException("The operator '" + c.toString() + "' is not supported.");
+		throw new UnsupportedLogicTypeException(c);
 	}
 }

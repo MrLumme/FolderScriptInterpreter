@@ -1,11 +1,13 @@
 package lumCode.folderScriptInterpreter.handlers;
 
-import lumCode.folderScriptInterpreter.exceptions.InvalidOperatorException;
+import lumCode.folderScriptInterpreter.exceptions.UnsupportedCommandTypeException;
+import lumCode.folderScriptInterpreter.exceptions.UnsupportedTypeException;
 
 public enum CommandType {
-	NAME, EXTENSION, PARENT, IS_FILE, IS_AVAILABLE, COPY, MOVE, DELETE, LIST, PRINT, SIZE, REPLACE, SUBSTRING, RANDOM, READ, TEST, OVERWRITE;
+	NAME, EXTENSION, PARENT, IS_FILE, IS_AVAILABLE, COPY, MOVE, DELETE, LIST, PRINT, SIZE, REPLACE, SUBSTRING, RANDOM,
+	READ, TEST, OVERWRITE;
 
-	public static CommandType fromChar(char c) throws InvalidOperatorException {
+	public static CommandType fromChar(char c) throws UnsupportedTypeException {
 		switch (c) {
 		case 'n':
 			return NAME;
@@ -43,10 +45,10 @@ public enum CommandType {
 			return OVERWRITE;
 		}
 
-		throw new InvalidOperatorException("The operator '" + c + "' is not valid.");
+		throw new UnsupportedTypeException(c);
 	}
 
-	public static char toChar(CommandType c) throws InvalidOperatorException {
+	public static char toChar(CommandType c) throws UnsupportedCommandTypeException {
 		switch (c) {
 		case COPY:
 			return 'c';
@@ -83,10 +85,10 @@ public enum CommandType {
 		case TEST:
 			return 't';
 		}
-		throw new InvalidOperatorException("The command type '" + c.toString() + "' is invalid.");
+		throw new UnsupportedCommandTypeException(c);
 	}
 
-	public static int varCount(CommandType c) throws InvalidOperatorException {
+	public static int varCount(CommandType c) throws UnsupportedCommandTypeException {
 		switch (c) {
 		case NAME:
 		case OVERWRITE:
@@ -109,7 +111,8 @@ public enum CommandType {
 		case SUBSTRING:
 			return 3;
 		}
+		throw new UnsupportedCommandTypeException(c);
+	}
 
-		throw new InvalidOperatorException("The command type '" + c.toString() + "' is invalid.");
 	}
 }

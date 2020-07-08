@@ -35,6 +35,6 @@ public class IntVariable extends Variable {
 			return true;
 		}
 
-		throw new LogicConversionException("The value '" + var + "' can not be converted to boolean logic.");
+		throw new LogicConversionException(var);
 	}
 }
