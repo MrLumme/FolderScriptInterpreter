@@ -9,6 +9,7 @@ import lumCode.folderScriptInterpreter.exceptions.UnsupportedTypeException;
 import lumCode.folderScriptInterpreter.variables.FileVariable;
 import lumCode.folderScriptInterpreter.variables.FolderVariable;
 import lumCode.folderScriptInterpreter.variables.IntVariable;
+import lumCode.folderScriptInterpreter.variables.StringVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 import lumCode.folderScriptInterpreter.variables.VariableType;
 
@@ -63,39 +64,51 @@ public class CommandHandler {
 		// Perform action
 
 		if (type == CommandType.OVERWRITE) {
-			overwriteCommand(type, vars);
+			overwriteCommand(vars);
 			return null;
 		} else if (type == CommandType.RANDOM) {
-			return randomCommand(type, vars);
+			return randomCommand(vars);
 		} else if (type == CommandType.IS_FILE) {
-			return isFileCommand(type, vars);
+			return isFileCommand(vars);
 		} else if (type == CommandType.IS_AVAILABLE) {
-			return isAvailableCommand(type, vars);
+			return isAvailableCommand(vars);
 		} else if (type == CommandType.NAME) {
-			return nameCommand(type, vars);
+			return nameCommand(vars);
+		} else if (type == CommandType.PARENT) {
+			return parentCommand(vars);
+		} else if (type == CommandType.EXTENSION) {
+			return extensionCommand(vars);
 		}
 		throw new UndefinedCommandException(type, params);
 	}
 
-	private static Variable nameCommand(CommandType type, Variable[] vars) {
-		return new StringVariable;
+	private static Variable nameCommand(Variable[] vars) {
+		return new StringVariable(((FolderVariable) vars[0]).getName());
 	}
 
-	private static Variable isFileCommand(CommandType type, Variable[] vars) {
+	private static Variable parentCommand(Variable[] vars) {
+		return new FolderVariable(((FolderVariable) vars[0]).getParent());
+	}
+
+	private static Variable extensionCommand(Variable[] vars) {
+		return new StringVariable(((FileVariable) vars[0]).getExtension());
+	}
+
+	private static Variable isFileCommand(Variable[] vars) {
 		return new IntVariable(vars[0] instanceof FileVariable ? 1 : 0);
 	}
 
-	private static Variable isAvailableCommand(CommandType type, Variable[] vars) {
+	private static Variable isAvailableCommand(Variable[] vars) {
 		return new IntVariable(((FolderVariable) vars[0]).getVar().exists() ? 1 : 0);
 	}
 
-	private static IntVariable randomCommand(CommandType type, Variable[] vars) {
+	private static IntVariable randomCommand(Variable[] vars) {
 		double u = ((IntVariable) vars[0]).getVar()
 				+ (Math.random() * (((IntVariable) vars[1]).getVar() - ((IntVariable) vars[0]).getVar()));
 		return new IntVariable((int) Math.floor(u));
 	}
 
-	private static void overwriteCommand(CommandType type, Variable[] vars) throws LogicConversionException {
+	private static void overwriteCommand(Variable[] vars) throws LogicConversionException {
 		Main.overwrite = ((IntVariable) vars[0]).asBoolean();
 	}
 }
