@@ -33,7 +33,7 @@ public class CommandHandler {
 			if (type == CommandType.COPY || type == CommandType.DELETE || type == CommandType.MOVE
 					|| type == CommandType.EXTENSION || type == CommandType.NAME || type == CommandType.IS_FILE
 					|| type == CommandType.IS_AVAILABLE || type == CommandType.PARENT || type == CommandType.READ
-					|| (i == 1 && type == CommandType.PRINT) || (i == 0 && type == CommandType.LIST)) {
+					|| (i == 0 && type == CommandType.LIST)) {
 				if (vars[i].type != VariableType.FILE && vars[i].type != VariableType.FOLDER) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
@@ -46,12 +46,15 @@ public class CommandHandler {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
 			} else if (i == 1 && type == CommandType.LIST) {
-				if (vars[i].type != VariableType.INT || vars[i].type != VariableType.SPECIAL) {
+				if (vars[i].type != VariableType.INT && vars[i].type != VariableType.SPECIAL) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
-
 			} else if (type == CommandType.OVERWRITE) {
 				if (vars[i].type != VariableType.INT) {
+					throw new IncorrectParameterTypeException(type, vars[i]);
+				}
+			} else if (type == CommandType.PRINT && i == 1) {
+				if (vars[i].type != VariableType.FILE && vars[i].type != VariableType.SPECIAL) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
 			}
