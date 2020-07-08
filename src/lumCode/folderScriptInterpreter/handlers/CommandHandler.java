@@ -68,10 +68,15 @@ public class CommandHandler {
 			return isFileCommand(type, vars);
 		} else if (type == CommandType.IS_AVAILABLE) {
 			return isAvailableCommand(type, vars);
+		} else if (type == CommandType.NAME) {
+			return nameCommand(type, vars);
 		}
 		throw new UndefinedCommandException(type, params);
 	}
 
+	private static Variable nameCommand(CommandType type, Variable[] vars) {
+		return new StringVariable;
+	}
 
 	private static Variable isFileCommand(CommandType type, Variable[] vars) {
 		return new IntVariable(vars[0] instanceof FileVariable ? 1 : 0);
