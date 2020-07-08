@@ -6,6 +6,8 @@ import lumCode.folderScriptInterpreter.exceptions.IncorrentParameterAmountExcept
 import lumCode.folderScriptInterpreter.exceptions.LogicConversionException;
 import lumCode.folderScriptInterpreter.exceptions.UndefinedCommandException;
 import lumCode.folderScriptInterpreter.exceptions.UnsupportedTypeException;
+import lumCode.folderScriptInterpreter.variables.FileVariable;
+import lumCode.folderScriptInterpreter.variables.FolderVariable;
 import lumCode.folderScriptInterpreter.variables.IntVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 import lumCode.folderScriptInterpreter.variables.VariableType;
@@ -64,23 +66,28 @@ public class CommandHandler {
 			return randomCommand(type, vars);
 		} else if (type == CommandType.IS_FILE) {
 			return isFileCommand(type, vars);
+		} else if (type == CommandType.IS_AVAILABLE) {
+			return isAvailableCommand(type, vars);
 		}
 		throw new UndefinedCommandException(type, params);
 	}
 
-	private static Variable isFileCommand(CommandType type, Variable[] vars) {
-		boolean isFile = false;
 
-		return new IntVariable(isFile ? 1 : 0);
+	private static Variable isFileCommand(CommandType type, Variable[] vars) {
+		return new IntVariable(vars[0] instanceof FileVariable ? 1 : 0);
 	}
 
-	private static void overwriteCommand(CommandType type, Variable[] vars) throws LogicConversionException {
-		Main.overwrite = ((IntVariable) vars[0]).asBoolean();
+	private static Variable isAvailableCommand(CommandType type, Variable[] vars) {
+		return new IntVariable(((FolderVariable) vars[0]).getVar().exists() ? 1 : 0);
 	}
 
 	private static IntVariable randomCommand(CommandType type, Variable[] vars) {
 		double u = ((IntVariable) vars[0]).getVar()
 				+ (Math.random() * (((IntVariable) vars[1]).getVar() - ((IntVariable) vars[0]).getVar()));
 		return new IntVariable((int) Math.floor(u));
+	}
+
+	private static void overwriteCommand(CommandType type, Variable[] vars) throws LogicConversionException {
+		Main.overwrite = ((IntVariable) vars[0]).asBoolean();
 	}
 }
