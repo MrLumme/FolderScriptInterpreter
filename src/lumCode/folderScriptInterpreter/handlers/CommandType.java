@@ -114,5 +114,28 @@ public enum CommandType {
 		throw new UnsupportedCommandTypeException(c);
 	}
 
+	public static boolean commandReturns(CommandType c) throws UnsupportedCommandTypeException {
+		switch (c) {
+		case NAME:
+		case PARENT:
+		case SIZE:
+		case TEST:
+		case IS_FILE:
+		case IS_AVAILABLE:
+		case EXTENSION:
+		case DELETE:
+		case READ:
+		case PRINT:
+		case MOVE:
+		case COPY:
+		case LIST:
+		case RANDOM:
+		case REPLACE:
+		case SUBSTRING:
+			return true;
+		case OVERWRITE:
+			return false;
+		}
+		throw new UnsupportedCommandTypeException(c);
 	}
 }
