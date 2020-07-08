@@ -1,11 +1,11 @@
 package lumCode.folderScriptInterpreter.handlers;
 
 import lumCode.folderScriptInterpreter.Main;
+import lumCode.folderScriptInterpreter.exceptions.IncorrectParameterTypeException;
 import lumCode.folderScriptInterpreter.exceptions.IncorrentParameterAmountException;
 import lumCode.folderScriptInterpreter.exceptions.LogicConversionException;
 import lumCode.folderScriptInterpreter.exceptions.UndefinedCommandException;
 import lumCode.folderScriptInterpreter.exceptions.UnsupportedTypeException;
-import lumCode.folderScriptInterpreter.exceptions.IncorrectParameterTypeException;
 import lumCode.folderScriptInterpreter.variables.IntVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 import lumCode.folderScriptInterpreter.variables.VariableType;
@@ -65,7 +65,7 @@ public class CommandHandler {
 		} else if (type == CommandType.IS_FILE) {
 			return isFileCommand(type, vars);
 		}
-		throw new UndefinedCommandException("The command '" + c + "(" + params + ")' is undefined.");
+		throw new UndefinedCommandException(type, params);
 	}
 
 	private static Variable isFileCommand(CommandType type, Variable[] vars) {

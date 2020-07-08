@@ -13,7 +13,6 @@ public class StringLogicHandler {
 		case NOT:
 			return !left.equals(right);
 		}
-		throw new UndefinedLogicException(
-				"The equation '" + left + LogicType.toChar(operator) + right + "' can not be validated.");
+		throw new UndefinedLogicException(left, operator, right);
 	}
 }

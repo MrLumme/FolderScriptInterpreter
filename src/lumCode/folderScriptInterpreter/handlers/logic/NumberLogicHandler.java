@@ -17,7 +17,6 @@ public class NumberLogicHandler {
 		case NOT:
 			return left != right;
 		}
-		throw new UndefinedLogicException(
-				"The equation '" + left + LogicType.toChar(operator) + right + "' can not be validated.");
+		throw new UndefinedLogicException("" + left, operator, "" + right);
 	}
 }

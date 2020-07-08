@@ -73,8 +73,7 @@ public class ArithmeticHandler {
 						folderArithmetic(((FileVariable) left).getVar(), operator, ((FileVariable) right).getVar()));
 			}
 		}
-		throw new UndefinedArithmeticException("No arithmetic have been defined for setup '" + left.toString() + " "
-				+ ArithmeticType.toChar(operator) + " " + right.toString() + "'.");
+		throw new UndefinedArithmeticException(left.toString(), operator, right.toString());
 	}
 
 	private String stringArithmetic(String left, ArithmeticType operator, String right)
@@ -85,8 +84,7 @@ public class ArithmeticHandler {
 		case SUBTRACTION:
 			return left.replace(right, "");
 		default:
-			throw new UndefinedArithmeticException("No arithmetic have been defined for setup '" + left + " "
-					+ ArithmeticType.toChar(operator) + " " + right + "'.");
+			throw new UndefinedArithmeticException(left, operator, right);
 		}
 	}
 
@@ -118,8 +116,7 @@ public class ArithmeticHandler {
 		case ADDITION:
 			return new File(path + "\\" + name + right + "." + ext);
 		default:
-			throw new UndefinedArithmeticException("No arithmetic have been defined for setup '"
-					+ left.getAbsolutePath() + " " + ArithmeticType.toChar(operator) + " " + right + "'.");
+			throw new UndefinedArithmeticException(left.getAbsolutePath(), operator, right);
 		}
 	}
 
@@ -133,8 +130,7 @@ public class ArithmeticHandler {
 		case ADDITION:
 			return new File(path + "\\" + left + name + "." + ext);
 		default:
-			throw new UndefinedArithmeticException("No arithmetic have been defined for setup '" + left + " "
-					+ ArithmeticType.toChar(operator) + " " + right.getAbsolutePath() + "'.");
+			throw new UndefinedArithmeticException(left, operator, right.getAbsolutePath());
 		}
 	}
 
@@ -148,8 +144,7 @@ public class ArithmeticHandler {
 		case ADDITION:
 			return new File(path + "\\" + name + "." + ext);
 		default:
-			throw new UndefinedArithmeticException("No arithmetic have been defined for setup '" + left + " "
-					+ ArithmeticType.toChar(operator) + " " + right.getAbsolutePath() + "'.");
+			throw new UndefinedArithmeticException(left.getAbsolutePath(), operator, right.getAbsolutePath());
 		}
 	}
 
@@ -162,8 +157,7 @@ public class ArithmeticHandler {
 		case ADDITION:
 			return new File(path + "\\" + name + right);
 		default:
-			throw new UndefinedArithmeticException("No arithmetic have been defined for setup '"
-					+ left.getAbsolutePath() + " " + ArithmeticType.toChar(operator) + " " + right + "'.");
+			throw new UndefinedArithmeticException(left.getAbsolutePath(), operator, right);
 		}
 	}
 
@@ -176,8 +170,7 @@ public class ArithmeticHandler {
 		case ADDITION:
 			return new File(path + "\\" + left + name);
 		default:
-			throw new UndefinedArithmeticException("No arithmetic have been defined for setup '" + left + " "
-					+ ArithmeticType.toChar(operator) + " " + right.getAbsolutePath() + "'.");
+			throw new UndefinedArithmeticException(left, operator, right.getAbsolutePath());
 		}
 	}
 
@@ -190,8 +183,7 @@ public class ArithmeticHandler {
 		case ADDITION:
 			return new File(path + "\\" + left + name);
 		default:
-			throw new UndefinedArithmeticException("No arithmetic have been defined for setup '" + left + " "
-					+ ArithmeticType.toChar(operator) + " " + right.getAbsolutePath() + "'.");
+			throw new UndefinedArithmeticException("" + left, operator, right.getAbsolutePath());
 		}
 	}
 

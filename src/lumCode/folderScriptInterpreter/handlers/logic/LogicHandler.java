@@ -34,8 +34,7 @@ public class LogicHandler {
 						((FolderVariable) right).getVar());
 			}
 		}
-		throw new UndefinedLogicException(
-				"The equation '" + left.toString() + operator + right.toString() + "' can not be validated.");
+		throw new UndefinedLogicException(left.toString(), operator, right.toString());
 	}
 
 }
