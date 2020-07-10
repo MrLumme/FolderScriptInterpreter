@@ -3,7 +3,6 @@ package lumCode.folderScriptInterpreter.variables;
 import java.io.File;
 
 public class FileVariable extends FolderVariable {
-	File var;
 
 	public FileVariable(File var) {
 		super(var, VariableType.FILE);
@@ -15,15 +14,15 @@ public class FileVariable extends FolderVariable {
 
 	@Override
 	public String getName() {
-		return var.getName().substring(0, var.getName().indexOf('.'));
+		return getVar().getName().substring(0, getVar().getName().indexOf('.'));
 	}
 
 	public String getExtension() {
-		return var.getName().substring(var.getName().indexOf('.'));
+		return getVar().getName().substring(getVar().getName().indexOf('.'));
 	}
 
 	@Override
 	public String toString() {
-		return var.getAbsolutePath();
+		return getVar().getAbsolutePath();
 	}
 }

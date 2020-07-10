@@ -3,7 +3,7 @@ package lumCode.folderScriptInterpreter.variables;
 import lumCode.folderScriptInterpreter.exceptions.LogicConversionException;
 
 public class IntVariable extends Variable {
-	int var;
+	private int var;
 
 	public IntVariable(int var) {
 		super(VariableType.INT);

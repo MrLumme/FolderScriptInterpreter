@@ -3,7 +3,7 @@ package lumCode.folderScriptInterpreter.variables;
 import java.io.File;
 
 public class FolderVariable extends Variable {
-	File var;
+	private File var;
 
 	public FolderVariable(File var) {
 		super(VariableType.FOLDER);
