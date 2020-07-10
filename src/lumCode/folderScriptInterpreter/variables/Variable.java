@@ -27,7 +27,11 @@ public class Variable {
 		} else if (var.equals("$")) {
 			return new SpecialVariable();
 		} else {
-			return new StringVariable(var);
+			StringVariable s = new StringVariable(var);
+			if (var.startsWith("{") && var.endsWith("}")) {
+				s.setRegex(true);
+			}
+			return s;
 		}
 	}
 }
