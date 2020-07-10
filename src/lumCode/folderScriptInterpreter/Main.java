@@ -8,6 +8,7 @@ public class Main {
 	public static boolean overwrite = false;
 	public static String script = "";
 	public static Variable[] a;
+	public static Variable[] i;
 
 	public static ArrayList<Variable> vars = new ArrayList<>();
 
@@ -17,6 +18,14 @@ public class Main {
 		for (int i = 1; i < args.length; i++) {
 			a[i - 1] = Variable.fromString(args[i]);
 		}
+
+		String[] list = breakDownScript();
+
+	}
+
+	private static String[] breakDownScript() {
+		if ()
+		return null;
 	}
 
 	public static Variable lookUpVariable(String name) {
