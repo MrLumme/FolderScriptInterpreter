@@ -125,7 +125,6 @@ public enum CommandType {
 		case EXTENSION:
 		case DELETE:
 		case READ:
-		case PRINT:
 		case MOVE:
 		case COPY:
 		case LIST:
@@ -134,6 +133,7 @@ public enum CommandType {
 		case SUBSTRING:
 			return true;
 		case OVERWRITE:
+		case PRINT:
 			return false;
 		}
 		throw new UnsupportedCommandTypeException(c);

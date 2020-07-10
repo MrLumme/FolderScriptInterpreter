@@ -1,14 +1,24 @@
 package lumCode.folderScriptInterpreter.handlers;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+
+import org.apache.commons.io.FileUtils;
+
 import lumCode.folderScriptInterpreter.Main;
+import lumCode.folderScriptInterpreter.exceptions.CommandErrorException;
 import lumCode.folderScriptInterpreter.exceptions.IncorrectParameterTypeException;
 import lumCode.folderScriptInterpreter.exceptions.IncorrentParameterAmountException;
 import lumCode.folderScriptInterpreter.exceptions.LogicConversionException;
 import lumCode.folderScriptInterpreter.exceptions.UndefinedCommandException;
+import lumCode.folderScriptInterpreter.exceptions.UnsupportedCommandTypeException;
 import lumCode.folderScriptInterpreter.exceptions.UnsupportedTypeException;
 import lumCode.folderScriptInterpreter.variables.FileVariable;
 import lumCode.folderScriptInterpreter.variables.FolderVariable;
 import lumCode.folderScriptInterpreter.variables.IntVariable;
+import lumCode.folderScriptInterpreter.variables.SpecialVariable;
 import lumCode.folderScriptInterpreter.variables.StringVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 import lumCode.folderScriptInterpreter.variables.VariableType;
@@ -17,7 +27,7 @@ public class CommandHandler {
 
 	public static Variable Interpret(char c, String params)
 			throws IncorrentParameterAmountException, IncorrectParameterTypeException, LogicConversionException,
-			UndefinedCommandException, UnsupportedTypeException {
+			UndefinedCommandException, UnsupportedTypeException, CommandErrorException {
 		CommandType type = CommandType.fromChar(c);
 
 		String[] list = params.split(",");
@@ -38,7 +48,7 @@ public class CommandHandler {
 				if (vars[i].type != VariableType.FILE && vars[i].type != VariableType.FOLDER) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
-			} else if (type == CommandType.REPLACE || type == CommandType.SUBSTRING) {
+			} else if (type == CommandType.REPLACE || (type == CommandType.SUBSTRING && i == 0)) {
 				if (vars[i].type == VariableType.SPECIAL) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
@@ -78,27 +88,153 @@ public class CommandHandler {
 			return parentCommand(vars);
 		} else if (type == CommandType.EXTENSION) {
 			return extensionCommand(vars);
+		} else if (type == CommandType.REPLACE) {
+			return replaceCommand(vars);
+		} else if (type == CommandType.SUBSTRING) {
+			return substringCommand(vars);
+		} else if (type == CommandType.PRINT) {
+			printCommand(vars);
+			return null;
+		} else if (type == CommandType.MOVE) {
+			return moveCommand(vars);
+		} else if (type == CommandType.COPY) {
+			return copyCommand(vars);
+		} else if (type == CommandType.DELETE) {
+			return deleteCommand(vars);
 		}
 		throw new UndefinedCommandException(type, params);
 	}
 
-	private static Variable nameCommand(Variable[] vars) {
+	private static Variable deleteCommand(Variable[] vars) {
+		return new IntVariable(FileUtils.deleteQuietly(((FolderVariable) vars[0]).getVar()) ? 1 : 0);
+	}
+
+	private static Variable copyCommand(Variable[] vars) throws UnsupportedCommandTypeException, CommandErrorException {
+		try {
+			if (Main.overwrite || !((FileVariable) vars[0]).getVar().exists()) {
+				if (vars[0] instanceof FileVariable) {
+					if (vars[1] instanceof FileVariable) {
+						FileUtils.copyFile(((FileVariable) vars[0]).getVar(), ((FileVariable) vars[1]).getVar());
+					} else {
+						throw new CommandErrorException("Can not copy the folder \"" + vars[0].toString()
+								+ "\" to the file \"" + vars[0].toString() + "\".");
+					}
+				} else {
+					if (vars[1] instanceof FileVariable) {
+						FileUtils.copyFile(((FileVariable) vars[0]).getVar(), ((FileVariable) vars[1]).getVar());
+					} else {
+						FileUtils.copyDirectory(((FolderVariable) vars[0]).getVar(),
+								((FolderVariable) vars[1]).getVar());
+					}
+				}
+			} else {
+				return new IntVariable(0);
+			}
+		} catch (IOException e) {
+			throw new CommandErrorException(
+					"Can not copy \"" + vars[0].toString() + "\" to \"" + vars[0].toString() + "\".");
+		}
+		return new IntVariable(1);
+	}
+
+	private static Variable moveCommand(Variable[] vars) throws UnsupportedCommandTypeException, CommandErrorException {
+		try {
+			if (Main.overwrite || !((FileVariable) vars[0]).getVar().exists()) {
+				if (vars[0] instanceof FileVariable) {
+					if (vars[1] instanceof FileVariable) {
+						FileUtils.moveFile(((FileVariable) vars[0]).getVar(), ((FileVariable) vars[1]).getVar());
+					} else {
+						throw new CommandErrorException("Can not copy the folder \"" + vars[0].toString()
+								+ "\" to the file \"" + vars[0].toString() + "\".");
+					}
+				} else {
+					if (vars[1] instanceof FileVariable) {
+						FileUtils.moveFile(((FileVariable) vars[0]).getVar(), ((FileVariable) vars[1]).getVar());
+					} else {
+						FileUtils.moveDirectory(((FolderVariable) vars[0]).getVar(),
+								((FolderVariable) vars[1]).getVar());
+					}
+				}
+			} else {
+				return new IntVariable(0);
+			}
+		} catch (IOException e) {
+			throw new CommandErrorException(
+					"Can not copy \"" + vars[0].toString() + "\" to \"" + vars[0].toString() + "\".");
+		}
+		return new IntVariable(1);
+	}
+
+	private static void printCommand(Variable[] vars) throws UnsupportedCommandTypeException, CommandErrorException {
+		if (vars[1] instanceof SpecialVariable) {
+			System.out.println(vars[0].toString());
+		} else {
+			try {
+				Files.write(Paths.get(((FileVariable) vars[1]).getVar().getAbsolutePath()),
+						vars[0].toString().getBytes(), StandardOpenOption.APPEND);
+			} catch (IOException e) {
+				throw new CommandErrorException(
+						"Can not print to file \"" + ((FileVariable) vars[1]).getVar().getAbsolutePath() + "\".");
+			}
+		}
+	}
+
+	private static Variable replaceCommand(Variable[] vars) {
+		String base = vars[0].toString();
+		String look = vars[1].toString();
+		String replace = vars[2].toString();
+
+		String str;
+		if (vars[1] instanceof StringVariable && ((StringVariable) vars[1]).isRegex()) {
+			str = base.replaceAll(look, replace);
+		} else {
+			str = base.replace(look, replace);
+		}
+
+		return Variable.fromString(str);
+	}
+
+	private static Variable substringCommand(Variable[] vars)
+			throws UnsupportedCommandTypeException, CommandErrorException {
+		String base = vars[0].toString();
+		int arg[] = new int[2];
+		arg[0] = 0;
+		arg[1] = base.length();
+
+		for (int i = 0; i < 2; i++) {
+			if (vars[i + 1] instanceof IntVariable) {
+				arg[i] = ((IntVariable) vars[i + 1]).getVar();
+			} else if (!(vars[i + 1] instanceof SpecialVariable)) {
+				arg[i] = base.indexOf(((StringVariable) vars[i + 1]).getVar())
+						- ((StringVariable) vars[i + 1]).getVar().length();
+			}
+		}
+
+		try {
+			return Variable.fromString(base.substring(arg[0], arg[1]));
+		} catch (StringIndexOutOfBoundsException e) {
+			throw new CommandErrorException(
+					"Can not get a substring of \"" + base + "\" taking from \"" + arg[0] + "\" to \"" + arg[1] + "\"");
+		}
+	}
+
+	private static StringVariable nameCommand(Variable[] vars) {
 		return new StringVariable(((FolderVariable) vars[0]).getName());
 	}
 
-	private static Variable parentCommand(Variable[] vars) {
+	private static FolderVariable parentCommand(Variable[] vars) {
 		return new FolderVariable(((FolderVariable) vars[0]).getParent());
 	}
 
-	private static Variable extensionCommand(Variable[] vars) {
+	private static StringVariable extensionCommand(Variable[] vars) {
 		return new StringVariable(((FileVariable) vars[0]).getExtension());
 	}
 
-	private static Variable isFileCommand(Variable[] vars) {
+	private static IntVariable isFileCommand(Variable[] vars) {
 		return new IntVariable(vars[0] instanceof FileVariable ? 1 : 0);
 	}
 
-	private static Variable isAvailableCommand(Variable[] vars) {
+	private static IntVariable isAvailableCommand(Variable[] vars) {
 		return new IntVariable(((FolderVariable) vars[0]).getVar().exists() ? 1 : 0);
 	}
 
