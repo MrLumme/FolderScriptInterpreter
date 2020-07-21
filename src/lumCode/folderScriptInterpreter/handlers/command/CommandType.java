@@ -1,4 +1,4 @@
-package lumCode.folderScriptInterpreter.handlers;
+package lumCode.folderScriptInterpreter.handlers.command;
 
 import lumCode.folderScriptInterpreter.exceptions.UnsupportedCommandTypeException;
 import lumCode.folderScriptInterpreter.exceptions.UnsupportedTypeException;

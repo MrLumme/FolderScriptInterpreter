@@ -1,6 +1,6 @@
 package lumCode.folderScriptInterpreter.exceptions;
 
-import lumCode.folderScriptInterpreter.handlers.CommandType;
+import lumCode.folderScriptInterpreter.handlers.command.CommandType;
 import lumCode.folderScriptInterpreter.variables.Variable;
 
 public class IncorrectParameterTypeException extends InterpreterException {
