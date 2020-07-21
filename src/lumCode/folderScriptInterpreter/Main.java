@@ -24,7 +24,6 @@ public class Main {
 	}
 
 	private static String[] breakDownScript() {
-		if ()
 		return null;
 	}
 
