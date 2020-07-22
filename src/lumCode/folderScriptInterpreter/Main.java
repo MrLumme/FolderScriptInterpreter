@@ -44,8 +44,6 @@ public class Main {
 
 			} else if (c[i] == '#') {
 
-			} else if (c[i] == 'x') {
-
 			}
 		}
 	}
