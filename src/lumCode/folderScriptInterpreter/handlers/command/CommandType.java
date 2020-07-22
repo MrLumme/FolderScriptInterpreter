@@ -5,7 +5,7 @@ import lumCode.folderScriptInterpreter.exceptions.UnsupportedTypeException;
 
 public enum CommandType {
 	NAME, EXTENSION, PARENT, IS_FILE, IS_AVAILABLE, COPY, MOVE, DELETE, LIST, PRINT, SIZE, REPLACE, SUBSTRING, RANDOM,
-	READ, TEST, OVERWRITE;
+	READ, TEST, OVERWRITE, CASE_SENSITIVE, EXIT;
 
 	public static CommandType fromChar(char c) throws UnsupportedTypeException {
 		switch (c) {
@@ -43,6 +43,10 @@ public enum CommandType {
 			return TEST;
 		case 'w':
 			return OVERWRITE;
+		case 'k':
+			return CASE_SENSITIVE;
+		case 'x':
+			return EXIT;
 		}
 
 		throw new UnsupportedTypeException(c);
@@ -84,11 +88,14 @@ public enum CommandType {
 			return 'u';
 		case TEST:
 			return 't';
+		case CASE_SENSITIVE:
+			return 'k';
+		case EXIT:
+			return 'x';
 		}
 		throw new UnsupportedCommandTypeException(c);
 	}
 
-	public static int varCount(CommandType c) throws UnsupportedCommandTypeException {
 	public static boolean valid(char c) {
 		switch (c) {
 		case 'n':
@@ -116,9 +123,11 @@ public enum CommandType {
 		}
 	}
 
+	public static int inputCount(CommandType c) throws UnsupportedCommandTypeException {
 		switch (c) {
 		case NAME:
 		case OVERWRITE:
+		case CASE_SENSITIVE:
 		case PARENT:
 		case SIZE:
 		case TEST:
@@ -127,6 +136,7 @@ public enum CommandType {
 		case EXTENSION:
 		case DELETE:
 		case READ:
+		case EXIT:
 			return 1;
 		case PRINT:
 		case MOVE:
@@ -141,7 +151,7 @@ public enum CommandType {
 		throw new UnsupportedCommandTypeException(c);
 	}
 
-	public static boolean commandReturns(CommandType c) throws UnsupportedCommandTypeException {
+	public static boolean outputs(CommandType c) throws UnsupportedCommandTypeException {
 		switch (c) {
 		case NAME:
 		case PARENT:
@@ -160,7 +170,9 @@ public enum CommandType {
 		case SUBSTRING:
 			return true;
 		case OVERWRITE:
+		case CASE_SENSITIVE:
 		case PRINT:
+		case EXIT:
 			return false;
 		}
 		throw new UnsupportedCommandTypeException(c);

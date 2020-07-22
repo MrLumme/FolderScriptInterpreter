@@ -33,7 +33,7 @@ public class Command implements CommandNode {
 		type = CommandType.fromChar(c);
 
 		String[] list = params.split(",");
-		if (CommandType.varCount(type) != list.length) {
+		if (CommandType.inputCount(type) != list.length) {
 			throw new IncorrentParameterAmountException(type, list.length);
 		}
 
@@ -62,7 +62,7 @@ public class Command implements CommandNode {
 				if (vars[i].type != VariableType.INT && vars[i].type != VariableType.SPECIAL) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
-			} else if (type == CommandType.OVERWRITE) {
+			} else if (type == CommandType.OVERWRITE || type == CommandType.CASE_SENSITIVE) {
 				if (vars[i].type != VariableType.INT) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
@@ -81,6 +81,8 @@ public class Command implements CommandNode {
 			UndefinedCommandException {
 		if (type == CommandType.OVERWRITE) {
 			overwriteCommand();
+		} else if (type == CommandType.CASE_SENSITIVE) {
+			caseSensitiveCommand();
 		} else if (type == CommandType.RANDOM) {
 			result = new Variable[] { randomCommand() };
 		} else if (type == CommandType.IS_FILE) {
@@ -105,8 +107,18 @@ public class Command implements CommandNode {
 			result = new Variable[] { copyCommand() };
 		} else if (type == CommandType.DELETE) {
 			result = new Variable[] { deleteCommand() };
+		} else if (type == CommandType.LIST) {
+			// todo
+		} else if (type == CommandType.SIZE) {
+			// todo
+		} else if (type == CommandType.EXIT) {
+			exitCommand();
 		}
 		throw new UndefinedCommandException(type, vars);
+	}
+
+	private void exitCommand() {
+		System.exit(((IntVariable) vars[0]).getVar());
 	}
 
 	private Variable deleteCommand() {
@@ -249,6 +261,10 @@ public class Command implements CommandNode {
 
 	private void overwriteCommand() throws LogicConversionException {
 		Main.overwrite = ((IntVariable) vars[0]).asBoolean();
+	}
+
+	private void caseSensitiveCommand() throws LogicConversionException {
+		Main.caseSensitive = ((IntVariable) vars[0]).asBoolean();
 	}
 
 	@Override

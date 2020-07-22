@@ -6,7 +6,7 @@ public class IncorrentParameterAmountException extends InterpreterException {
 	private static final long serialVersionUID = 1909083068084599020L;
 
 	public IncorrentParameterAmountException(CommandType c, int amount) throws UnsupportedCommandTypeException {
-		super("The command '" + CommandType.toChar(c) + "' expects " + CommandType.varCount(c)
+		super("The command '" + CommandType.toChar(c) + "' expects " + CommandType.inputCount(c)
 				+ " inputs parameters, but has gotten " + amount + ".");
 	}
 }
