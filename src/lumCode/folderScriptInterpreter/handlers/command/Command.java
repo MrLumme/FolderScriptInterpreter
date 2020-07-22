@@ -15,7 +15,6 @@ import lumCode.folderScriptInterpreter.exceptions.LogicConversionException;
 import lumCode.folderScriptInterpreter.exceptions.UndefinedCommandException;
 import lumCode.folderScriptInterpreter.exceptions.UnsupportedCommandTypeException;
 import lumCode.folderScriptInterpreter.exceptions.UnsupportedTypeException;
-import lumCode.folderScriptInterpreter.handlers.CommandNode;
 import lumCode.folderScriptInterpreter.variables.FileVariable;
 import lumCode.folderScriptInterpreter.variables.FolderVariable;
 import lumCode.folderScriptInterpreter.variables.IntVariable;
