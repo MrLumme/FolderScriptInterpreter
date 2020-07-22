@@ -12,6 +12,14 @@ import lumCode.folderScriptInterpreter.variables.Variable;
 import lumCode.folderScriptInterpreter.variables.VariableType;
 
 public class ArithmeticHandler {
+	private final Variable left, right;
+	private final ArithmeticType type;
+
+	public ArithmeticHandler(Variable left, ArithmeticType type, Variable right) {
+		this.left = left;
+		this.right = right;
+		this.type = type;
+	}
 
 	public Variable Interpret(Variable left, ArithmeticType operator, Variable right)
 			throws UnsupportedArithmeticTypeException, UndefinedArithmeticException {
