@@ -89,6 +89,33 @@ public enum CommandType {
 	}
 
 	public static int varCount(CommandType c) throws UnsupportedCommandTypeException {
+	public static boolean valid(char c) {
+		switch (c) {
+		case 'n':
+		case 'e':
+		case 'p':
+		case 'f':
+		case 'v':
+		case 'c':
+		case 'm':
+		case 'd':
+		case 'l':
+		case 'o':
+		case 's':
+		case 'r':
+		case 'u':
+		case 'q':
+		case 'g':
+		case 't':
+		case 'w':
+		case 'k':
+		case 'x':
+			return true;
+		default:
+			return false;
+		}
+	}
+
 		switch (c) {
 		case NAME:
 		case OVERWRITE:

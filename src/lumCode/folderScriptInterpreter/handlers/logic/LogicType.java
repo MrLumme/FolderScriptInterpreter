@@ -33,4 +33,16 @@ public enum LogicType {
 		}
 		throw new UnsupportedLogicTypeException(c);
 	}
+
+	public static boolean valid(char c) {
+		switch (c) {
+		case '=':
+		case '>':
+		case '<':
+		case '!':
+			return true;
+		default:
+			return false;
+		}
+	}
 }
