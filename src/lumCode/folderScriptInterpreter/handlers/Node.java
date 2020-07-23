@@ -1,14 +1,10 @@
 package lumCode.folderScriptInterpreter.handlers;
 
-import lumCode.folderScriptInterpreter.exceptions.CommandErrorException;
-import lumCode.folderScriptInterpreter.exceptions.LogicConversionException;
-import lumCode.folderScriptInterpreter.exceptions.UndefinedCommandException;
-import lumCode.folderScriptInterpreter.exceptions.UnsupportedCommandTypeException;
+import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 
 public interface Node {
 
-	public void action() throws UnsupportedCommandTypeException, CommandErrorException, LogicConversionException,
-			UndefinedCommandException;
+	public void action() throws InterpreterException;
 
 	public void explain();
 }
