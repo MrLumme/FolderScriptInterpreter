@@ -5,19 +5,20 @@ import java.io.File;
 import lumCode.folderScriptInterpreter.Main;
 import lumCode.folderScriptInterpreter.exceptions.InfiniteLoopException;
 import lumCode.folderScriptInterpreter.exceptions.IteratorTypeException;
+import lumCode.folderScriptInterpreter.handlers.Node;
 import lumCode.folderScriptInterpreter.variables.FileVariable;
 import lumCode.folderScriptInterpreter.variables.FolderVariable;
 import lumCode.folderScriptInterpreter.variables.IntVariable;
 import lumCode.folderScriptInterpreter.variables.StringVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 
-public class Iteration {
+public class Iteration implements Node {
 	private final int number;
 	private final Variable rule;
-	private final String[] script;
+	private final Node[] script;
 	private final IterationType type;
 
-	public Iteration(int number, Variable rule, String[] script) throws IteratorTypeException, InfiniteLoopException {
+	public Iteration(int number, Variable rule, Node[] script) throws IteratorTypeException, InfiniteLoopException {
 		super();
 		this.number = number;
 		this.rule = rule;
@@ -40,6 +41,7 @@ public class Iteration {
 		}
 	}
 
+	@Override
 	public void action() throws IteratorTypeException, InfiniteLoopException {
 		if (type == IterationType.INTEGER_ITERATION) {
 			int till = ((IntVariable) rule).getVar();
@@ -70,6 +72,7 @@ public class Iteration {
 		}
 	}
 
+	@Override
 	public void explain() {
 		if (type == IterationType.INTEGER_ITERATION) {
 			// explain
@@ -92,7 +95,7 @@ public class Iteration {
 		return rule;
 	}
 
-	public String[] getScript() {
+	public Node[] getScript() {
 		return script;
 	}
 }
