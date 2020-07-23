@@ -8,13 +8,13 @@ import java.nio.file.StandardOpenOption;
 import org.apache.commons.io.FileUtils;
 
 import lumCode.folderScriptInterpreter.Main;
+import lumCode.folderScriptInterpreter.VariableNameNotFoundException;
 import lumCode.folderScriptInterpreter.exceptions.CommandErrorException;
 import lumCode.folderScriptInterpreter.exceptions.IncorrectParameterTypeException;
 import lumCode.folderScriptInterpreter.exceptions.IncorrentParameterAmountException;
 import lumCode.folderScriptInterpreter.exceptions.LogicConversionException;
 import lumCode.folderScriptInterpreter.exceptions.UndefinedCommandException;
 import lumCode.folderScriptInterpreter.exceptions.UnsupportedCommandTypeException;
-import lumCode.folderScriptInterpreter.exceptions.UnsupportedTypeException;
 import lumCode.folderScriptInterpreter.variables.FileVariable;
 import lumCode.folderScriptInterpreter.variables.FolderVariable;
 import lumCode.folderScriptInterpreter.variables.IntVariable;
@@ -28,9 +28,9 @@ public class Command implements CommandNode {
 	private final Variable[] vars;
 	private Variable[] result;
 
-	public Command(char c, String params)
-			throws UnsupportedTypeException, IncorrentParameterAmountException, IncorrectParameterTypeException {
-		type = CommandType.fromChar(c);
+	public Command(CommandType type, String params) throws IncorrentParameterAmountException,
+			IncorrectParameterTypeException, VariableNameNotFoundException, UnsupportedCommandTypeException {
+		this.type = type;
 
 		String[] list = params.split(",");
 		if (CommandType.inputCount(type) != list.length) {
@@ -41,7 +41,7 @@ public class Command implements CommandNode {
 
 		vars = new Variable[list.length];
 		for (int i = 0; i < list.length; i++) {
-			vars[i] = Variable.fromString(list[i]);
+			vars[i] = Variable.interpret(list[i]);
 
 			if (type == CommandType.COPY || type == CommandType.DELETE || type == CommandType.MOVE
 					|| type == CommandType.EXTENSION || type == CommandType.NAME || type == CommandType.IS_FILE
