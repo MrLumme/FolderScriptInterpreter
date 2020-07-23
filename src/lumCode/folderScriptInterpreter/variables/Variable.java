@@ -2,6 +2,9 @@ package lumCode.folderScriptInterpreter.variables;
 
 import java.io.File;
 
+import lumCode.folderScriptInterpreter.Main;
+import lumCode.folderScriptInterpreter.VariableNameNotFoundException;
+
 public class Variable {
 	public final VariableType type;
 	public final String name;
@@ -32,6 +35,14 @@ public class Variable {
 				s.setRegex(true);
 			}
 			return s;
+		}
+	}
+
+	public static Variable interpret(String in) throws VariableNameNotFoundException {
+		if (in.startsWith("#")) {
+			return Main.lookUpVariable(in);
+		} else {
+			return Variable.fromString(in);
 		}
 	}
 }
