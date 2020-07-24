@@ -3,6 +3,8 @@ package lumCode.folderScriptInterpreter.variables;
 import java.io.File;
 
 import lumCode.folderScriptInterpreter.Main;
+import lumCode.folderScriptInterpreter.exceptions.ArgumentNameNotFoundException;
+import lumCode.folderScriptInterpreter.exceptions.IteratorNameNotFoundException;
 import lumCode.folderScriptInterpreter.exceptions.VariableNameNotFoundException;
 
 public class Variable {
@@ -38,9 +40,14 @@ public class Variable {
 		}
 	}
 
-	public static Variable interpret(String in) throws VariableNameNotFoundException {
+	public static Variable interpret(String in)
+			throws VariableNameNotFoundException, ArgumentNameNotFoundException, IteratorNameNotFoundException {
 		if (in.startsWith("#")) {
 			return Main.lookUpVariable(in);
+		} else if (in.startsWith("a")) {
+			return Main.lookUpArgument(in);
+		} else if (in.startsWith("i")) {
+			return Main.lookUpIterator(in);
 		} else {
 			return Variable.fromString(in);
 		}

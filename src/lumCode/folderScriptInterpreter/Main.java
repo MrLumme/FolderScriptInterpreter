@@ -2,12 +2,15 @@ package lumCode.folderScriptInterpreter;
 
 import java.util.ArrayList;
 
+import lumCode.folderScriptInterpreter.exceptions.ArgumentNameNotFoundException;
 import lumCode.folderScriptInterpreter.exceptions.BreakDownException;
 import lumCode.folderScriptInterpreter.exceptions.IncorrectParameterTypeException;
 import lumCode.folderScriptInterpreter.exceptions.IncorrentParameterAmountException;
 import lumCode.folderScriptInterpreter.exceptions.InfiniteLoopException;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
+import lumCode.folderScriptInterpreter.exceptions.IteratorNameNotFoundException;
 import lumCode.folderScriptInterpreter.exceptions.IteratorTypeException;
+import lumCode.folderScriptInterpreter.exceptions.NameNotFoundException;
 import lumCode.folderScriptInterpreter.exceptions.UnsupportedCommandTypeException;
 import lumCode.folderScriptInterpreter.exceptions.UnsupportedTypeException;
 import lumCode.folderScriptInterpreter.exceptions.VariableNameNotFoundException;
@@ -74,7 +77,7 @@ public class Main {
 				try {
 					out.add(new Command(t, params));
 				} catch (UnsupportedCommandTypeException | IncorrentParameterAmountException
-						| IncorrectParameterTypeException | VariableNameNotFoundException e) {
+						| IncorrectParameterTypeException | NameNotFoundException e) {
 					throw new BreakDownException(script, i, c[i], e.getMessage());
 				}
 			} else if (ArithmeticType.valid(c[i])) {
@@ -127,7 +130,7 @@ public class Main {
 				// Create node
 				try {
 					out.add(new Iteration(i, Variable.interpret(rule), (Node[]) n.toArray()));
-				} catch (IteratorTypeException | InfiniteLoopException | VariableNameNotFoundException e) {
+				} catch (IteratorTypeException | InfiniteLoopException | NameNotFoundException e) {
 					throw new BreakDownException(script, i, c[i], e.getMessage());
 				}
 			} else if (c[i] == '?') {
@@ -149,12 +152,12 @@ public class Main {
 					String[] ar = con.split("=<>!");
 					try {
 						left = Variable.interpret(ar[0]);
-					} catch (VariableNameNotFoundException e) {
+					} catch (NameNotFoundException e) {
 						throw new BreakDownException(script, i + 1, '#', e.getMessage());
 					}
 					try {
 						right = Variable.interpret(ar[1]);
-					} catch (VariableNameNotFoundException e) {
+					} catch (NameNotFoundException e) {
 						throw new BreakDownException(script, i + ar[0].length() + 2, '#', e.getMessage());
 					}
 					char l = con.charAt(ar[0].length());
@@ -207,5 +210,21 @@ public class Main {
 			}
 		}
 		throw new VariableNameNotFoundException(name);
+	}
+
+	public static Variable lookUpArgument(String in) throws ArgumentNameNotFoundException {
+		int n = Integer.parseInt(in.split("\\[\\]")[1]);
+		if (a.length < n) {
+			return a[n];
+		}
+		throw new ArgumentNameNotFoundException(n);
+	}
+
+	public static Variable lookUpIterator(String in) throws IteratorNameNotFoundException {
+		int n = Integer.parseInt(in.split("\\[\\]")[1]);
+		if (i.length < n) {
+			return i[n];
+		}
+		throw new IteratorNameNotFoundException(n);
 	}
 }
