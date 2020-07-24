@@ -12,9 +12,9 @@ import lumCode.folderScriptInterpreter.exceptions.CommandErrorException;
 import lumCode.folderScriptInterpreter.exceptions.IncorrectParameterTypeException;
 import lumCode.folderScriptInterpreter.exceptions.IncorrentParameterAmountException;
 import lumCode.folderScriptInterpreter.exceptions.LogicConversionException;
+import lumCode.folderScriptInterpreter.exceptions.NameNotFoundException;
 import lumCode.folderScriptInterpreter.exceptions.UndefinedCommandException;
 import lumCode.folderScriptInterpreter.exceptions.UnsupportedCommandTypeException;
-import lumCode.folderScriptInterpreter.exceptions.VariableNameNotFoundException;
 import lumCode.folderScriptInterpreter.variables.FileVariable;
 import lumCode.folderScriptInterpreter.variables.FolderVariable;
 import lumCode.folderScriptInterpreter.variables.IntVariable;
@@ -29,7 +29,7 @@ public class Command implements CommandNode {
 	private Variable[] result;
 
 	public Command(CommandType type, String params) throws IncorrentParameterAmountException,
-			IncorrectParameterTypeException, VariableNameNotFoundException, UnsupportedCommandTypeException {
+			IncorrectParameterTypeException, UnsupportedCommandTypeException, NameNotFoundException {
 		this.type = type;
 
 		String[] list = params.split(",");
@@ -54,7 +54,7 @@ public class Command implements CommandNode {
 				if (vars[i].type == VariableType.SPECIAL) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
-			} else if (type == CommandType.RANDOM) {
+			} else if (type == CommandType.RANDOM || type == CommandType.EXIT || type == CommandType.SLEEP) {
 				if (vars[i].type != VariableType.INT) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
@@ -63,7 +63,7 @@ public class Command implements CommandNode {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
 			} else if (type == CommandType.OVERWRITE || type == CommandType.CASE_SENSITIVE) {
-				if (vars[i].type != VariableType.INT) {
+				if (vars[i].type != VariableType.INT || ((IntVariable) vars[i]).isBoolean()) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
 			} else if (type == CommandType.PRINT && i == 1) {
@@ -111,10 +111,20 @@ public class Command implements CommandNode {
 			// todo
 		} else if (type == CommandType.SIZE) {
 			// todo
+		} else if (type == CommandType.SLEEP) {
+			sleepCommmand();
 		} else if (type == CommandType.EXIT) {
 			exitCommand();
 		}
 		throw new UndefinedCommandException(type, vars);
+	}
+
+	private void sleepCommmand() {
+		try {
+			Thread.sleep(((IntVariable) vars[0]).getVar());
+		} catch (InterruptedException e) {
+			// Do nothing
+		}
 	}
 
 	private void exitCommand() {

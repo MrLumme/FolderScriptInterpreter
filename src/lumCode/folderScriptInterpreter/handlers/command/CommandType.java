@@ -5,7 +5,7 @@ import lumCode.folderScriptInterpreter.exceptions.UnsupportedTypeException;
 
 public enum CommandType {
 	NAME, EXTENSION, PARENT, IS_FILE, IS_AVAILABLE, COPY, MOVE, DELETE, LIST, PRINT, SIZE, REPLACE, SUBSTRING, RANDOM,
-	READ, TEST, OVERWRITE, CASE_SENSITIVE, EXIT;
+	READ, TEST, OVERWRITE, CASE_SENSITIVE, SLEEP, EXIT;
 
 	public static CommandType fromChar(char c) throws UnsupportedTypeException {
 		switch (c) {
@@ -45,6 +45,8 @@ public enum CommandType {
 			return OVERWRITE;
 		case 'k':
 			return CASE_SENSITIVE;
+		case 'z':
+			return SLEEP;
 		case 'x':
 			return EXIT;
 		}
@@ -90,6 +92,8 @@ public enum CommandType {
 			return 't';
 		case CASE_SENSITIVE:
 			return 'k';
+		case SLEEP:
+			return 'z';
 		case EXIT:
 			return 'x';
 		}
@@ -116,6 +120,7 @@ public enum CommandType {
 		case 't':
 		case 'w':
 		case 'k':
+		case 'z':
 		case 'x':
 			return true;
 		default:
@@ -136,6 +141,7 @@ public enum CommandType {
 		case EXTENSION:
 		case DELETE:
 		case READ:
+		case SLEEP:
 		case EXIT:
 			return 1;
 		case PRINT:
@@ -172,6 +178,7 @@ public enum CommandType {
 		case OVERWRITE:
 		case CASE_SENSITIVE:
 		case PRINT:
+		case SLEEP:
 		case EXIT:
 			return false;
 		}
