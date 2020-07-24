@@ -47,7 +47,7 @@ public class Iteration implements Node {
 			int till = ((IntVariable) rule).getVar();
 			while (((IntVariable) Main.i[number]).getVar() < till) {
 
-				// iterate
+				// TODO
 
 				((IntVariable) Main.i[number]).setVar(((IntVariable) Main.i[number]).getVar() + 1);
 			}
@@ -57,8 +57,7 @@ public class Iteration implements Node {
 			for (File f : list) {
 				((FileVariable) Main.i[number]).setVar(f);
 
-				// iterate
-
+				// TODO
 			}
 		} else if (type == IterationType.STRING_ITERATION) {
 			char[] seq = ((StringVariable) rule).getVar().toCharArray();
@@ -66,8 +65,7 @@ public class Iteration implements Node {
 			for (char c : seq) {
 				((StringVariable) Main.i[number]).setVar("" + c);
 
-				// iterate
-
+				// TODO
 			}
 		}
 	}
