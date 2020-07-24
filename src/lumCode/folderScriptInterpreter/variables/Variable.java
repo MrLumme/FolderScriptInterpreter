@@ -3,7 +3,7 @@ package lumCode.folderScriptInterpreter.variables;
 import java.io.File;
 
 import lumCode.folderScriptInterpreter.Main;
-import lumCode.folderScriptInterpreter.VariableNameNotFoundException;
+import lumCode.folderScriptInterpreter.exceptions.VariableNameNotFoundException;
 
 public class Variable {
 	public final VariableType type;

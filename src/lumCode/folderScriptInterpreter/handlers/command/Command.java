@@ -8,13 +8,13 @@ import java.nio.file.StandardOpenOption;
 import org.apache.commons.io.FileUtils;
 
 import lumCode.folderScriptInterpreter.Main;
-import lumCode.folderScriptInterpreter.VariableNameNotFoundException;
 import lumCode.folderScriptInterpreter.exceptions.CommandErrorException;
 import lumCode.folderScriptInterpreter.exceptions.IncorrectParameterTypeException;
 import lumCode.folderScriptInterpreter.exceptions.IncorrentParameterAmountException;
 import lumCode.folderScriptInterpreter.exceptions.LogicConversionException;
 import lumCode.folderScriptInterpreter.exceptions.UndefinedCommandException;
 import lumCode.folderScriptInterpreter.exceptions.UnsupportedCommandTypeException;
+import lumCode.folderScriptInterpreter.exceptions.VariableNameNotFoundException;
 import lumCode.folderScriptInterpreter.variables.FileVariable;
 import lumCode.folderScriptInterpreter.variables.FolderVariable;
 import lumCode.folderScriptInterpreter.variables.IntVariable;

@@ -1,6 +1,4 @@
-package lumCode.folderScriptInterpreter;
-
-import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
+package lumCode.folderScriptInterpreter.exceptions;
 
 public class BreakDownException extends InterpreterException {
 

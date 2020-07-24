@@ -2,6 +2,7 @@ package lumCode.folderScriptInterpreter;
 
 import java.util.ArrayList;
 
+import lumCode.folderScriptInterpreter.exceptions.BreakDownException;
 import lumCode.folderScriptInterpreter.exceptions.IncorrectParameterTypeException;
 import lumCode.folderScriptInterpreter.exceptions.IncorrentParameterAmountException;
 import lumCode.folderScriptInterpreter.exceptions.InfiniteLoopException;
@@ -9,6 +10,7 @@ import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.exceptions.IteratorTypeException;
 import lumCode.folderScriptInterpreter.exceptions.UnsupportedCommandTypeException;
 import lumCode.folderScriptInterpreter.exceptions.UnsupportedTypeException;
+import lumCode.folderScriptInterpreter.exceptions.VariableNameNotFoundException;
 import lumCode.folderScriptInterpreter.handlers.Node;
 import lumCode.folderScriptInterpreter.handlers.arithmetic.ArithmeticType;
 import lumCode.folderScriptInterpreter.handlers.command.Command;
