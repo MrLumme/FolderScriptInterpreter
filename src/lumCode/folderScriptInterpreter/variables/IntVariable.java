@@ -34,7 +34,15 @@ public class IntVariable extends Variable {
 		} else if (var == 1) {
 			return true;
 		}
-
 		throw new LogicConversionException(var);
+	}
+
+	public boolean isBoolean() {
+		try {
+			asBoolean();
+			return true;
+		} catch (LogicConversionException e) {
+			return false;
+		}
 	}
 }
