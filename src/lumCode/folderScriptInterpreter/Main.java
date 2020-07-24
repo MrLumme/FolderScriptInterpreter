@@ -88,6 +88,13 @@ public class Main {
 				} catch (UnsupportedTypeException e) {
 					throw new BreakDownException(script, i, c[i], e.getMessage());
 				}
+			} else if (c[i] == '#') {
+				String name = "" + c[i];
+				while (c[i + 1] == '=' || c[i + 1] == '!') {
+					i++;
+					name += c[i];
+				}
+
 			} else if (c[i] == 'i') {
 				String number = "";
 				String rule = "";
