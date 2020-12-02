@@ -22,6 +22,7 @@ import lumCode.folderScriptInterpreter.handlers.conditional.Conditional;
 import lumCode.folderScriptInterpreter.handlers.iteration.Iteration;
 import lumCode.folderScriptInterpreter.handlers.logic.Logic;
 import lumCode.folderScriptInterpreter.handlers.logic.LogicType;
+import lumCode.folderScriptInterpreter.variables.ArrayVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 
 public class Main {
@@ -45,7 +46,7 @@ public class Main {
 	}
 
 	private static ArrayList<Node> breakDownScript(String script) throws BreakDownException {
-		char[] c = script.toCharArray();
+		char[] c = script.replace('\t', ' ').toCharArray();
 		ArrayList<Node> out = new ArrayList<Node>();
 
 		for (int i = 0; i < c.length; i++) {
@@ -90,7 +91,7 @@ public class Main {
 				}
 			} else if (c[i] == '#') {
 				String name = "" + c[i];
-				while (c[i + 1] == '=' || c[i + 1] == '!') {
+				while (c[i + 1] == '=' || c[i + 1] == '!' || c[i + 1] == ' ') {
 					i++;
 					name += c[i];
 				}

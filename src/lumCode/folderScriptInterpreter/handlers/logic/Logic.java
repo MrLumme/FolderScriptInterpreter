@@ -12,6 +12,7 @@ import lumCode.folderScriptInterpreter.variables.VariableType;
 public class Logic implements LogicNode {
 	private final Variable left, right;
 	private final LogicType type;
+
 	private boolean result;
 
 	public Logic(Variable left, LogicType type, Variable right) {
@@ -22,28 +23,36 @@ public class Logic implements LogicNode {
 
 	@Override
 	public void action() throws InterpreterException {
+		boolean found = false;
 		if (left.type == VariableType.INT) {
 			if (right.type == VariableType.INT) {
 				result = NumberLogicHandler.Interpret(((IntVariable) left).getVar(), type,
 						((IntVariable) right).getVar());
+				found = true;
 			}
 		} else if (left.type == VariableType.STRING) {
 			if (right.type == VariableType.STRING) {
 				result = StringLogicHandler.Interpret(((StringVariable) left).getVar(), type,
 						((StringVariable) right).getVar());
+				found = true;
 			}
 		} else if (left.type == VariableType.FILE) {
 			if (right.type == VariableType.FILE) {
 				result = FileLogicHandler.Interpret(((FileVariable) left).getVar(), type,
 						((FileVariable) right).getVar());
+				found = true;
 			}
 		} else if (left.type == VariableType.FOLDER) {
 			if (right.type == VariableType.FOLDER) {
 				result = FolderLogicHandler.Interpret(((FolderVariable) left).getVar(), type,
 						((FolderVariable) right).getVar());
+				found = true;
 			}
 		}
-		throw new UndefinedLogicException(left.toString(), type, right.toString());
+
+		if (!found) {
+			throw new UndefinedLogicException(left.toString(), type, right.toString());
+		}
 	}
 
 	@Override

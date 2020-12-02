@@ -11,7 +11,7 @@ public class StringVariable extends Variable {
 	}
 
 	public StringVariable(String var) {
-		this(var, null);
+		this(null, var);
 	}
 
 	public String getVar() {
