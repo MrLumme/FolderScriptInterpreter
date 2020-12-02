@@ -7,35 +7,35 @@ import lumCode.folderScriptInterpreter.handlers.logic.LogicNode;
 import lumCode.folderScriptInterpreter.variables.Variable;
 
 public class Declaring implements Node {
-	private final Variable var;
-	private final Variable other;
+	private final String name;
+	private Variable value;
 	private final Node action;
 	private final DeclaringType type;
 
-	public Declaring(Variable var, DeclaringType type, Node action) {
-		this.var = var;
+	public Declaring(String name, DeclaringType type, Node action) {
+		this.name = name;
 		this.action = action;
 		this.type = type;
-		other = null;
+		value = null;
 	}
 
-	public Declaring(Variable var, DeclaringType type, Variable other) {
-		this.var = var;
-		this.other = other;
+	public Declaring(String name, DeclaringType type, Variable value) {
+		this.name = name;
+		this.value = value;
 		this.type = type;
 		action = null;
 	}
 
 	@Override
 	public void action() throws InterpreterException {
-		if (other != null) {
+		if (value != null) {
 			if (type == DeclaringType.NEGATE) {
 				// TODO
 			} else {
 				// TODO
 			}
 		} else if (action instanceof LogicNode) {
-			// TODO
+			action.action();
 		} else if (action instanceof ArithmeticNode) {
 			// TODO
 		}
