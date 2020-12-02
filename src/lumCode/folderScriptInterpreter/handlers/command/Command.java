@@ -33,7 +33,7 @@ public class Command implements CommandNode {
 		this.type = type;
 
 		String[] list = params.split(",");
-		if (CommandType.inputCount(type) != list.length) {
+		if (type.getInput() != list.length) {
 			throw new IncorrentParameterAmountException(type, list.length);
 		}
 

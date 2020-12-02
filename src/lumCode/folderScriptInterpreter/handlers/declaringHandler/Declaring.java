@@ -1,4 +1,4 @@
-package lumCode.folderScriptInterpreter.handlers.DeclaringHandler;
+package lumCode.folderScriptInterpreter.handlers.declaringHandler;
 
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.handlers.Node;

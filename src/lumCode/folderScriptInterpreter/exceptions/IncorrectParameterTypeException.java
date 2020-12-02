@@ -8,6 +8,6 @@ public class IncorrectParameterTypeException extends InterpreterException {
 
 	public IncorrectParameterTypeException(CommandType c, Variable v) throws UnsupportedCommandTypeException {
 		super("The variable '" + v.toString() + "' resolves to the type '" + v.type.toString().toLowerCase()
-				+ "' which is not supported for the command '" + CommandType.toChar(c) + "'.");
+				+ "' which is not supported for the command '" + c.getChar() + "'.");
 	}
 }

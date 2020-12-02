@@ -6,7 +6,7 @@ public class UndefinedLogicException extends UndefinedException {
 	private static final long serialVersionUID = 8317477507578124451L;
 
 	public UndefinedLogicException(String left, LogicType l, String right) throws UnsupportedLogicTypeException {
-		super("equation", left + LogicType.toChar(l) + right);
+		super("equation", left + l.getChar() + right);
 	}
 
 }

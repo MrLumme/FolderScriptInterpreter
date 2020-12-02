@@ -7,7 +7,7 @@ public class UndefinedArithmeticException extends UndefinedException {
 
 	public UndefinedArithmeticException(String l, ArithmeticType a, String r)
 			throws UnsupportedArithmeticTypeException {
-		super("arithmetic", l + " " + ArithmeticType.toChar(a) + " " + r);
+		super("arithmetic", l + " " + a.getChar() + " " + r);
 	}
 
 }

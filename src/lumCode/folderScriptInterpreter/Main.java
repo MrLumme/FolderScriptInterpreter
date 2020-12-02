@@ -196,7 +196,7 @@ public class Main {
 				// Create node
 				out.add(new Conditional(new Logic(left, type, right), (Node[]) n.toArray()));
 			} else if (c[i] == 'h') {
-				// todo
+				// TODO
 			} else if (c[i] == '^') {
 				i++;
 				while (c[i] != '^') {
