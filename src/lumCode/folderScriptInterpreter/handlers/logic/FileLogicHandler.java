@@ -2,13 +2,21 @@ package lumCode.folderScriptInterpreter.handlers.logic;
 
 import java.io.File;
 
+import lumCode.folderScriptInterpreter.Utilities;
 import lumCode.folderScriptInterpreter.exceptions.UndefinedLogicException;
 import lumCode.folderScriptInterpreter.exceptions.UnsupportedLogicTypeException;
 
 public class FileLogicHandler {
 
+	@SuppressWarnings("incomplete-switch")
 	protected static boolean Interpret(File left, LogicType operator, File right)
 			throws UndefinedLogicException, UnsupportedLogicTypeException {
-		return StringLogicHandler.Interpret(left.getAbsolutePath(), operator, left.getAbsolutePath());
+		switch (operator) {
+		case EQUAL:
+			return Utilities.getMD5(left).equals(Utilities.getMD5(right));
+		case NOT:
+			return !Utilities.getMD5(left).equals(Utilities.getMD5(right));
+		}
+		throw new UndefinedLogicException(left.getAbsolutePath(), operator, right.getAbsolutePath());
 	}
 }
