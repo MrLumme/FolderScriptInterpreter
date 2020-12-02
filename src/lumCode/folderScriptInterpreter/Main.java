@@ -212,8 +212,16 @@ public class Main {
 
 	public static Variable lookUpVariable(String name) throws VariableNameNotFoundException {
 		for (Variable var : vars) {
-			if (var.name.equals(name)) {
-				return var;
+			if (name.contains("[")) {
+				int numb = Integer.parseInt(name.substring(name.indexOf('[') + 1, name.indexOf(']')));
+				if (var.name.equals(name.substring(0, name.indexOf('[')))) {
+					if (var instanceof ArrayVariable)
+						return ((ArrayVariable) var).getVar(numb);
+				}
+			} else {
+				if (var.name.equals(name)) {
+					return var;
+				}
 			}
 		}
 		throw new VariableNameNotFoundException(name);
