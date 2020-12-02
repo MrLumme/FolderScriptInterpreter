@@ -1,11 +1,14 @@
 package lumCode.folderScriptInterpreter.handlers.iteration;
 
 import java.io.File;
+import java.util.TreeMap;
 
 import lumCode.folderScriptInterpreter.Main;
 import lumCode.folderScriptInterpreter.exceptions.InfiniteLoopException;
+import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.exceptions.IteratorTypeException;
 import lumCode.folderScriptInterpreter.handlers.Node;
+import lumCode.folderScriptInterpreter.variables.ArrayVariable;
 import lumCode.folderScriptInterpreter.variables.FileVariable;
 import lumCode.folderScriptInterpreter.variables.FolderVariable;
 import lumCode.folderScriptInterpreter.variables.IntVariable;
@@ -14,58 +17,72 @@ import lumCode.folderScriptInterpreter.variables.Variable;
 
 public class Iteration implements Node {
 	private final int number;
-	private final Variable rule;
+	private final Variable iterant;
 	private final Node[] script;
 	private final IterationType type;
 
-	public Iteration(int number, Variable rule, Node[] script) throws IteratorTypeException, InfiniteLoopException {
-		super();
+	public Iteration(int number, Variable iterant, Node[] script) throws IteratorTypeException, InfiniteLoopException {
 		this.number = number;
-		this.rule = rule;
+		this.iterant = iterant;
 		this.script = script;
 
-		if (rule instanceof IntVariable) {
-			if (((IntVariable) rule).getVar() < 0) {
-				throw new InfiniteLoopException((IntVariable) rule);
+		if (iterant instanceof IntVariable) {
+			if (((IntVariable) iterant).getVar() < 0) {
+				throw new InfiniteLoopException((IntVariable) iterant);
 			}
 			Main.i[number] = new IntVariable(0);
 			type = IterationType.INTEGER_ITERATION;
-		} else if (rule instanceof FolderVariable) {
+		} else if (iterant instanceof FolderVariable) {
 			Main.i[number] = new FileVariable(null);
 			type = IterationType.FOLDER_ITERATION;
-		} else if (rule instanceof StringVariable) {
+		} else if (iterant instanceof StringVariable) {
 			Main.i[number] = new StringVariable("");
 			type = IterationType.STRING_ITERATION;
+		} else if (iterant instanceof ArrayVariable) {
+			Main.i[number] = new ArrayVariable();
+			type = IterationType.LIST_ITERATION;
 		} else {
-			throw new IteratorTypeException(rule);
+			throw new IteratorTypeException(iterant);
 		}
 	}
 
 	@Override
-	public void action() throws IteratorTypeException, InfiniteLoopException {
+	public void action() throws InterpreterException {
 		if (type == IterationType.INTEGER_ITERATION) {
-			int till = ((IntVariable) rule).getVar();
+			int till = ((IntVariable) iterant).getVar();
 			while (((IntVariable) Main.i[number]).getVar() < till) {
-
-				// TODO
-
+				for (Node n : script) {
+					n.action();
+				}
 				((IntVariable) Main.i[number]).setVar(((IntVariable) Main.i[number]).getVar() + 1);
 			}
 		} else if (type == IterationType.FOLDER_ITERATION) {
-			File[] list = ((FolderVariable) rule).getVar().listFiles();
+			File[] list = ((FolderVariable) iterant).getVar().listFiles();
 			Main.i[number] = new FileVariable(null);
 			for (File f : list) {
 				((FileVariable) Main.i[number]).setVar(f);
-
-				// TODO
+				for (Node n : script) {
+					n.action();
+				}
 			}
 		} else if (type == IterationType.STRING_ITERATION) {
-			char[] seq = ((StringVariable) rule).getVar().toCharArray();
+			char[] seq = ((StringVariable) iterant).getVar().toCharArray();
 			Main.i[number] = new StringVariable("");
 			for (char c : seq) {
 				((StringVariable) Main.i[number]).setVar("" + c);
-
-				// TODO
+				for (Node n : script) {
+					n.action();
+				}
+			}
+		} else if (type == IterationType.LIST_ITERATION) {
+			TreeMap<Integer, Variable> list = new TreeMap<Integer, Variable>();
+			list.putAll(((ArrayVariable) iterant).getAll());
+			Main.i[number] = new ArrayVariable();
+			for (Variable f : list.values()) {
+				Main.i[number] = f;
+				for (Node n : script) {
+					n.action();
+				}
 			}
 		}
 	}
@@ -78,6 +95,8 @@ public class Iteration implements Node {
 			// explain
 		} else if (type == IterationType.STRING_ITERATION) {
 			// explain
+		} else if (type == IterationType.LIST_ITERATION) {
+			// explain
 		}
 	}
 
@@ -89,8 +108,8 @@ public class Iteration implements Node {
 		return number;
 	}
 
-	public Variable getRule() {
-		return rule;
+	public Variable getIterant() {
+		return iterant;
 	}
 
 	public Node[] getScript() {
