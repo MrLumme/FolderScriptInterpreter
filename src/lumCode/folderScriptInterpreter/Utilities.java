@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -20,5 +22,20 @@ public class Utilities {
 			md5 = "";
 		}
 		return md5;
+	}
+
+	public static List<File> listFiles(File dir, int level) {
+		List<File> out = new ArrayList<File>();
+		for (File f : dir.listFiles()) {
+			if (f.isDirectory()) {
+				if (level == 0) {
+					out.add(f);
+				} else {
+
+				}
+			} else if (f.isFile()) {
+
+			}
+		}
 	}
 }
