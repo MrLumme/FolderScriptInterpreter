@@ -34,7 +34,6 @@ public class Command implements CommandNode {
 
 		String[] list = params.split(",");
 		if (type.getInput() != list.length) {
-			throw new IncorrentParameterAmountException(type, list.length);
 		}
 
 		// Make variables

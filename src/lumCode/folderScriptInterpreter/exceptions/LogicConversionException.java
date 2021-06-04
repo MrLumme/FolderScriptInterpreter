@@ -6,4 +6,8 @@ public class LogicConversionException extends InterpreterException {
 	public LogicConversionException(int var) {
 		super("The value '" + var + "' can not be converted to boolean logic.");
 	}
+
+	public LogicConversionException(long var) {
+		super("The value '" + var + "' can not be converted to boolean logic.");
+	}
 }
