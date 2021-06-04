@@ -2,20 +2,15 @@ package lumCode.folderScriptInterpreter.variables;
 
 import lumCode.folderScriptInterpreter.exceptions.LogicConversionException;
 
-public class IntVariable extends Variable {
-	private int var;
+public class NumberVariable extends Variable {
+	private long var;
 
-	public IntVariable(int var) {
-		super(VariableType.INT);
+	public NumberVariable(long var) {
+		super(VariableType.NUMBER);
 		this.var = var;
 	}
 
-	protected IntVariable(String name, int var) {
-		super(VariableType.INT, name);
-		this.var = var;
-	}
-
-	public int getVar() {
+	public long getVar() {
 		return var;
 	}
 

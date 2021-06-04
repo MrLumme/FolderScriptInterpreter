@@ -1,17 +1,13 @@
 package lumCode.folderScriptInterpreter.variables;
 
-public class StringVariable extends Variable {
+public class TextVariable extends Variable {
 	private String var;
 	private boolean regex;
 
-	protected StringVariable(String name, String var) {
-		super(VariableType.STRING, name);
+	public TextVariable(String var) {
+		super(VariableType.TEXT);
 		this.var = var;
 		this.regex = false;
-	}
-
-	public StringVariable(String var) {
-		this(null, var);
 	}
 
 	public String getVar() {

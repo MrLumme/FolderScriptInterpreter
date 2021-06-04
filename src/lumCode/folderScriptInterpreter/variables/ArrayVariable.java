@@ -5,22 +5,23 @@ import java.util.HashMap;
 public class ArrayVariable extends Variable {
 	private HashMap<Integer, Variable> vars;
 
-	protected ArrayVariable(String name) {
-		super(VariableType.ARRAY, name);
-	}
-
 	public ArrayVariable() {
 		super(VariableType.ARRAY);
-	}
-
-	protected ArrayVariable(String name, HashMap<Integer, Variable> vars) {
-		this(name);
-		this.vars = vars;
 	}
 
 	protected ArrayVariable(HashMap<Integer, Variable> vars) {
 		this();
 		this.vars = vars;
+	}
+
+	@Override
+	public String toString() {
+		String str = "[";
+		for (Integer key : vars.keySet()) {
+			str += key + ":\"" + vars.get(key) + "\",";
+		}
+		str = str.substring(0, str.length() - 1) + "]";
+		return str;
 	}
 
 	public void setVar(int numb, Variable var) {

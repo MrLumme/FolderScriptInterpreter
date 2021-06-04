@@ -6,10 +6,6 @@ public class SpecialVariable extends Variable {
 		super(VariableType.SPECIAL);
 	}
 
-	protected SpecialVariable(String name) {
-		super(VariableType.SPECIAL, name);
-	}
-
 	@Override
 	public String toString() {
 		return "$";

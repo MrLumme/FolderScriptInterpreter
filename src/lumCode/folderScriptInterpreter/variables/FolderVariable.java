@@ -15,16 +15,6 @@ public class FolderVariable extends Variable {
 		this.var = var;
 	}
 
-	protected FolderVariable(String name, File var) {
-		super(VariableType.FOLDER, name);
-		this.var = var;
-	}
-
-	protected FolderVariable(String name, File var, VariableType type) {
-		super(type, name);
-		this.var = var;
-	}
-
 	public File getVar() {
 		return var;
 	}

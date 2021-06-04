@@ -4,25 +4,21 @@ import java.io.File;
 
 import lumCode.folderScriptInterpreter.Main;
 import lumCode.folderScriptInterpreter.exceptions.ArgumentNameNotFoundException;
+import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.exceptions.IteratorNameNotFoundException;
 import lumCode.folderScriptInterpreter.exceptions.VariableNameNotFoundException;
+import lumCode.folderScriptInterpreter.handlers.ResultantNode;
 
-public class Variable {
+public class Variable implements ResultantNode {
 	public final VariableType type;
-	public final String name;
-
-	protected Variable(VariableType type, String name) {
-		this.type = type;
-		this.name = name;
-	}
 
 	protected Variable(VariableType type) {
-		this(type, null);
+		this.type = type;
 	}
 
 	public static Variable fromString(String var) {
 		if (var.matches("^-{0,1}[0-9]{1,}$")) {
-			return new IntVariable(Integer.parseInt(var));
+			return new NumberVariable(Long.parseLong(var));
 		} else if (var.matches("^[A-Za-z]{1}:(\\\\|\\/).{1,}")) {
 			if (var.contains(".")) {
 				return new FileVariable(new File(var));
@@ -32,7 +28,7 @@ public class Variable {
 		} else if (var.equals("$")) {
 			return new SpecialVariable();
 		} else {
-			StringVariable s = new StringVariable(var);
+			TextVariable s = new TextVariable(var);
 			if (var.startsWith("{") && var.endsWith("}")) {
 				s.setRegex(true);
 			}
@@ -40,7 +36,7 @@ public class Variable {
 		}
 	}
 
-	public static Variable interpret(String in)
+	public static Variable fetch(String in)
 			throws VariableNameNotFoundException, ArgumentNameNotFoundException, IteratorNameNotFoundException {
 		if (in.startsWith("#")) {
 			return Main.lookUpVariable(in);
@@ -48,8 +44,21 @@ public class Variable {
 			return Main.lookUpArgument(in);
 		} else if (in.startsWith("i")) {
 			return Main.lookUpIterator(in);
-		} else {
-			return Variable.fromString(in);
 		}
+		return null;
+	}
+
+	@Override
+	public void action() throws InterpreterException {
+	}
+
+	@Override
+	public void explain() {
+		// TODO return toString();
+	}
+
+	@Override
+	public Variable result() {
+		return this;
 	}
 }
