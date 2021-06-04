@@ -3,7 +3,7 @@ package lumCode.folderScriptInterpreter.handlers.arithmetic;
 import lumCode.folderScriptInterpreter.exceptions.UnsupportedArithmeticTypeException;
 
 public class NumberArithmeticHandler {
-	public static int interpret(int left, ArithmeticType operator, int right)
+	public static long interpret(long left, ArithmeticType operator, long right)
 			throws UnsupportedArithmeticTypeException {
 		switch (operator) {
 		case ADDITION:

@@ -46,7 +46,7 @@ public class FolderArithmeticHandler {
 		}
 	}
 
-	public static File interpret(int left, ArithmeticType operator, File right)
+	public static File interpret(long left, ArithmeticType operator, File right)
 			throws UnsupportedArithmeticTypeException, UndefinedArithmeticException {
 		String path = right.getParent();
 		String name = right.getName();

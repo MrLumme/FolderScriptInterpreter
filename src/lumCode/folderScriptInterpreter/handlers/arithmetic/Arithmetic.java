@@ -4,8 +4,8 @@ import lumCode.folderScriptInterpreter.exceptions.UndefinedArithmeticException;
 import lumCode.folderScriptInterpreter.exceptions.UnsupportedArithmeticTypeException;
 import lumCode.folderScriptInterpreter.variables.FileVariable;
 import lumCode.folderScriptInterpreter.variables.FolderVariable;
-import lumCode.folderScriptInterpreter.variables.IntVariable;
-import lumCode.folderScriptInterpreter.variables.StringVariable;
+import lumCode.folderScriptInterpreter.variables.NumberVariable;
+import lumCode.folderScriptInterpreter.variables.TextVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 import lumCode.folderScriptInterpreter.variables.VariableType;
 
@@ -22,27 +22,27 @@ public class Arithmetic {
 	public Variable Interpret(Variable left, ArithmeticType operator, Variable right)
 			throws UnsupportedArithmeticTypeException, UndefinedArithmeticException {
 
-		if (left.type == VariableType.INT) {
-			if (right.type == VariableType.INT) {
-				return new IntVariable(NumberArithmeticHandler.interpret(((IntVariable) left).getVar(), operator,
-						((IntVariable) right).getVar()));
-			} else if (right.type == VariableType.STRING) {
-				return new StringVariable(StringArithmeticHandler.interpret("" + ((IntVariable) left).getVar(),
-						operator, ((StringVariable) right).getVar()));
+		if (left.type == VariableType.NUMBER) {
+			if (right.type == VariableType.NUMBER) {
+				return new NumberVariable(NumberArithmeticHandler.interpret(((NumberVariable) left).getVar(), operator,
+						((NumberVariable) right).getVar()));
+			} else if (right.type == VariableType.TEXT) {
+				return new TextVariable(StringArithmeticHandler.interpret("" + ((NumberVariable) left).getVar(),
+						operator, ((TextVariable) right).getVar()));
 			} else if (right.type == VariableType.FILE) {
 //				return new FileVariable(
 //						fileArithmetic(((IntVariable) left).getVar(), operator, ((FileVariable) right).getVar()));
 			} else if (right.type == VariableType.FOLDER) {
-				return new FolderVariable(FolderArithmeticHandler.interpret(((IntVariable) left).getVar(), operator,
+				return new FolderVariable(FolderArithmeticHandler.interpret(((NumberVariable) left).getVar(), operator,
 						((FolderVariable) right).getVar()));
 			}
-		} else if (left.type == VariableType.STRING) {
-			if (right.type == VariableType.INT) {
-				return new StringVariable(StringArithmeticHandler.interpret(((StringVariable) left).getVar(), operator,
-						"" + ((IntVariable) right).getVar()));
-			} else if (right.type == VariableType.STRING) {
-				return new StringVariable(StringArithmeticHandler.interpret(((StringVariable) left).getVar(), operator,
-						((StringVariable) right).getVar()));
+		} else if (left.type == VariableType.TEXT) {
+			if (right.type == VariableType.NUMBER) {
+				return new TextVariable(StringArithmeticHandler.interpret(((TextVariable) left).getVar(), operator,
+						"" + ((NumberVariable) right).getVar()));
+			} else if (right.type == VariableType.TEXT) {
+				return new TextVariable(StringArithmeticHandler.interpret(((TextVariable) left).getVar(), operator,
+						((TextVariable) right).getVar()));
 			} else if (right.type == VariableType.FILE) {
 //				return new StringVariable(
 //						fileArithmetic(((StringVariable) left).getVar(), operator, ((FileVariable) right).getVar()));
@@ -51,12 +51,12 @@ public class Arithmetic {
 //						((FolderVariable) right).getVar()));
 			}
 		} else if (left.type == VariableType.FILE) {
-			if (right.type == VariableType.INT) {
+			if (right.type == VariableType.NUMBER) {
 				return new FileVariable(FileArithmeticHandler.interpret(((FileVariable) left).getVar(), operator,
-						"" + ((IntVariable) right).getVar()));
-			} else if (right.type == VariableType.STRING) {
+						"" + ((NumberVariable) right).getVar()));
+			} else if (right.type == VariableType.TEXT) {
 				return new FileVariable(FileArithmeticHandler.interpret(((FileVariable) left).getVar(), operator,
-						((StringVariable) right).getVar()));
+						((TextVariable) right).getVar()));
 			} else if (right.type == VariableType.FILE) {
 //				return new FileVariable(
 //						fileArithmetic(((FileVariable) left).getVar(), operator, ((IntVariable) right).getVar()));
@@ -65,12 +65,12 @@ public class Arithmetic {
 						((FileVariable) left).getVar()));
 			}
 		} else if (left.type == VariableType.FOLDER) {
-			if (right.type == VariableType.INT) {
+			if (right.type == VariableType.NUMBER) {
 				return new FolderVariable(FolderArithmeticHandler.interpret(((FileVariable) left).getVar(), operator,
-						"" + ((IntVariable) right).getVar()));
-			} else if (right.type == VariableType.STRING) {
+						"" + ((NumberVariable) right).getVar()));
+			} else if (right.type == VariableType.TEXT) {
 				return new FolderVariable(FolderArithmeticHandler.interpret(((FileVariable) left).getVar(), operator,
-						((StringVariable) right).getVar()));
+						((TextVariable) right).getVar()));
 			} else if (right.type == VariableType.FILE) {
 //				return new FileVariable(
 //						fileArithmetic(((FileVariable) left).getVar(), operator, ((FileVariable) right).getVar()));
