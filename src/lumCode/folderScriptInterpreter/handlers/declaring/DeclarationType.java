@@ -1,18 +1,18 @@
-package lumCode.folderScriptInterpreter.handlers.declaringHandler;
+package lumCode.folderScriptInterpreter.handlers.declaring;
 
 import lumCode.folderScriptInterpreter.exceptions.UnsupportedTypeException;
 
-public enum DeclaringType {
+public enum DeclarationType {
 	EQUAL('='), NEGATE('!');
 
 	private char symbol;
 
-	private DeclaringType(char symbol) {
+	private DeclarationType(char symbol) {
 		this.symbol = symbol;
 	}
 
-	public static DeclaringType fromChar(char c) throws UnsupportedTypeException {
-		for (DeclaringType t : DeclaringType.values()) {
+	public static DeclarationType fromChar(char c) throws UnsupportedTypeException {
+		for (DeclarationType t : DeclarationType.values()) {
 			if (t.symbol == c) {
 				return t;
 			}
@@ -25,7 +25,7 @@ public enum DeclaringType {
 	}
 
 	public static boolean valid(char c) {
-		for (DeclaringType t : DeclaringType.values()) {
+		for (DeclarationType t : DeclarationType.values()) {
 			if (t.symbol == c) {
 				return true;
 			}

@@ -1,44 +1,53 @@
-package lumCode.folderScriptInterpreter.handlers.declaringHandler;
+package lumCode.folderScriptInterpreter.handlers.declaring;
 
+import lumCode.folderScriptInterpreter.Main;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
+import lumCode.folderScriptInterpreter.exceptions.UndefinedDeclaringException;
 import lumCode.folderScriptInterpreter.handlers.Node;
-import lumCode.folderScriptInterpreter.handlers.arithmetic.ArithmeticNode;
-import lumCode.folderScriptInterpreter.handlers.logic.LogicNode;
+import lumCode.folderScriptInterpreter.handlers.ResultantNode;
+import lumCode.folderScriptInterpreter.variables.NumberVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 
-public class Declaring implements Node {
+public class Declaration implements Node {
 	private final String name;
 	private Variable value;
 	private final Node action;
-	private final DeclaringType type;
+	private final DeclarationType type;
 
-	public Declaring(String name, DeclaringType type, Node action) {
+	public Declaration(String name, DeclarationType type, Node action) {
 		this.name = name;
 		this.action = action;
 		this.type = type;
 		value = null;
+		Main.setVariable(name, "0");
 	}
 
-	public Declaring(String name, DeclaringType type, Variable value) {
+	public Declaration(String name, DeclarationType type, Variable value) {
 		this.name = name;
 		this.value = value;
 		this.type = type;
 		action = null;
+		Main.setVariable(name, "0");
 	}
 
 	@Override
 	public void action() throws InterpreterException {
-		if (value != null) {
-			if (type == DeclaringType.NEGATE) {
-				// TODO
-			} else {
-				// TODO
-			}
-		} else if (action instanceof LogicNode) {
+		Variable var = value;
+		if (action instanceof ResultantNode) {
 			action.action();
-		} else if (action instanceof ArithmeticNode) {
-			// TODO
+			var = Variable.fromString("" + ((ResultantNode) action).result());
 		}
+
+		if (type == DeclarationType.NEGATE) {
+			if (var.toString().equals("1")) {
+				var = new NumberVariable(0);
+			} else if (var.toString().equals("0")) {
+				var = new NumberVariable(1);
+			} else {
+				throw new UndefinedDeclaringException(type, value);
+			}
+		}
+		Main.setVariable(name, var.toString());
 	}
 
 	@Override
