@@ -1,9 +1,8 @@
-package lumCode.folderScriptInterpreter.handlers.arithmetic;
+package lumCode.folderScriptInterpreter.handlers;
 
-import lumCode.folderScriptInterpreter.handlers.Node;
 import lumCode.folderScriptInterpreter.variables.Variable;
 
-public interface ArithmeticNode extends Node {
+public interface ResultantNode extends Node {
 
 	public Variable result();
 }
