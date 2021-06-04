@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.handlers.logic.Logic;
 import lumCode.folderScriptInterpreter.handlers.logic.LogicType;
+import lumCode.folderScriptInterpreter.variables.NumberVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 
 class LogicTest {
@@ -15,13 +16,13 @@ class LogicTest {
 	void logicTest() throws InterpreterException {
 		Logic l = new Logic(Variable.fromString("15"), LogicType.GREATER, Variable.fromString("12"));
 		l.action();
-		assertTrue(l.result());
+		assertTrue(((NumberVariable) l.result()).asBoolean());
 		Logic l2 = new Logic(Variable.fromString("String"), LogicType.EQUAL, Variable.fromString("String"));
 		l2.action();
-		assertTrue(l2.result());
+		assertTrue(((NumberVariable) l2.result()).asBoolean());
 		Logic l3 = new Logic(Variable.fromString("String"), LogicType.EQUAL, Variable.fromString("Type"));
 		l3.action();
-		assertTrue(!l3.result());
+		assertTrue(!((NumberVariable) l3.result()).asBoolean());
 	}
 
 }
