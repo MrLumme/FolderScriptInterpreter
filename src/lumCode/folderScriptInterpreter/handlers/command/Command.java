@@ -1,9 +1,12 @@
 package lumCode.folderScriptInterpreter.handlers.command;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.HashMap;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
@@ -11,58 +14,74 @@ import lumCode.folderScriptInterpreter.Main;
 import lumCode.folderScriptInterpreter.exceptions.CommandErrorException;
 import lumCode.folderScriptInterpreter.exceptions.IncorrectParameterTypeException;
 import lumCode.folderScriptInterpreter.exceptions.IncorrentParameterAmountException;
+import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.exceptions.LogicConversionException;
-import lumCode.folderScriptInterpreter.exceptions.NameNotFoundException;
 import lumCode.folderScriptInterpreter.exceptions.UndefinedCommandException;
 import lumCode.folderScriptInterpreter.exceptions.UnsupportedCommandTypeException;
+import lumCode.folderScriptInterpreter.handlers.Node;
+import lumCode.folderScriptInterpreter.handlers.ResultantNode;
+import lumCode.folderScriptInterpreter.variables.ArrayVariable;
 import lumCode.folderScriptInterpreter.variables.FileVariable;
 import lumCode.folderScriptInterpreter.variables.FolderVariable;
-import lumCode.folderScriptInterpreter.variables.IntVariable;
+import lumCode.folderScriptInterpreter.variables.NumberVariable;
 import lumCode.folderScriptInterpreter.variables.SpecialVariable;
-import lumCode.folderScriptInterpreter.variables.StringVariable;
+import lumCode.folderScriptInterpreter.variables.TextVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 import lumCode.folderScriptInterpreter.variables.VariableType;
 
-public class Command implements CommandNode {
+public class Command implements ResultantNode {
 	private final CommandType type;
-	private final Variable[] vars;
-	private Variable[] result;
+	private final List<Node> input;
+	private Variable output;
+	private Variable[] vars;
 
-	public Command(CommandType type, String params) throws IncorrentParameterAmountException,
-			IncorrectParameterTypeException, UnsupportedCommandTypeException, NameNotFoundException {
+	public Command(CommandType type, List<Node> input) throws IncorrentParameterAmountException, CommandErrorException {
 		this.type = type;
+		this.input = input;
+		output = null;
+		vars = null;
 
-		String[] list = params.split(",");
-		if (type.getInput() != list.length) {
+		if (type.getInput() != input.size()) {
+			throw new IncorrentParameterAmountException(type, input.size());
+		}
+		for (Node i : input) {
+			if (!(i instanceof ResultantNode)) {
+				throw new CommandErrorException("The commands needs resulting inputs, which one node does not is not.");
+			}
+		}
+	}
+
+	@Override
+	public void action() throws InterpreterException {
+		// Fetch results
+		vars = new Variable[input.size()];
+		for (int i = 0; input.size() < i; i++) {
+			input.get(i).action();
+			vars[i] = ((ResultantNode) input.get(i)).result();
 		}
 
-		// Make variables
-
-		vars = new Variable[list.length];
-		for (int i = 0; i < list.length; i++) {
-			vars[i] = Variable.interpret(list[i]);
-
+		for (int i = 0; i < vars.length; i++) {
 			if (type == CommandType.COPY || type == CommandType.DELETE || type == CommandType.MOVE
 					|| type == CommandType.EXTENSION || type == CommandType.NAME || type == CommandType.IS_FILE
-					|| type == CommandType.IS_AVAILABLE || type == CommandType.PARENT || type == CommandType.READ
-					|| (i == 0 && type == CommandType.LIST)) {
+					|| type == CommandType.IS_AVAILABLE || type == CommandType.PARENT || type == CommandType.READ) {
 				if (vars[i].type != VariableType.FILE && vars[i].type != VariableType.FOLDER) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
-			} else if (type == CommandType.REPLACE || (type == CommandType.SUBSTRING && i == 0)) {
+			} else if (type == CommandType.REPLACE
+					|| (i == 0 && (type == CommandType.SUBSTRING || type == CommandType.LIST))) {
 				if (vars[i].type == VariableType.SPECIAL) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
 			} else if (type == CommandType.RANDOM || type == CommandType.EXIT || type == CommandType.SLEEP) {
-				if (vars[i].type != VariableType.INT) {
+				if (vars[i].type != VariableType.NUMBER) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
 			} else if (i == 1 && type == CommandType.LIST) {
-				if (vars[i].type != VariableType.INT && vars[i].type != VariableType.SPECIAL) {
+				if (vars[i].type != VariableType.NUMBER && vars[i].type != VariableType.SPECIAL) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
 			} else if (type == CommandType.OVERWRITE || type == CommandType.CASE_SENSITIVE) {
-				if (vars[i].type != VariableType.INT || ((IntVariable) vars[i]).isBoolean()) {
+				if (vars[i].type != VariableType.NUMBER || ((NumberVariable) vars[i]).isBoolean()) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
 			} else if (type == CommandType.PRINT && i == 1) {
@@ -72,44 +91,38 @@ public class Command implements CommandNode {
 			}
 		}
 
-		result = null;
-	}
-
-	@Override
-	public void action() throws UnsupportedCommandTypeException, CommandErrorException, LogicConversionException,
-			UndefinedCommandException {
 		if (type == CommandType.OVERWRITE) {
 			overwriteCommand();
 		} else if (type == CommandType.CASE_SENSITIVE) {
 			caseSensitiveCommand();
 		} else if (type == CommandType.RANDOM) {
-			result = new Variable[] { randomCommand() };
+			output = randomCommand();
 		} else if (type == CommandType.IS_FILE) {
-			result = new Variable[] { isFileCommand() };
+			output = isFileCommand();
 		} else if (type == CommandType.IS_AVAILABLE) {
-			result = new Variable[] { isAvailableCommand() };
+			output = isAvailableCommand();
 		} else if (type == CommandType.NAME) {
-			result = new Variable[] { nameCommand() };
+			output = nameCommand();
 		} else if (type == CommandType.PARENT) {
-			result = new Variable[] { parentCommand() };
+			output = parentCommand();
 		} else if (type == CommandType.EXTENSION) {
-			result = new Variable[] { extensionCommand() };
+			output = extensionCommand();
 		} else if (type == CommandType.REPLACE) {
-			result = new Variable[] { replaceCommand() };
+			output = replaceCommand();
 		} else if (type == CommandType.SUBSTRING) {
-			result = new Variable[] { substringCommand() };
+			output = substringCommand();
 		} else if (type == CommandType.PRINT) {
 			printCommand();
 		} else if (type == CommandType.MOVE) {
-			result = new Variable[] { moveCommand() };
+			output = moveCommand();
 		} else if (type == CommandType.COPY) {
-			result = new Variable[] { copyCommand() };
+			output = copyCommand();
 		} else if (type == CommandType.DELETE) {
-			result = new Variable[] { deleteCommand() };
+			output = deleteCommand();
 		} else if (type == CommandType.LIST) {
-			// todo
+			output = listCommand();
 		} else if (type == CommandType.SIZE) {
-			// todo
+			output = sizeCommand();
 		} else if (type == CommandType.SLEEP) {
 			sleepCommmand();
 		} else if (type == CommandType.EXIT) {
@@ -118,20 +131,71 @@ public class Command implements CommandNode {
 		throw new UndefinedCommandException(type, vars);
 	}
 
+	private Variable listCommand() throws CommandErrorException {
+		ArrayVariable out = new ArrayVariable();
+		if (vars[0].type == VariableType.NUMBER) {
+			for (int i = 0; i < ((NumberVariable) vars[0]).getVar(); i++) {
+				out.setVar(i, new NumberVariable(i));
+			}
+		} else if (vars[0].type == VariableType.ARRAY) {
+			HashMap<Integer, Variable> a = ((ArrayVariable) vars[0]).getAll();
+			for (Integer v : a.keySet()) {
+				Variable n = a.get(v);
+				if (n.type != VariableType.ARRAY) {
+					n = Variable.fromString(a.get(v).toString());
+				}
+				out.setVar(v, n);
+			}
+		} else if (vars[0].type == VariableType.FOLDER) {
+			int i = 0;
+			for (File f : ((FolderVariable) vars[0]).getVar().listFiles()) {
+				out.setVar(i, new TextVariable(f.getAbsolutePath()));
+				i++;
+			}
+		} else if (vars[0].type == VariableType.FILE) {
+			String[] spl = ((FileVariable) vars[0]).getVar().getAbsolutePath()
+					.split(System.getProperty("file.separator"));
+			for (int i = 0; i < spl.length; i++) {
+				out.setVar(i, Variable.fromString(spl[i]));
+			}
+		} else if (vars[0].type == VariableType.TEXT) {
+			String str = ((TextVariable) vars[0]).getVar();
+			for (int i = 0; i < str.length(); i++) {
+				out.setVar(i, new TextVariable("" + str.charAt(i)));
+			}
+		}
+		return out;
+	}
+
+	private Variable sizeCommand() {
+		if (vars[0].type == VariableType.NUMBER) {
+			return new NumberVariable(Math.abs(((NumberVariable) vars[0]).getVar()));
+		} else if (vars[0].type == VariableType.ARRAY) {
+			return new NumberVariable(((ArrayVariable) vars[0]).getAll().size());
+		} else if (vars[0].type == VariableType.FOLDER) {
+			return new NumberVariable(((FolderVariable) vars[0]).getVar().list().length);
+		} else if (vars[0].type == VariableType.FILE) {
+			return new NumberVariable(((FileVariable) vars[0]).getVar().length());
+		} else if (vars[0].type == VariableType.TEXT) {
+			return new NumberVariable(((TextVariable) vars[0]).getVar().length());
+		}
+		return null;
+	}
+
 	private void sleepCommmand() {
 		try {
-			Thread.sleep(((IntVariable) vars[0]).getVar());
+			Thread.sleep(((NumberVariable) vars[0]).getVar());
 		} catch (InterruptedException e) {
 			// Do nothing
 		}
 	}
 
 	private void exitCommand() {
-		System.exit(((IntVariable) vars[0]).getVar());
+		System.exit((int) ((NumberVariable) vars[0]).getVar());
 	}
 
 	private Variable deleteCommand() {
-		return new IntVariable(FileUtils.deleteQuietly(((FolderVariable) vars[0]).getVar()) ? 1 : 0);
+		return new NumberVariable(FileUtils.deleteQuietly(((FolderVariable) vars[0]).getVar()) ? 1 : 0);
 	}
 
 	private Variable copyCommand() throws UnsupportedCommandTypeException, CommandErrorException {
@@ -153,13 +217,13 @@ public class Command implements CommandNode {
 					}
 				}
 			} else {
-				return new IntVariable(0);
+				return new NumberVariable(0);
 			}
 		} catch (IOException e) {
 			throw new CommandErrorException(
 					"Can not copy \"" + vars[0].toString() + "\" to \"" + vars[0].toString() + "\".");
 		}
-		return new IntVariable(1);
+		return new NumberVariable(1);
 	}
 
 	private Variable moveCommand() throws UnsupportedCommandTypeException, CommandErrorException {
@@ -181,13 +245,13 @@ public class Command implements CommandNode {
 					}
 				}
 			} else {
-				return new IntVariable(0);
+				return new NumberVariable(0);
 			}
 		} catch (IOException e) {
 			throw new CommandErrorException(
-					"Can not copy \"" + vars[0].toString() + "\" to \"" + vars[0].toString() + "\".");
+					"Can not move \"" + vars[0].toString() + "\" to \"" + vars[0].toString() + "\".");
 		}
-		return new IntVariable(1);
+		return new NumberVariable(1);
 	}
 
 	private void printCommand() throws UnsupportedCommandTypeException, CommandErrorException {
@@ -210,7 +274,7 @@ public class Command implements CommandNode {
 		String replace = vars[2].toString();
 
 		String str;
-		if (vars[1] instanceof StringVariable && ((StringVariable) vars[1]).isRegex()) {
+		if (vars[1] instanceof TextVariable && ((TextVariable) vars[1]).isRegex()) {
 			str = base.replaceAll(look, replace);
 		} else {
 			str = base.replace(look, replace);
@@ -226,11 +290,11 @@ public class Command implements CommandNode {
 		arg[1] = base.length();
 
 		for (int i = 0; i < 2; i++) {
-			if (vars[i + 1] instanceof IntVariable) {
-				arg[i] = ((IntVariable) vars[i + 1]).getVar();
+			if (vars[i + 1] instanceof NumberVariable) {
+				arg[i] = (int) ((NumberVariable) vars[i + 1]).getVar();
 			} else if (!(vars[i + 1] instanceof SpecialVariable)) {
-				arg[i] = base.indexOf(((StringVariable) vars[i + 1]).getVar())
-						- ((StringVariable) vars[i + 1]).getVar().length();
+				arg[i] = base.indexOf(((TextVariable) vars[i + 1]).getVar())
+						- ((TextVariable) vars[i + 1]).getVar().length();
 			}
 		}
 
@@ -242,48 +306,47 @@ public class Command implements CommandNode {
 		}
 	}
 
-	private StringVariable nameCommand() {
-		return new StringVariable(((FolderVariable) vars[0]).getName());
+	private TextVariable nameCommand() {
+		return new TextVariable(((FolderVariable) vars[0]).getName());
 	}
 
 	private FolderVariable parentCommand() {
 		return new FolderVariable(((FolderVariable) vars[0]).getParent());
 	}
 
-	private StringVariable extensionCommand() {
-		return new StringVariable(((FileVariable) vars[0]).getExtension());
+	private TextVariable extensionCommand() {
+		return new TextVariable(((FileVariable) vars[0]).getExtension());
 	}
 
-	private IntVariable isFileCommand() {
-		return new IntVariable(vars[0] instanceof FileVariable ? 1 : 0);
+	private NumberVariable isFileCommand() {
+		return new NumberVariable(vars[0] instanceof FileVariable ? 1 : 0);
 	}
 
-	private IntVariable isAvailableCommand() {
-		return new IntVariable(((FolderVariable) vars[0]).getVar().exists() ? 1 : 0);
+	private NumberVariable isAvailableCommand() {
+		return new NumberVariable(((FolderVariable) vars[0]).getVar().exists() ? 1 : 0);
 	}
 
-	private IntVariable randomCommand() {
-		double u = ((IntVariable) vars[0]).getVar()
-				+ (Math.random() * (((IntVariable) vars[1]).getVar() - ((IntVariable) vars[0]).getVar()));
-		return new IntVariable((int) Math.floor(u));
+	private NumberVariable randomCommand() {
+		double u = ((NumberVariable) vars[0]).getVar()
+				+ (Math.random() * (((NumberVariable) vars[1]).getVar() - ((NumberVariable) vars[0]).getVar()));
+		return new NumberVariable((int) Math.floor(u));
 	}
 
 	private void overwriteCommand() throws LogicConversionException {
-		Main.overwrite = ((IntVariable) vars[0]).asBoolean();
+		Main.overwrite = ((NumberVariable) vars[0]).asBoolean();
 	}
 
 	private void caseSensitiveCommand() throws LogicConversionException {
-		Main.caseSensitive = ((IntVariable) vars[0]).asBoolean();
+		Main.caseSensitive = ((NumberVariable) vars[0]).asBoolean();
 	}
 
 	@Override
 	public void explain() {
-		// TODO Auto-generated method stub
-
+		// TODO
 	}
 
 	@Override
-	public Variable[] result() {
-		return result;
+	public Variable result() {
+		return output;
 	}
 }

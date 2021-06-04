@@ -13,9 +13,7 @@ public enum CommandType {
 	private boolean output;
 
 	private CommandType(char symbol, int input) {
-		this.symbol = symbol;
-		this.input = input;
-		this.output = true;
+		this(symbol, input, true);
 	}
 
 	private CommandType(char symbol, int input, boolean output) {
