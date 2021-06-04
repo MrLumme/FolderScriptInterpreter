@@ -2,14 +2,15 @@ package lumCode.folderScriptInterpreter.handlers.logic;
 
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.exceptions.UndefinedLogicException;
+import lumCode.folderScriptInterpreter.handlers.ResultantNode;
 import lumCode.folderScriptInterpreter.variables.FileVariable;
 import lumCode.folderScriptInterpreter.variables.FolderVariable;
-import lumCode.folderScriptInterpreter.variables.IntVariable;
-import lumCode.folderScriptInterpreter.variables.StringVariable;
+import lumCode.folderScriptInterpreter.variables.NumberVariable;
+import lumCode.folderScriptInterpreter.variables.TextVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 import lumCode.folderScriptInterpreter.variables.VariableType;
 
-public class Logic implements LogicNode {
+public class Logic implements ResultantNode {
 	private final Variable left, right;
 	private final LogicType type;
 
@@ -24,16 +25,16 @@ public class Logic implements LogicNode {
 	@Override
 	public void action() throws InterpreterException {
 		boolean found = false;
-		if (left.type == VariableType.INT) {
-			if (right.type == VariableType.INT) {
-				result = NumberLogicHandler.Interpret(((IntVariable) left).getVar(), type,
-						((IntVariable) right).getVar());
+		if (left.type == VariableType.NUMBER) {
+			if (right.type == VariableType.NUMBER) {
+				result = NumberLogicHandler.Interpret(((NumberVariable) left).getVar(), type,
+						((NumberVariable) right).getVar());
 				found = true;
 			}
-		} else if (left.type == VariableType.STRING) {
-			if (right.type == VariableType.STRING) {
-				result = StringLogicHandler.Interpret(((StringVariable) left).getVar(), type,
-						((StringVariable) right).getVar());
+		} else if (left.type == VariableType.TEXT) {
+			if (right.type == VariableType.TEXT) {
+				result = StringLogicHandler.Interpret(((TextVariable) left).getVar(), type,
+						((TextVariable) right).getVar());
 				found = true;
 			}
 		} else if (left.type == VariableType.FILE) {
@@ -62,7 +63,7 @@ public class Logic implements LogicNode {
 	}
 
 	@Override
-	public boolean result() {
-		return result;
+	public Variable result() {
+		return new NumberVariable(result ? 1 : 0);
 	}
 }

@@ -5,7 +5,7 @@ import lumCode.folderScriptInterpreter.exceptions.UnsupportedLogicTypeException;
 
 public class NumberLogicHandler {
 
-	protected static boolean Interpret(int left, LogicType operator, int right)
+	protected static boolean Interpret(long left, LogicType operator, long right)
 			throws UndefinedLogicException, UnsupportedLogicTypeException {
 		switch (operator) {
 		case EQUAL:
