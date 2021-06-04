@@ -27,15 +27,12 @@ public class Utilities {
 	public static List<File> listFiles(File dir, int level) {
 		List<File> out = new ArrayList<File>();
 		for (File f : dir.listFiles()) {
-			if (f.isDirectory()) {
-				if (level == 0) {
-					out.add(f);
-				} else {
-
-				}
-			} else if (f.isFile()) {
-
+			if (f.isFile() || level == 0) {
+				out.add(f);
+			} else {
+				out.addAll(listFiles(f, level - 1));
 			}
 		}
+		return out;
 	}
 }
