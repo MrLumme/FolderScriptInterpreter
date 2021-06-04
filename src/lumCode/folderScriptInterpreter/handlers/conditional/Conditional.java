@@ -3,6 +3,7 @@ package lumCode.folderScriptInterpreter.handlers.conditional;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.handlers.Node;
 import lumCode.folderScriptInterpreter.handlers.logic.Logic;
+import lumCode.folderScriptInterpreter.variables.NumberVariable;
 
 public class Conditional implements Node {
 	private final Logic condition;
@@ -16,7 +17,7 @@ public class Conditional implements Node {
 	@Override
 	public void action() throws InterpreterException {
 		condition.action();
-		if (condition.result()) {
+		if (((NumberVariable) condition.result()).asBoolean()) {
 			for (Node n : script) {
 				n.action();
 			}
