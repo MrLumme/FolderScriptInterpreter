@@ -11,8 +11,8 @@ import lumCode.folderScriptInterpreter.handlers.Node;
 import lumCode.folderScriptInterpreter.variables.ArrayVariable;
 import lumCode.folderScriptInterpreter.variables.FileVariable;
 import lumCode.folderScriptInterpreter.variables.FolderVariable;
-import lumCode.folderScriptInterpreter.variables.IntVariable;
-import lumCode.folderScriptInterpreter.variables.StringVariable;
+import lumCode.folderScriptInterpreter.variables.NumberVariable;
+import lumCode.folderScriptInterpreter.variables.TextVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 
 public class Iteration implements Node {
@@ -26,20 +26,20 @@ public class Iteration implements Node {
 		this.iterant = iterant;
 		this.script = script;
 
-		if (iterant instanceof IntVariable) {
-			if (((IntVariable) iterant).getVar() < 0) {
-				throw new InfiniteLoopException((IntVariable) iterant);
+		if (iterant instanceof NumberVariable) {
+			if (((NumberVariable) iterant).getVar() < 0) {
+				throw new InfiniteLoopException((NumberVariable) iterant);
 			}
-			Main.i[number] = new IntVariable(0);
+			Main.i.put(number, new NumberVariable(0));
 			type = IterationType.INTEGER_ITERATION;
 		} else if (iterant instanceof FolderVariable) {
-			Main.i[number] = new FileVariable(null);
+			Main.i.put(number, new FileVariable(null));
 			type = IterationType.FOLDER_ITERATION;
-		} else if (iterant instanceof StringVariable) {
-			Main.i[number] = new StringVariable("");
+		} else if (iterant instanceof TextVariable) {
+			Main.i.put(number, new TextVariable(""));
 			type = IterationType.STRING_ITERATION;
 		} else if (iterant instanceof ArrayVariable) {
-			Main.i[number] = new ArrayVariable();
+			Main.i.put(number, new ArrayVariable());
 			type = IterationType.LIST_ITERATION;
 		} else {
 			throw new IteratorTypeException(iterant);
@@ -49,27 +49,26 @@ public class Iteration implements Node {
 	@Override
 	public void action() throws InterpreterException {
 		if (type == IterationType.INTEGER_ITERATION) {
-			int till = ((IntVariable) iterant).getVar();
-			while (((IntVariable) Main.i[number]).getVar() < till) {
+			int till = (int) ((NumberVariable) iterant).getVar();
+			while (((NumberVariable) Main.i.get(number)).getVar() < till) {
 				for (Node n : script) {
 					n.action();
 				}
-				((IntVariable) Main.i[number]).setVar(((IntVariable) Main.i[number]).getVar() + 1);
+				((NumberVariable) Main.i.get(number))
+						.setVar((int) (((NumberVariable) Main.i.get(number)).getVar() + 1));
 			}
 		} else if (type == IterationType.FOLDER_ITERATION) {
 			File[] list = ((FolderVariable) iterant).getVar().listFiles();
-			Main.i[number] = new FileVariable(null);
 			for (File f : list) {
-				((FileVariable) Main.i[number]).setVar(f);
+				((FileVariable) Main.i.get(number)).setVar(f);
 				for (Node n : script) {
 					n.action();
 				}
 			}
 		} else if (type == IterationType.STRING_ITERATION) {
-			char[] seq = ((StringVariable) iterant).getVar().toCharArray();
-			Main.i[number] = new StringVariable("");
+			char[] seq = ((TextVariable) iterant).getVar().toCharArray();
 			for (char c : seq) {
-				((StringVariable) Main.i[number]).setVar("" + c);
+				((TextVariable) Main.i.get(number)).setVar("" + c);
 				for (Node n : script) {
 					n.action();
 				}
@@ -77,9 +76,8 @@ public class Iteration implements Node {
 		} else if (type == IterationType.LIST_ITERATION) {
 			TreeMap<Integer, Variable> list = new TreeMap<Integer, Variable>();
 			list.putAll(((ArrayVariable) iterant).getAll());
-			Main.i[number] = new ArrayVariable();
-			for (Variable f : list.values()) {
-				Main.i[number] = f;
+			for (Variable v : list.values()) {
+				Main.i.put(number, v);
 				for (Node n : script) {
 					n.action();
 				}
