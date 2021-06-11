@@ -20,7 +20,7 @@ public class InterpretationTest {
 		assertTrue(new File(tf1.getAbsolutePath() + "/dok3.xml").exists());
 
 		// Test0 - Declare and print variable to screen
-		Main.main(new String[] { "#var=45 o(#var,$)" });
+		// Main.main(new String[] { "#var=45 o(#var,$)" });
 
 		// Test1 - List filenames into a new text file
 		File list = new File(tf1.getAbsolutePath() + "/list.txt");

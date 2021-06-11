@@ -17,10 +17,12 @@ import lumCode.folderScriptInterpreter.exceptions.UnsupportedTypeException;
 import lumCode.folderScriptInterpreter.exceptions.VariableNameNotFoundException;
 import lumCode.folderScriptInterpreter.exceptions.VariableNotArrayException;
 import lumCode.folderScriptInterpreter.handlers.Node;
+import lumCode.folderScriptInterpreter.handlers.ResultantNode;
 import lumCode.folderScriptInterpreter.handlers.command.Command;
 import lumCode.folderScriptInterpreter.handlers.command.CommandType;
 import lumCode.folderScriptInterpreter.handlers.declaring.Declaration;
 import lumCode.folderScriptInterpreter.handlers.declaring.DeclarationType;
+import lumCode.folderScriptInterpreter.handlers.iteration.Iteration;
 import lumCode.folderScriptInterpreter.variables.ArrayVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 
@@ -39,8 +41,15 @@ public class Main {
 			a.put(i - 1, Variable.fromString(args[i]));
 		}
 		cleanScript();
+
+		// Construct node tree
 		for (String[] s : splitScript(script)) {
 			nodes.addAll(breakDownScript(s));
+		}
+
+		// Execute program
+		for (Node n : nodes) {
+			n.action();
 		}
 	}
 
@@ -144,8 +153,13 @@ public class Main {
 		head.trim();
 		com.trim();
 		act.trim();
-		out.add(new String[] { head.equals("") ? null : head, com.equals("") ? null : com,
-				act.equals("") ? null : act });
+
+		String[] end = new String[] { head.equals("") ? null : head, com.equals("") ? null : com,
+				act.equals("") ? null : act };
+
+		if (end[0] != null || end[1] != null || end[2] != null) {
+			out.add(end);
+		}
 
 		return out;
 	}
@@ -169,20 +183,10 @@ public class Main {
 			List<String[]> arg = splitScript(splScript[1]);
 			List<Node> ins = new ArrayList<Node>();
 			for (String[] s : arg) {
-				try {
-					Variable var = Variable.fetch(s[0]);
-					if (var != null) {
-						out.add(var);
-					} else {
-						throw new ScriptErrorException(s[0], "Could not be resolved to a value");
-					}
-				} catch (VariableNameNotFoundException | ArgumentNameNotFoundException
-						| IteratorNameNotFoundException e) {
-					out = breakDownScript(s);
-				}
-				if (out.size() > 1) {
-					throw new ScriptErrorException(s[0] + s[1] + s[2],
-							"Syntax error; can not perform multiple unrelated commands in command inputs.");
+				if (Variable.exists(s[0])) {
+					ins.add(new VariableLookUp(s[0]));
+				} else {
+					ins.add(Variable.fromString(s[0]));
 				}
 			}
 			try {
@@ -234,6 +238,20 @@ public class Main {
 			// Conditional logic
 		} else if (c == 'i') {
 			// Iteration logic
+			int num = Integer.parseInt(splScript[0].substring(1, splScript[0].indexOf(')')));
+			ResultantNode var;
+			if (Variable.exists(splScript[1])) {
+				var = new VariableLookUp(splScript[1]);
+			} else {
+				var = Variable.fromString(splScript[1]);
+			}
+
+			List<String[]> spl = splitScript(splScript[2]);
+			List<Node> com = new ArrayList<Node>();
+			for (String[] s : spl) {
+				com.addAll(breakDownScript(s));
+			}
+			out.add(new Iteration(num, var, com));
 		} else if (c == 'b') {
 			// Break loop logic
 		} else if (c == 'h') {
@@ -242,172 +260,6 @@ public class Main {
 
 		return out;
 	}
-
-//	private static ArrayList<Node> breakDownScript(String script) throws BreakDownException {
-//		char[] c = script.toCharArray();
-//		ArrayList<Node> out = new ArrayList<Node>();
-//
-//		for (int i = 0; i < c.length; i++) {
-//			if (CommandType.valid(c[i])) {
-//				CommandType t;
-//				List<List<Node>> params = null;
-//				// Find command type
-//				try {
-//					t = CommandType.fromChar(c[i]);
-//				} catch (UnsupportedTypeException e) {
-//					throw new BreakDownException(script, i, c[i], e.getMessage());
-//				}
-//
-//				// Find params
-//				if (c[i + 1] == '(') {
-//					i += 2;
-//					while (c[i] != ')') {
-//						params += c[i];
-//						i++;
-//						if (i == c.length) {
-//							throw new BreakDownException(script, i, c[i], "End parenthesis was expected.");
-//						}
-//					}
-//				} else {
-//					throw new BreakDownException(script, i, c[i], "Start parenthesis was expected.");
-//				}
-//
-//				// Create node
-//				try {
-//					out.add(new Command(t, params));
-//				} catch (UnsupportedCommandTypeException | IncorrentParameterAmountException
-//						| IncorrectParameterTypeException | NameNotFoundException e) {
-//					throw new BreakDownException(script, i, c[i], e.getMessage());
-//				}
-//			} else if (ArithmeticType.valid(c[i])) {
-//				ArithmeticType t;
-//				// Find command type
-//				try {
-//					t = ArithmeticType.fromChar(c[i]);
-//				} catch (UnsupportedTypeException e) {
-//					throw new BreakDownException(script, i, c[i], e.getMessage());
-//				}
-//			} else if (c[i] == '#') {
-//				String name = "" + c[i];
-//				while (c[i + 1] == '=' || c[i + 1] == '!' || c[i + 1] == ' ') {
-//					i++;
-//					name += c[i];
-//				}
-//
-//			} else if (c[i] == 'i') {
-//				String number = "";
-//				String rule = "";
-//				ArrayList<Node> n;
-//				// Find iteration number
-//				do {
-//					i++;
-//					number += c[i];
-//				} while (c[i + 1] == '(');
-//				// Find rule
-//				if (c[i + 1] == '(') {
-//					i += 2;
-//					while (c[i] != ')') {
-//						rule += c[i];
-//						i++;
-//						if (i == c.length) {
-//							throw new BreakDownException(script, i, c[i], "End parenthesis was expected.");
-//						}
-//					}
-//				} else {
-//					throw new BreakDownException(script, i, c[i], "Start parenthesis was expected.");
-//				}
-//
-//				// Find nodes
-//				if (c[i + 1] == '{') {
-//					i += 2;
-//					String subScript = "";
-//					while (c[i] != '}') {
-//						subScript += c[i];
-//						i++;
-//						if (i == c.length) {
-//							throw new BreakDownException(script, i, c[i], "End parenthesis was expected.");
-//						}
-//					}
-//					n = breakDownScript(subScript);
-//				} else {
-//					throw new BreakDownException(script, i, c[i], "Start parenthesis was expected.");
-//				}
-//
-//				// Create node
-//				try {
-//					out.add(new Iteration(i, Variable.interpret(rule), (Node[]) n.toArray()));
-//				} catch (IteratorTypeException | InfiniteLoopException | NameNotFoundException e) {
-//					throw new BreakDownException(script, i, c[i], e.getMessage());
-//				}
-//			} else if (c[i] == '?') {
-//				Variable left, right;
-//				LogicType type;
-//				ArrayList<Node> n;
-//				// Find condition
-//				if (c[i + 1] == '(') {
-//					i += 2;
-//					String con = "";
-//					while (c[i] != ')') {
-//						con += c[i];
-//						i++;
-//						if (i == c.length) {
-//							throw new BreakDownException(script, i, c[i], "End parenthesis was expected.");
-//						}
-//					}
-//
-//					String[] ar = con.split("=<>!");
-//					try {
-//						left = Variable.interpret(ar[0]);
-//					} catch (NameNotFoundException e) {
-//						throw new BreakDownException(script, i + 1, '#', e.getMessage());
-//					}
-//					try {
-//						right = Variable.interpret(ar[1]);
-//					} catch (NameNotFoundException e) {
-//						throw new BreakDownException(script, i + ar[0].length() + 2, '#', e.getMessage());
-//					}
-//					char l = con.charAt(ar[0].length());
-//					try {
-//						type = LogicType.fromChar(l);
-//					} catch (UnsupportedTypeException e) {
-//						throw new BreakDownException(script, i + ar[0].length() + 1, l, e.getMessage());
-//					}
-//				} else {
-//					throw new BreakDownException(script, i, c[i], "Start parenthesis was expected.");
-//				}
-//
-//				// Find nodes
-//				if (c[i + 1] == '{') {
-//					i += 2;
-//					String subScript = "";
-//					while (c[i] != '}') {
-//						subScript += c[i];
-//						i++;
-//						if (i == c.length) {
-//							throw new BreakDownException(script, i, c[i], "End parenthesis was expected.");
-//						}
-//					}
-//					n = breakDownScript(subScript);
-//				} else {
-//					throw new BreakDownException(script, i, c[i], "Start parenthesis was expected.");
-//				}
-//
-//				// Create node
-//				out.add(new Conditional(new Logic(left, type, right), (Node[]) n.toArray()));
-//			} else if (c[i] == 'h') {
-//				// TODO
-//			} else if (c[i] == '^') {
-//				i++;
-//				while (c[i] != '^') {
-//					i++;
-//					if (i == c.length) {
-//						throw new BreakDownException(script, i, c[i], "End of comment was expected.");
-//					}
-//				}
-//			}
-//		}
-//		return out;
-//	}
 
 	public static Variable lookUpVariable(String name) throws VariableNameNotFoundException {
 		if (name.contains("[")) {
@@ -426,7 +278,7 @@ public class Main {
 	}
 
 	public static Variable lookUpArgument(String name) throws ArgumentNameNotFoundException {
-		int n = Integer.parseInt(name.split("\\[\\]")[1]);
+		int n = Integer.parseInt(name.split("\\[|\\]")[1]);
 		Variable var = a.get(n);
 		if (var != null) {
 			return var;

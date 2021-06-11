@@ -1,6 +1,7 @@
 package lumCode.folderScriptInterpreter.handlers.iteration;
 
 import java.io.File;
+import java.util.List;
 import java.util.TreeMap;
 
 import lumCode.folderScriptInterpreter.Main;
@@ -8,6 +9,7 @@ import lumCode.folderScriptInterpreter.exceptions.InfiniteLoopException;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.exceptions.IteratorTypeException;
 import lumCode.folderScriptInterpreter.handlers.Node;
+import lumCode.folderScriptInterpreter.handlers.ResultantNode;
 import lumCode.folderScriptInterpreter.variables.ArrayVariable;
 import lumCode.folderScriptInterpreter.variables.FileVariable;
 import lumCode.folderScriptInterpreter.variables.FolderVariable;
@@ -17,37 +19,39 @@ import lumCode.folderScriptInterpreter.variables.Variable;
 
 public class Iteration implements Node {
 	private final int number;
-	private final Variable iterant;
-	private final Node[] script;
-	private final IterationType type;
+	private final ResultantNode iterant;
+	private final List<Node> script;
+	private IterationType type;
 
-	public Iteration(int number, Variable iterant, Node[] script) throws IteratorTypeException, InfiniteLoopException {
+	public Iteration(int number, ResultantNode iterant, List<Node> script) {
 		this.number = number;
 		this.iterant = iterant;
 		this.script = script;
-
-		if (iterant instanceof NumberVariable) {
-			if (((NumberVariable) iterant).getVar() < 0) {
-				throw new InfiniteLoopException((NumberVariable) iterant);
-			}
-			Main.i.put(number, new NumberVariable(0));
-			type = IterationType.INTEGER_ITERATION;
-		} else if (iterant instanceof FolderVariable) {
-			Main.i.put(number, new FileVariable(null));
-			type = IterationType.FOLDER_ITERATION;
-		} else if (iterant instanceof TextVariable) {
-			Main.i.put(number, new TextVariable(""));
-			type = IterationType.STRING_ITERATION;
-		} else if (iterant instanceof ArrayVariable) {
-			Main.i.put(number, new ArrayVariable());
-			type = IterationType.LIST_ITERATION;
-		} else {
-			throw new IteratorTypeException(iterant);
-		}
 	}
 
 	@Override
 	public void action() throws InterpreterException {
+		iterant.action();
+		Variable var = iterant.result();
+		if (var instanceof NumberVariable) {
+			if (((NumberVariable) var).getVar() < 0) {
+				throw new InfiniteLoopException((NumberVariable) var);
+			}
+			Main.i.put(number, new NumberVariable(0));
+			type = IterationType.INTEGER_ITERATION;
+		} else if (var instanceof FolderVariable) {
+			Main.i.put(number, new FileVariable(null));
+			type = IterationType.FOLDER_ITERATION;
+		} else if (var instanceof TextVariable) {
+			Main.i.put(number, new TextVariable(""));
+			type = IterationType.STRING_ITERATION;
+		} else if (var instanceof ArrayVariable) {
+			Main.i.put(number, new ArrayVariable());
+			type = IterationType.LIST_ITERATION;
+		} else {
+			throw new IteratorTypeException(var);
+		}
+
 		if (type == IterationType.INTEGER_ITERATION) {
 			int till = (int) ((NumberVariable) iterant).getVar();
 			while (((NumberVariable) Main.i.get(number)).getVar() < till) {
@@ -106,11 +110,11 @@ public class Iteration implements Node {
 		return number;
 	}
 
-	public Variable getIterant() {
+	public ResultantNode getIterant() {
 		return iterant;
 	}
 
-	public Node[] getScript() {
+	public List<Node> getScript() {
 		return script;
 	}
 }

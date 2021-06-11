@@ -54,4 +54,13 @@ public class Declaration implements Node {
 	public void explain() {
 
 	}
+
+	@Override
+	public String toString() {
+		String res = value.toString();
+		if (action != null) {
+			res = action.toString();
+		}
+		return name + ' ' + type.getChar() + ' ' + res;
+	}
 }

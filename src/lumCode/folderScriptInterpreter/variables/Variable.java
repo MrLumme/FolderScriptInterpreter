@@ -48,6 +48,24 @@ public class Variable implements ResultantNode {
 		return null;
 	}
 
+	public static boolean exists(String in) {
+		try {
+			if (in.startsWith("#")) {
+				Main.lookUpVariable(in);
+				return true;
+			} else if (in.startsWith("a")) {
+				Main.lookUpArgument(in);
+				return true;
+			} else if (in.startsWith("i")) {
+				Main.lookUpIterator(in);
+				return true;
+			}
+		} catch (VariableNameNotFoundException | ArgumentNameNotFoundException | IteratorNameNotFoundException e) {
+			return false;
+		}
+		return false;
+	}
+
 	@Override
 	public void action() throws InterpreterException {
 	}

@@ -55,7 +55,7 @@ public class Command implements ResultantNode {
 	public void action() throws InterpreterException {
 		// Fetch results
 		vars = new Variable[input.size()];
-		for (int i = 0; input.size() < i; i++) {
+		for (int i = 0; i < input.size(); i++) {
 			input.get(i).action();
 			vars[i] = ((ResultantNode) input.get(i)).result();
 		}
@@ -127,8 +127,9 @@ public class Command implements ResultantNode {
 			sleepCommmand();
 		} else if (type == CommandType.EXIT) {
 			exitCommand();
+		} else {
+			throw new UndefinedCommandException(type, vars);
 		}
-		throw new UndefinedCommandException(type, vars);
 	}
 
 	private Variable listCommand() throws CommandErrorException {
