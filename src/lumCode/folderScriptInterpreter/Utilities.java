@@ -35,4 +35,24 @@ public class Utilities {
 		}
 		return out;
 	}
+
+	public static String extractBracket(String str, int position) {
+		char bracket = str.charAt(position);
+		BracketType type = BracketType.getType(bracket);
+		if (type == null) {
+			return null;
+		}
+
+		boolean backward = false;
+		if (type.end == bracket) {
+			backward = true;
+		}
+
+//		str = 
+//		String content = null;
+//		if (str.charAt(position))
+//
+//			return content;
+		return null;
+	}
 }
