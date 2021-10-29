@@ -1,7 +1,7 @@
 package lumCode.folderScriptInterpreter;
 
 public enum BracketType {
-	ROUND('(', ')'), SQUARE('[', ']'), CURLY('{', '}'), ANGLE('<', '>');
+	INPUT('(', ')'), ARRAY('[', ']'), COMMAND('{', '}');
 
 	public final char begin;
 	public final char end;
