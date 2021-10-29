@@ -33,46 +33,28 @@ public class Main {
 	public static final HashMap<Integer, Variable> a = new HashMap<Integer, Variable>();
 	public static final HashMap<Integer, Variable> i = new HashMap<Integer, Variable>();
 	public static final HashMap<String, Variable> v = new HashMap<String, Variable>();
-	public static final ArrayList<Node> nodes = new ArrayList<>();
+	public static final List<Node> nodes = new ArrayList<>();
 
 	public static void main(String[] args) throws InterpreterException {
 		script = args[0];
 		for (int i = 1; i < args.length; i++) {
 			a.put(i - 1, Variable.fromString(args[i]));
 		}
-		cleanScript();
+		script = Utilities.cleanAndValidateScript(script);
+
+		ScriptSection sec = new ScriptSection(script);
+
+		nodes.addAll(ScriptBuilder.buildNodeTree(sec));
 
 		// Construct node tree
-		for (String[] s : splitScript(script)) {
-			nodes.addAll(breakDownScript(s));
-		}
+//		for (String[] s : splitScript(script)) {
+//			nodes.addAll(breakDownScript(s));
+//		}
 
 		// Execute program
 		for (Node n : nodes) {
 			n.action();
 		}
-	}
-
-	private static void cleanScript() {
-		String rem = "";
-		String[] spl = script.split("\\^");
-		for (int i = 0; i < spl.length; i++) {
-			if (i % 2 == 0) {
-				rem += spl[i];
-			}
-		}
-		boolean inString = false;
-		for (int i = 0; i < rem.length(); i++) {
-			if (rem.charAt(i) == '"') {
-				inString = !inString;
-			} else if (!inString && (rem.charAt(i) == ' ' && rem.charAt(i) == '\n' && rem.charAt(i) == '\t'
-					&& rem.charAt(i) == '\r')) {
-				rem = rem.substring(0, i) + rem.substring(i + 1);
-				i--;
-			}
-		}
-
-		script = rem;
 	}
 
 	private static List<String[]> splitScript(String script) throws ScriptErrorException {
