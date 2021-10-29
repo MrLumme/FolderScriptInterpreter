@@ -60,6 +60,8 @@ public class Command implements ResultantNode {
 			vars[i] = ((ResultantNode) input.get(i)).result();
 		}
 
+		// TODO match to Zip and MD5 commands too
+
 		for (int i = 0; i < vars.length; i++) {
 			if (type == CommandType.COPY || type == CommandType.DELETE || type == CommandType.MOVE
 					|| type == CommandType.EXTENSION || type == CommandType.NAME || type == CommandType.IS_FILE
