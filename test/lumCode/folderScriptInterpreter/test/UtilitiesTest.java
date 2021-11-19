@@ -2,6 +2,7 @@ package lumCode.folderScriptInterpreter.test;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -80,6 +81,12 @@ class UtilitiesTest {
 		assertNotNull(Utilities.charSplitter("i0(l(a[0],0)){o(i0+\"\\r\",a[1]),o(i0+\"\\r\",$)}", ','));
 	}
 
+	@Test
+	void charOutsideBracketsTest() {
+		assertTrue(Utilities.charOutsideBrackets("n(i0)+\"\\n\",a[1]", '+'));
+
+		assertTrue(Utilities.charOutsideBrackets("n(+)+(-)", '+'));
+		assertFalse(Utilities.charOutsideBrackets("n(+)-(-)", '+'));
 	}
 
 }
