@@ -74,7 +74,7 @@ public class Utilities {
 				if (level == 0 && str.charAt(position) == type.begin) {
 					return out;
 				} else {
-					out += c;
+					out = c + out;
 					if (c == type.end) {
 						level++;
 					} else if (c == type.begin) {
