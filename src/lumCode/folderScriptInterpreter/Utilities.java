@@ -143,32 +143,31 @@ public class Utilities {
 		return rem;
 	}
 
-	public static List<String> sectionSplitter(String section) throws ScriptErrorException {
+	public static List<String> charSplitter(String string, char c) throws ScriptErrorException {
 		ArrayList<String> out = new ArrayList<String>();
 
-		if (section.charAt(section.length() - 1) == ',') {
-			throw new ScriptErrorException(section, "Input section malformed; ending with invalid comma (',')");
+		if (string.charAt(string.length() - 1) == c) {
+			throw new ScriptErrorException(string, "Section malformed; ending with splitter character ('" + c + "')");
 		}
 
 		String cur = "";
 		boolean inString = false;
-		for (int i = 0; i < section.length(); i++) {
-			if (!inString && section.charAt(i) == ',') {
+		for (int i = 0; i < string.length(); i++) {
+			if (!inString && string.charAt(i) == c) {
 				out.add(cur);
 				cur = "";
 				i++;
 			}
 
-			cur += section.charAt(i);
+			cur += string.charAt(i);
 
-			if (section.charAt(i) == '\"') {
+			if (string.charAt(i) == '\"') {
 				inString = !inString;
-			} else if (!inString
-					&& (section.charAt(i) == BracketType.INPUT.begin || section.charAt(i) == BracketType.COMMAND.begin
-							|| section.charAt(i) == BracketType.ARRAY.begin)) {
-				String br = extractBracket(section, i);
+			} else if (!inString && (string.charAt(i) == BracketType.INPUT.begin
+					|| string.charAt(i) == BracketType.COMMAND.begin || string.charAt(i) == BracketType.ARRAY.begin)) {
+				String br = extractBracket(string, i);
 				cur += br;
-				i += br.length();
+				i += br.length() + 1;
 			}
 		}
 		out.add(cur);

@@ -20,7 +20,7 @@ public class ScriptSection {
 		} else {
 			this.head = script.substring(0, in);
 			this.input = new ArrayList<ScriptSection>();
-			List<String> i = Utilities.sectionSplitter(Utilities.extractBracket(script, in));
+			List<String> i = Utilities.charSplitter(Utilities.extractBracket(script, in), ',');
 			for (String s : i) {
 				input.add(new ScriptSection(s));
 			}
@@ -30,7 +30,7 @@ public class ScriptSection {
 				this.command = null;
 			} else {
 				this.command = new ArrayList<ScriptSection>();
-				List<String> c = Utilities.sectionSplitter(Utilities.extractBracket(script, com));
+				List<String> c = Utilities.charSplitter(Utilities.extractBracket(script, com), ',');
 				for (String s : c) {
 					command.add(new ScriptSection(s));
 				}

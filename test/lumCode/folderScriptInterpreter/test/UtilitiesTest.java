@@ -63,18 +63,23 @@ class UtilitiesTest {
 	}
 
 	@Test
-	void inputSplitterTest() throws ScriptErrorException {
-		assertNotNull(Utilities.sectionSplitter(
-				"this command \"even ( with , this } madness\", should be (even with, weird stuff, like this), approved"));
+	void charSplitterTest() throws ScriptErrorException {
+		assertNotNull(Utilities.charSplitter(
+				"this command \"even ( with , this } madness\", should be (even with, weird stuff, like this), approved",
+				','));
 
 		boolean done = false;
 		try {
-			Utilities.sectionSplitter("this, should, error,");
+			Utilities.charSplitter("this, should, error,", ',');
 			done = true;
 		} catch (ScriptErrorException e) {
 			e.printStackTrace();
 		}
 		assertFalse(done);
+
+		assertNotNull(Utilities.charSplitter("i0(l(a[0],0)){o(i0+\"\\r\",a[1]),o(i0+\"\\r\",$)}", ','));
+	}
+
 	}
 
 }
