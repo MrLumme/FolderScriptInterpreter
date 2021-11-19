@@ -18,120 +18,150 @@ import lumCode.folderScriptInterpreter.handlers.command.CommandType;
 import lumCode.folderScriptInterpreter.handlers.declaring.Declaration;
 import lumCode.folderScriptInterpreter.handlers.declaring.DeclarationType;
 import lumCode.folderScriptInterpreter.handlers.iteration.Iteration;
+import lumCode.folderScriptInterpreter.variables.NumberVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 
 public class ScriptBuilder {
-	public static List<Node> buildNodeTree(ScriptSection script)
-			throws ScriptErrorException, BreakDownException, VariableNameNotFoundException {
-		validateScriptSection(script);
 
-		List<Node> out = breakDownScript(script);
+	public static List<Node> buildNodeTree(String script) throws ScriptErrorException, VariableNameNotFoundException,
+			BreakDownException, UnsupportedTypeException, IncorrentParameterAmountException, CommandErrorException {
+		List<String> sec = Utilities.charSplitter(script, ',');
+
+		ArrayList<Node> out = new ArrayList<Node>();
+
+		for (String s : sec) {
+			out.add(breakDownScript(s));
+		}
 
 		return out;
 	}
 
-	private static List<Node> breakDownScript(ScriptSection script)
-			throws ScriptErrorException, BreakDownException, VariableNameNotFoundException {
-		List<Node> out = new ArrayList<Node>();
-		char c = script.getHead().charAt(0);
+//	public static List<Node> buildNodeTree(ScriptSection script)
+//			throws ScriptErrorException, BreakDownException, VariableNameNotFoundException {
+//		validateScriptSection(script);
+//
+//		List<Node> out = breakDownScript(script);
+//		return out;
+//	}
 
-		if (CommandType.valid(c)) {
-			// Command logic
-			if (script.getCommand() != null) {
-				throw new ScriptErrorException(script.toString(),
-						"Syntax error; command type operations can not contain command brackets ('{', '}').");
+	private static Node breakDownScript(String script)
+			throws ScriptErrorException, BreakDownException, VariableNameNotFoundException, UnsupportedTypeException,
+			IncorrentParameterAmountException, CommandErrorException {
+		char c = script.charAt(0);
+
+		if (c == 'a') {
+			return breakDownVariable(script);
+		} else if (CommandType.valid(c)) {
+			if (script.charAt(1) != '(') {
+				throw new ScriptErrorException(script, "Parenthesis should follow after command, but is missing.");
 			}
-			CommandType t;
-			try {
-				t = CommandType.fromChar(c);
-			} catch (UnsupportedTypeException e) {
-				throw new BreakDownException(script.getHead(), c, e.getMessage());
+			String inputs = Utilities.extractBracket(script, 1);
+
+			String sub = script.substring(3 + inputs.length());
+			if (sub.contains("{") || sub.contains("}")) {
+				throw new ScriptErrorException(script, "Commands can not have action type brackets ('{', '}').");
 			}
-			List<Node> ins = new ArrayList<Node>();
-			for (ScriptSection input : script.getInput()) {
-				ins.addAll(breakDownScript(input));
-			}
-			try {
-				out.add(new Command(t, ins));
-			} catch (IncorrentParameterAmountException | CommandErrorException e) {
-				throw new BreakDownException(script.toString(), c, e.getMessage());
-			}
+
+			return breakDownCommand(CommandType.fromChar(c), Utilities.charSplitter(inputs, ','));
 		} else if (c == '#') {
-			// Variable name
 			Pattern p = Pattern.compile("^#[A-Za-z0-9_]{1,}(?=(\\[[0-9]{1,}\\]){0,1})");
-			Matcher m = p.matcher(script.getHead());
+			Matcher m = p.matcher(script);
 			String name;
 			if (m.find()) {
 				name = m.group(0);
 			} else {
-				throw new ScriptErrorException(script.toString(),
-						"Syntax error; could not interpret variable with name ('#').");
+				throw new ScriptErrorException(script, "Syntax error; could not interpret variable ('#').");
 			}
 
-			char d = script.getHead().charAt(name.length());
-			if (d == '=' || d == '!') {
-				// Declaration logic
-				DeclarationType t;
-				try {
-					t = DeclarationType.fromChar(d);
-				} catch (UnsupportedTypeException e) {
-					throw new BreakDownException(script.getHead(), d, e.getMessage());
-				}
-				String res = script.getHead().substring(name.length() + 1);
-
-				Variable value = null;
-				if (res.matches("([0-9]{1,}|\\$|\".{0,}\")")) {
-					if (res.startsWith("\"")) {
-						res = res.substring(1, res.length() - 1);
-					}
-					value = Variable.fromString(res);
-					out.add(new Declaration(name, t, value));
-				} else {
-					ScriptSection scr = new ScriptSection(res);
-					Node node = breakDownScript(scr).get(0);
-					if (!(node instanceof ResultantNode)) {
-						throw new ScriptErrorException(script.toString(),
-								"Syntax error; declaration must be capable of setting a value.");
-					}
-					out.add(new Declaration(name, t, node));
-				}
+			char d = script.charAt(name.length());
+			if (DeclarationType.valid(d)) {
+				return breakDownDeclaration(name, DeclarationType.fromChar(d),
+						script.substring(script.charAt(name.length())));
 			} else {
-				// Variable lookup
-				if (Variable.exists(name)) {
-					out.add(new VariableLookUp(name));
-				} else {
-					throw new VariableNameNotFoundException(name);
-				}
+				return breakDownVariable(name);
 			}
 		} else if (c == '?') {
 			// Conditional logic
 		} else if (c == 'i') {
-			// Iteration logic
-			int num = Integer.parseInt(script.getHead().substring(1));
-
-			if (script.getInput().size() != 1) {
-				throw new ScriptErrorException(script.toString(),
-						"Syntax error; iteration ('i') must have exactly one input.");
+			int n;
+			int ip = script.indexOf('(');
+			if (ip != -1) {
+				try {
+					n = Integer.parseInt(script.substring(1, ip));
+					Main.i.put(n, new NumberVariable(0));
+				} catch (NumberFormatException e) {
+					throw new ScriptErrorException(script, "Syntax error; iteration ('i') malformed.");
+				}
+				String iterant = Utilities.extractBracket(script, ip);
+				return breakDownIteration(n, iterant,
+						Utilities.charSplitter(Utilities.extractBracket(script, script.lastIndexOf('}')), ','));
+			} else {
+				return breakDownVariable(script);
 			}
-			Node node = breakDownScript(script.getInput().get(0)).get(0);
-			if (!(node instanceof ResultantNode)) {
-				throw new ScriptErrorException(script.toString(),
-						"Syntax error; iteration ('i') must have an input capable of giving a result.");
-			}
-			ResultantNode var = (ResultantNode) node;
-
-			List<Node> com = new ArrayList<Node>();
-			for (ScriptSection s : script.getCommand()) {
-				com.addAll(breakDownScript(s));
-			}
-			out.add(new Iteration(num, var, com));
 		} else if (c == 'b') {
 			// Break loop logic
 		} else if (c == 'h') {
 			// Help logic
 		}
 
-		return out;
+		return null;
+	}
+
+	private static Node breakDownIteration(int n, String iterant, List<String> script)
+			throws ScriptErrorException, VariableNameNotFoundException, BreakDownException, UnsupportedTypeException,
+			IncorrentParameterAmountException, CommandErrorException {
+		Node node = breakDownScript(iterant);
+		if (!(node instanceof ResultantNode)) {
+			throw new ScriptErrorException(script.toString(),
+					"Syntax error; iteration ('i') must have an input capable of giving a result.");
+		}
+		ResultantNode var = (ResultantNode) node;
+
+		List<Node> com = new ArrayList<Node>();
+		for (String s : script) {
+			com.add(breakDownScript(s));
+		}
+		return new Iteration(n, var, com);
+	}
+
+	private static Node breakDownVariable(String name) throws VariableNameNotFoundException {
+		if (Variable.exists(name)) {
+			return new VariableLookUp(name);
+		} else {
+			throw new VariableNameNotFoundException(name);
+		}
+	}
+
+	private static Node breakDownDeclaration(String name, DeclarationType d, String script)
+			throws ScriptErrorException, VariableNameNotFoundException, BreakDownException, UnsupportedTypeException,
+			IncorrentParameterAmountException, CommandErrorException {
+		String res = script;
+
+		Variable value = null;
+		if (res.matches("([0-9]{1,}|\\$|\".{0,}\")")) {
+			if (res.startsWith("\"")) {
+				res = res.substring(1, res.length() - 1);
+			}
+			value = Variable.fromString(res);
+			return new Declaration(name, d, value);
+		} else {
+			Node node = breakDownScript(res);
+			if (!(node instanceof ResultantNode)) {
+				throw new ScriptErrorException(script.toString(),
+						"Syntax error; declaration does not receive a resultant value.");
+			}
+			return new Declaration(name, d, node);
+		}
+	}
+
+	private static Node breakDownCommand(CommandType c, List<String> inputs)
+			throws VariableNameNotFoundException, ScriptErrorException, BreakDownException,
+			IncorrentParameterAmountException, CommandErrorException, UnsupportedTypeException {
+		List<Node> ins = new ArrayList<Node>();
+		for (String input : inputs) {
+			ins.add(breakDownScript(input));
+		}
+		return new Command(c, ins);
 	}
 
 	private static void validateScriptSection(ScriptSection script) throws ScriptErrorException {

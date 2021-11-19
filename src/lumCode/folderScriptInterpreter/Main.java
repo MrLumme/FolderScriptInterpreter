@@ -42,9 +42,9 @@ public class Main {
 		}
 		script = Utilities.cleanAndValidateScript(script);
 
-		ScriptSection sec = new ScriptSection(script);
+		// ScriptSection sec = new ScriptSection(script);
 
-		nodes.addAll(ScriptBuilder.buildNodeTree(sec));
+		nodes.addAll(ScriptBuilder.buildNodeTree(script));
 
 		// Construct node tree
 //		for (String[] s : splitScript(script)) {
@@ -269,7 +269,7 @@ public class Main {
 	}
 
 	public static Variable lookUpIterator(String name) throws IteratorNameNotFoundException {
-		int n = Integer.parseInt(name.split("\\[\\]")[1]);
+		int n = Integer.parseInt(name.substring(1));
 		Variable var = i.get(n);
 		if (var != null) {
 			return var;
