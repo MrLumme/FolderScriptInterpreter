@@ -174,4 +174,22 @@ public class Utilities {
 
 		return out;
 	}
+
+	public static boolean charOutsideBrackets(String string, char c) {
+		boolean inString = false;
+		for (int i = 0; i < string.length(); i++) {
+			if (string.charAt(i) == '\"') {
+				inString = !inString;
+			} else if (!inString && (string.charAt(i) == BracketType.INPUT.begin
+					|| string.charAt(i) == BracketType.COMMAND.begin || string.charAt(i) == BracketType.ARRAY.begin)) {
+				String br = extractBracket(string, i);
+				i += br.length() + 1;
+			}
+
+			if (!inString && string.charAt(i) == c) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
