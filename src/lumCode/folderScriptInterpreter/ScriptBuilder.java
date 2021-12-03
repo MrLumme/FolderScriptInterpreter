@@ -13,6 +13,8 @@ import lumCode.folderScriptInterpreter.exceptions.UnsupportedTypeException;
 import lumCode.folderScriptInterpreter.exceptions.VariableNameNotFoundException;
 import lumCode.folderScriptInterpreter.handlers.Node;
 import lumCode.folderScriptInterpreter.handlers.ResultantNode;
+import lumCode.folderScriptInterpreter.handlers.arithmetic.Arithmetic;
+import lumCode.folderScriptInterpreter.handlers.arithmetic.ArithmeticType;
 import lumCode.folderScriptInterpreter.handlers.command.Command;
 import lumCode.folderScriptInterpreter.handlers.command.CommandType;
 import lumCode.folderScriptInterpreter.handlers.declaring.Declaration;
@@ -49,7 +51,20 @@ public class ScriptBuilder {
 			IncorrentParameterAmountException, CommandErrorException {
 		char c = script.charAt(0);
 
-		if (c == 'a') {
+		if (Utilities.isArithmeticExpression(script)) {
+			List<String> arith = splitArithmetically(script);
+
+			c = arith.get(arith.size() - 1).charAt(0);
+			ArithmeticType type = ArithmeticType.fromChar(c);
+
+			String right = "";
+			for (int i = 1; i < arith.size() - 1; i++) {
+				right += arith.get(i) + c;
+			}
+			right = right.substring(0, right.length() - 1);
+
+			return breakDownArithmetic(arith.get(0), type, right);
+		} else if (c == 'a') {
 			return breakDownVariable(script);
 		} else if (CommandType.valid(c)) {
 			if (script.charAt(1) != '(') {
@@ -102,12 +117,57 @@ public class ScriptBuilder {
 			// Break loop logic
 		} else if (c == 'h') {
 			// Help logic
+		} else if (script.startsWith("\"") || script.startsWith("$") || script.matches("^-{0,1}[0-9]{1,}$")) {
+			return Variable.fromString(script);
 		}
 
 		return null;
 	}
 
-	private static Node breakDownIteration(int n, String iterant, List<String> script)
+	private static Arithmetic breakDownArithmetic(String left, ArithmeticType type, String right)
+			throws VariableNameNotFoundException, ScriptErrorException, BreakDownException, UnsupportedTypeException,
+			IncorrentParameterAmountException, CommandErrorException {
+		Node ln = breakDownScript(left);
+		Node rn = breakDownScript(right);
+
+		if (ln instanceof ResultantNode && rn instanceof ResultantNode) {
+			return new Arithmetic((ResultantNode) ln, type, (ResultantNode) rn);
+		} else {
+			throw new ScriptErrorException(left + type.getChar() + right,
+					"Arithmetic function requires result giving inputs only");
+		}
+	}
+
+	private static List<String> splitArithmetically(String script) throws ScriptErrorException {
+		List<String> plu = Utilities.charSplitter(script, '+');
+		if (plu.size() > 1) {
+			plu.add("+");
+			return plu;
+		}
+		List<String> min = Utilities.charSplitter(script, '-');
+		if (min.size() > 1) {
+			min.add("-");
+			return min;
+		}
+		List<String> mul = Utilities.charSplitter(script, '*');
+		if (mul.size() > 1) {
+			mul.add("*");
+			return mul;
+		}
+		List<String> div = Utilities.charSplitter(script, '/');
+		if (div.size() > 1) {
+			div.add("/");
+			return div;
+		}
+		List<String> mod = Utilities.charSplitter(script, '%');
+		if (mod.size() > 1) {
+			mod.add("%");
+			return mod;
+		}
+		return null;
+	}
+
+	private static Iteration breakDownIteration(int n, String iterant, List<String> script)
 			throws ScriptErrorException, VariableNameNotFoundException, BreakDownException, UnsupportedTypeException,
 			IncorrentParameterAmountException, CommandErrorException {
 		Node node = breakDownScript(iterant);
@@ -132,7 +192,7 @@ public class ScriptBuilder {
 		}
 	}
 
-	private static Node breakDownDeclaration(String name, DeclarationType d, String script)
+	private static Declaration breakDownDeclaration(String name, DeclarationType d, String script)
 			throws ScriptErrorException, VariableNameNotFoundException, BreakDownException, UnsupportedTypeException,
 			IncorrentParameterAmountException, CommandErrorException {
 		String res = script;
@@ -154,7 +214,7 @@ public class ScriptBuilder {
 		}
 	}
 
-	private static Node breakDownCommand(CommandType c, List<String> inputs)
+	private static Command breakDownCommand(CommandType c, List<String> inputs)
 			throws VariableNameNotFoundException, ScriptErrorException, BreakDownException,
 			IncorrentParameterAmountException, CommandErrorException, UnsupportedTypeException {
 		List<Node> ins = new ArrayList<Node>();
