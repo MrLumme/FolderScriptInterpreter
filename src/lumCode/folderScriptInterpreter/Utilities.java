@@ -167,7 +167,7 @@ public class Utilities {
 					|| string.charAt(i) == BracketType.COMMAND.begin || string.charAt(i) == BracketType.ARRAY.begin)) {
 				String br = extractBracket(string, i);
 				cur += br;
-				i += br.length() + 1;
+				i += br.length();
 			}
 		}
 		out.add(cur);
