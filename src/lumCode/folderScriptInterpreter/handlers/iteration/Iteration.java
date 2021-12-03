@@ -53,7 +53,7 @@ public class Iteration implements Node {
 		}
 
 		if (type == IterationType.INTEGER_ITERATION) {
-			int till = (int) ((NumberVariable) iterant).getVar();
+			int till = (int) ((NumberVariable) var).getVar();
 			while (((NumberVariable) Main.i.get(number)).getVar() < till) {
 				for (Node n : script) {
 					n.action();
@@ -62,7 +62,7 @@ public class Iteration implements Node {
 						.setVar((int) (((NumberVariable) Main.i.get(number)).getVar() + 1));
 			}
 		} else if (type == IterationType.FOLDER_ITERATION) {
-			File[] list = ((FolderVariable) iterant).getVar().listFiles();
+			File[] list = ((FolderVariable) var).getVar().listFiles();
 			for (File f : list) {
 				((FileVariable) Main.i.get(number)).setVar(f);
 				for (Node n : script) {
@@ -70,7 +70,7 @@ public class Iteration implements Node {
 				}
 			}
 		} else if (type == IterationType.STRING_ITERATION) {
-			char[] seq = ((TextVariable) iterant).getVar().toCharArray();
+			char[] seq = ((TextVariable) var).getVar().toCharArray();
 			for (char c : seq) {
 				((TextVariable) Main.i.get(number)).setVar("" + c);
 				for (Node n : script) {
@@ -79,7 +79,7 @@ public class Iteration implements Node {
 			}
 		} else if (type == IterationType.LIST_ITERATION) {
 			TreeMap<Integer, Variable> list = new TreeMap<Integer, Variable>();
-			list.putAll(((ArrayVariable) iterant).getAll());
+			list.putAll(((ArrayVariable) var).getAll());
 			for (Variable v : list.values()) {
 				Main.i.put(number, v);
 				for (Node n : script) {
