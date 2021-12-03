@@ -27,4 +27,9 @@ public class VariableLookUp implements ResultantNode {
 		return res;
 	}
 
+	@Override
+	public String toString() {
+		return name;
+	}
+
 }

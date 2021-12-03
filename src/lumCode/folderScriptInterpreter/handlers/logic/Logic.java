@@ -66,4 +66,9 @@ public class Logic implements ResultantNode {
 	public Variable result() {
 		return new NumberVariable(result ? 1 : 0);
 	}
+
+	@Override
+	public String toString() {
+		return left.toString() + type.getChar() + right.toString();
+	}
 }

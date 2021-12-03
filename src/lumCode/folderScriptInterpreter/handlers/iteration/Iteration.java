@@ -117,4 +117,15 @@ public class Iteration implements Node {
 	public List<Node> getScript() {
 		return script;
 	}
+
+	@Override
+	public String toString() {
+		String s = "";
+		for (Node n : script) {
+			s += n.toString() + ",";
+		}
+		s = s.substring(0, s.length() - 1);
+
+		return "i" + number + "(" + iterant.toString() + ")" + "{" + s + "}";
+	}
 }

@@ -61,6 +61,6 @@ public class Declaration implements Node {
 		if (action != null) {
 			res = action.toString();
 		}
-		return name + ' ' + type.getChar() + ' ' + res;
+		return name + type.getChar() + res;
 	}
 }

@@ -46,7 +46,7 @@ public class Command implements ResultantNode {
 		}
 		for (Node i : input) {
 			if (!(i instanceof ResultantNode)) {
-				throw new CommandErrorException("The commands needs resulting inputs, which one node does not is not.");
+				throw new CommandErrorException("The commands needs resulting inputs, which at least one is not.");
 			}
 		}
 	}
@@ -351,5 +351,16 @@ public class Command implements ResultantNode {
 	@Override
 	public Variable result() {
 		return output;
+	}
+
+	@Override
+	public String toString() {
+		String s = "";
+		for (Node n : input) {
+			s += n.toString() + ",";
+		}
+		s = s.substring(0, s.length() - 1);
+
+		return type.getChar() + "(" + s + ")";
 	}
 }
