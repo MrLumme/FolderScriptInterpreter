@@ -259,7 +259,7 @@ public class Command implements ResultantNode {
 
 	private void printCommand() throws UnsupportedCommandTypeException, CommandErrorException {
 		if (vars[1] instanceof SpecialVariable) {
-			System.out.println(vars[0].toString());
+			System.out.print(vars[0].toString());
 		} else if (vars[1] instanceof FileVariable) {
 			File f = ((FileVariable) vars[1]).getVar();
 			try {
