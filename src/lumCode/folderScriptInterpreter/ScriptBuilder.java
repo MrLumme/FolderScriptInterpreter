@@ -84,6 +84,10 @@ public class ScriptBuilder {
 			String name;
 			if (m.find()) {
 				name = m.group(0);
+				String arr = m.group(1);
+				if (arr != null) {
+					name += arr;
+				}
 			} else {
 				throw new ScriptErrorException(script, "Syntax error; could not interpret variable ('#').");
 			}
