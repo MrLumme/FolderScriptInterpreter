@@ -28,7 +28,7 @@ public class Arithmetic implements ResultantNode {
 		result = null;
 
 		if (left.result().type == VariableType.NUMBER) {
-			if (left.result().type == VariableType.NUMBER) {
+			if (right.result().type == VariableType.NUMBER) {
 				result = new NumberVariable(NumberArithmeticHandler.interpret(((NumberVariable) left.result()).getVar(),
 						type, ((NumberVariable) right.result()).getVar()));
 			} else if (right.result().type == VariableType.TEXT) {
