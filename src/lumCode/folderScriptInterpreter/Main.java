@@ -78,19 +78,20 @@ public class Main {
 		throw new IteratorNameNotFoundException(n);
 	}
 
-	public static void setVariable(String name, String value) {
-		v.put(name, Variable.fromString(value));
-	}
-
-	public static void setVariable(String name, int number, String value) throws VariableNotArrayException {
-		Variable arr = v.get(name);
-		if (arr != null && !(arr instanceof ArrayVariable)) {
-			throw new VariableNotArrayException(name);
+	public static void setVariable(String name, String value) throws VariableNotArrayException {
+		if (name.contains("[")) {
+			int number = Integer.parseInt(name.substring(name.indexOf('[') + 1, name.indexOf(']')));
+			Variable arr = v.get(name);
+			if (arr != null && !(arr instanceof ArrayVariable)) {
+				throw new VariableNotArrayException(name);
+			}
+			if (arr == null) {
+				arr = new ArrayVariable();
+				v.put(name, arr);
+			}
+			((ArrayVariable) arr).setVar(number, Variable.fromString(value));
+		} else {
+			v.put(name, Variable.fromString(value));
 		}
-		if (arr == null) {
-			arr = new ArrayVariable();
-			v.put(name, arr);
-		}
-		((ArrayVariable) arr).setVar(number, Variable.fromString(value));
 	}
 }
