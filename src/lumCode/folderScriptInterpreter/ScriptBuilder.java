@@ -118,6 +118,9 @@ public class ScriptBuilder {
 		} else if (c == 'h') {
 			// Help logic
 		} else if (script.startsWith("\"") || script.startsWith("$") || script.matches("^-{0,1}[0-9]{1,}$")) {
+			if (script.startsWith("\"") && script.endsWith("\"")) {
+				script = script.substring(1, script.length() - 1);
+			}
 			return Variable.fromString(script);
 		}
 
