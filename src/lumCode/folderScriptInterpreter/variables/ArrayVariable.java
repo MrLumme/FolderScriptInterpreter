@@ -7,6 +7,7 @@ public class ArrayVariable extends Variable {
 
 	public ArrayVariable() {
 		super(VariableType.ARRAY);
+		vars = new HashMap<Integer, Variable>();
 	}
 
 	protected ArrayVariable(HashMap<Integer, Variable> vars) {
