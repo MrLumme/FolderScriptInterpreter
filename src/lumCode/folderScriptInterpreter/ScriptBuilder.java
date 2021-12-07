@@ -88,13 +88,15 @@ public class ScriptBuilder {
 				throw new ScriptErrorException(script, "Syntax error; could not interpret variable ('#').");
 			}
 
-			char d = script.charAt(name.length());
-			if (DeclarationType.valid(d)) {
-				return breakDownDeclaration(name, DeclarationType.fromChar(d),
-						script.substring(script.charAt(name.length())));
-			} else {
-				return breakDownVariable(name);
+			if (script.length() > name.length()) {
+				char d = script.charAt(name.length());
+				if (DeclarationType.valid(d)) {
+					return breakDownDeclaration(name, DeclarationType.fromChar(d), script.substring(name.length() + 1));
+				} else {
+					throw new ScriptErrorException(script, "Invalid character in variable name or declaration.");
+				}
 			}
+			return breakDownVariable(name);
 		} else if (c == '?') {
 			// Conditional logic
 		} else if (c == 'i') {
