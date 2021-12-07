@@ -260,14 +260,23 @@ public class Command implements ResultantNode {
 	private void printCommand() throws UnsupportedCommandTypeException, CommandErrorException {
 		if (vars[1] instanceof SpecialVariable) {
 			System.out.println(vars[0].toString());
-		} else {
+		} else if (vars[1] instanceof FileVariable) {
+			File f = ((FileVariable) vars[1]).getVar();
 			try {
-				Files.write(Paths.get(((FileVariable) vars[1]).getVar().getAbsolutePath()),
-						vars[0].toString().getBytes(), StandardOpenOption.APPEND);
+				if (f.exists()) {
+					Files.write(Paths.get(f.getAbsolutePath()), vars[0].toString().getBytes(),
+							StandardOpenOption.APPEND);
+				} else {
+					Files.write(Paths.get(f.getAbsolutePath()), vars[0].toString().getBytes(),
+							StandardOpenOption.CREATE);
+				}
 			} catch (IOException e) {
 				throw new CommandErrorException(
 						"Can not print to file \"" + ((FileVariable) vars[1]).getVar().getAbsolutePath() + "\".");
 			}
+		} else {
+			throw new CommandErrorException(
+					"Print location \"" + ((FileVariable) vars[1]).getVar().getAbsolutePath() + "\" is invalid.");
 		}
 	}
 
