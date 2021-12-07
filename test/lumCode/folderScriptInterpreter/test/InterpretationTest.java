@@ -41,6 +41,9 @@ public class InterpretationTest {
 		// Test2 - List filenames into a new text file
 		System.out.println("Test2");
 		File list = new File(tf1.getAbsolutePath() + "/list.txt");
+		if (list.exists()) {
+			list.delete();
+		}
 		clear();
 		Main.main(
 				new String[] { "i0(a[0]){o(n(i0)+e(i0)+\"\n\",a[1])}", tf1.getAbsolutePath(), list.getAbsolutePath() });
