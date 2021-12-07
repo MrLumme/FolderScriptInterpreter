@@ -11,6 +11,7 @@ import lumCode.folderScriptInterpreter.exceptions.IncorrentParameterAmountExcept
 import lumCode.folderScriptInterpreter.exceptions.ScriptErrorException;
 import lumCode.folderScriptInterpreter.exceptions.UnsupportedTypeException;
 import lumCode.folderScriptInterpreter.exceptions.VariableNameNotFoundException;
+import lumCode.folderScriptInterpreter.exceptions.VariableNotArrayException;
 import lumCode.folderScriptInterpreter.handlers.Node;
 import lumCode.folderScriptInterpreter.handlers.ResultantNode;
 import lumCode.folderScriptInterpreter.handlers.arithmetic.Arithmetic;
@@ -25,8 +26,9 @@ import lumCode.folderScriptInterpreter.variables.Variable;
 
 public class ScriptBuilder {
 
-	public static List<Node> buildNodeTree(String script) throws ScriptErrorException, VariableNameNotFoundException,
-			BreakDownException, UnsupportedTypeException, IncorrentParameterAmountException, CommandErrorException {
+	public static List<Node> buildNodeTree(String script)
+			throws ScriptErrorException, VariableNameNotFoundException, BreakDownException, UnsupportedTypeException,
+			IncorrentParameterAmountException, CommandErrorException, VariableNotArrayException {
 		List<String> sec = Utilities.charSplitter(script, ',');
 
 		ArrayList<Node> out = new ArrayList<Node>();
@@ -48,7 +50,7 @@ public class ScriptBuilder {
 
 	private static Node breakDownScript(String script)
 			throws ScriptErrorException, BreakDownException, VariableNameNotFoundException, UnsupportedTypeException,
-			IncorrentParameterAmountException, CommandErrorException {
+			IncorrentParameterAmountException, CommandErrorException, VariableNotArrayException {
 		char c = script.charAt(0);
 
 		if (Utilities.isArithmeticExpression(script)) {
@@ -135,7 +137,7 @@ public class ScriptBuilder {
 
 	private static Arithmetic breakDownArithmetic(String left, ArithmeticType type, String right)
 			throws VariableNameNotFoundException, ScriptErrorException, BreakDownException, UnsupportedTypeException,
-			IncorrentParameterAmountException, CommandErrorException {
+			IncorrentParameterAmountException, CommandErrorException, VariableNotArrayException {
 		Node ln = breakDownScript(left);
 		Node rn = breakDownScript(right);
 
@@ -178,7 +180,7 @@ public class ScriptBuilder {
 
 	private static Iteration breakDownIteration(int n, String iterant, List<String> script)
 			throws ScriptErrorException, VariableNameNotFoundException, BreakDownException, UnsupportedTypeException,
-			IncorrentParameterAmountException, CommandErrorException {
+			IncorrentParameterAmountException, CommandErrorException, VariableNotArrayException {
 		Node node = breakDownScript(iterant);
 		if (!(node instanceof ResultantNode)) {
 			throw new ScriptErrorException(script.toString(),
@@ -203,7 +205,7 @@ public class ScriptBuilder {
 
 	private static Declaration breakDownDeclaration(String name, DeclarationType d, String script)
 			throws ScriptErrorException, VariableNameNotFoundException, BreakDownException, UnsupportedTypeException,
-			IncorrentParameterAmountException, CommandErrorException {
+			IncorrentParameterAmountException, CommandErrorException, VariableNotArrayException {
 		String res = script;
 
 		Variable value = null;
@@ -223,9 +225,9 @@ public class ScriptBuilder {
 		}
 	}
 
-	private static Command breakDownCommand(CommandType c, List<String> inputs)
-			throws VariableNameNotFoundException, ScriptErrorException, BreakDownException,
-			IncorrentParameterAmountException, CommandErrorException, UnsupportedTypeException {
+	private static Command breakDownCommand(CommandType c, List<String> inputs) throws VariableNameNotFoundException,
+			ScriptErrorException, BreakDownException, IncorrentParameterAmountException, CommandErrorException,
+			UnsupportedTypeException, VariableNotArrayException {
 		List<Node> ins = new ArrayList<Node>();
 		for (String input : inputs) {
 			ins.add(breakDownScript(input));
