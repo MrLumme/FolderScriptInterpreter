@@ -228,15 +228,4 @@ public class ScriptBuilder {
 		}
 		return new Command(c, ins);
 	}
-
-	private static void validateScriptSection(ScriptSection script) throws ScriptErrorException {
-		if (script.getHead().matches("^[^A-Za-z#?^\"]")) {
-			throw new ScriptErrorException(script.toString(),
-					"The start of the script contains invalid or non-functional instructions.");
-		} else if (script.getHead().charAt(0) == 'i'
-				&& (script.getHead().charAt(1) < 48 || script.getHead().charAt(1) > 57)) {
-			throw new ScriptErrorException(script.toString(),
-					"The start of the script contains iterator but no numeric designation.");
-		}
-	}
 }
