@@ -81,6 +81,7 @@ public class Main {
 	public static void setVariable(String name, String value) throws VariableNotArrayException {
 		if (name.contains("[")) {
 			int number = Integer.parseInt(name.substring(name.indexOf('[') + 1, name.indexOf(']')));
+			name = name.substring(0, name.indexOf('['));
 			Variable arr = v.get(name);
 			if (arr != null && !(arr instanceof ArrayVariable)) {
 				throw new VariableNotArrayException(name);
