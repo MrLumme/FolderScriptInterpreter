@@ -10,7 +10,7 @@ import lumCode.folderScriptInterpreter.Main;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 
 public class InterpretationTest {
-	private static final File tf1 = new File("resources/interpretationTest/test1");
+	private static final File tf1 = new File("resources/interpretationTest/test2");
 
 	@Test
 	void interpretationTest() throws InterpreterException {
