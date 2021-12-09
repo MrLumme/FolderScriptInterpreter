@@ -64,8 +64,8 @@ public class Command implements ResultantNode {
 
 		for (int i = 0; i < vars.length; i++) {
 			if (type == CommandType.COPY || type == CommandType.DELETE || type == CommandType.MOVE
-					|| type == CommandType.EXTENSION || type == CommandType.NAME || type == CommandType.IS_FILE
-					|| type == CommandType.IS_AVAILABLE || type == CommandType.PARENT || type == CommandType.READ) {
+					|| type == CommandType.NAME || type == CommandType.IS_FILE || type == CommandType.IS_AVAILABLE
+					|| type == CommandType.PARENT) {
 				if (vars[i].type != VariableType.FILE && vars[i].type != VariableType.FOLDER) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
@@ -88,6 +88,10 @@ public class Command implements ResultantNode {
 				}
 			} else if (type == CommandType.PRINT && i == 1) {
 				if (vars[i].type != VariableType.FILE && vars[i].type != VariableType.SPECIAL) {
+					throw new IncorrectParameterTypeException(type, vars[i]);
+				}
+			} else if (type == CommandType.EXTENSION || type == CommandType.READ) {
+				if (vars[i].type != VariableType.FILE) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
 			}
