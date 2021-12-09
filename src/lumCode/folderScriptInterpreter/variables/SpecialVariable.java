@@ -2,7 +2,7 @@ package lumCode.folderScriptInterpreter.variables;
 
 public class SpecialVariable extends Variable {
 
-	protected SpecialVariable() {
+	public SpecialVariable() {
 		super(VariableType.SPECIAL);
 	}
 
