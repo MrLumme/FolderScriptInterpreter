@@ -29,14 +29,8 @@ public class Main {
 		}
 		script = Utilities.cleanAndValidateScript(script);
 
-		// ScriptSection sec = new ScriptSection(script);
-
-		nodes.addAll(ScriptBuilder.buildNodeTree(script));
-
 		// Construct node tree
-//		for (String[] s : splitScript(script)) {
-//			nodes.addAll(breakDownScript(s));
-//		}
+		nodes.addAll(ScriptBuilder.buildNodeTree(script));
 
 		// Execute program
 		for (Node n : nodes) {
