@@ -344,11 +344,19 @@ public class CommandTest {
 
 		// Copy
 		ArrayList<Node> lc = new ArrayList<Node>();
-		lc.add(txt);
 		lc.add(doc1);
+		lc.add(doc2);
 		Command c = new Command(CommandType.COPY, lc);
 		c.action();
 		assertTrue(doc2.getVar().exists());
+
+		// Move
+		ArrayList<Node> lm = new ArrayList<Node>();
+		lm.add(doc1);
+		lm.add(fol);
+		Command m = new Command(CommandType.COPY, lc);
+		m.action();
+		assertTrue(new File(fol.getVar().getAbsolutePath() + "/" + doc1.getVar().getName()).exists());
 	}
 
 }
