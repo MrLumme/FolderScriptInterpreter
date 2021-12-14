@@ -1,6 +1,5 @@
 package lumCode.folderScriptInterpreter.test;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -11,8 +10,6 @@ import org.junit.jupiter.api.Test;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.handlers.arithmetic.Arithmetic;
 import lumCode.folderScriptInterpreter.handlers.arithmetic.ArithmeticType;
-import lumCode.folderScriptInterpreter.handlers.command.Command;
-import lumCode.folderScriptInterpreter.handlers.command.CommandType;
 import lumCode.folderScriptInterpreter.variables.ArrayVariable;
 import lumCode.folderScriptInterpreter.variables.FileVariable;
 import lumCode.folderScriptInterpreter.variables.FolderVariable;
@@ -29,201 +26,35 @@ public class ArithmeticTest {
 
 	@Test
 	void additionTest() throws InterpreterException {
-		FileVariable fil = new FileVariable(new File("C:/dok1.rtf"));
-		FolderVariable fol = new FolderVariable(new File("C:/"));
+		FileVariable fil = new FileVariable(new File("C:/temp/docs/dok1.rtf"));
+		FileVariable fil2 = new FileVariable(new File("C:/temp/code/dok4.txt"));
+		FolderVariable fol = new FolderVariable(new File("C:/temp/code"));
 		TextVariable txt = new TextVariable("test TEXT");
 		NumberVariable num = new NumberVariable(14);
 		SpecialVariable spe = new SpecialVariable();
 		ArrayVariable arr = new ArrayVariable();
-		arr.setVar(0, new FileVariable(new File("C:/dok1.rtf")));
-		arr.setVar(1, new FolderVariable(new File("C:/")));
+		arr.setVar(0, new FileVariable(new File("C:/temp/docs/dok1.rtf")));
+		arr.setVar(1, new FolderVariable(new File("C:/temp/code")));
 		arr.setVar(2, new TextVariable("test TEXT"));
 		arr.setVar(3, new NumberVariable(15));
 		arr.setVar(4, new SpecialVariable());
 
-		Arithmetic n1 = new Arithmetic(num, ArithmeticType.ADDITION, fil);
-		Arithmetic n2 = new Arithmetic(num, ArithmeticType.ADDITION, fol);
-		Arithmetic n3 = new Arithmetic(num, ArithmeticType.ADDITION, txt);
-		Arithmetic n4 = new Arithmetic(num, ArithmeticType.ADDITION, num);
-		Arithmetic n5 = new Arithmetic(num, ArithmeticType.ADDITION, spe);
-		Arithmetic n6 = new Arithmetic(num, ArithmeticType.ADDITION, arr);
-
-		n1.action();
-		assertTrue(((TextVariable) n1.result()).getVar().equals("dok1"));
-		n2.action();
-		assertTrue(((TextVariable) n2.result()).getVar().equals("fileSet1"));
-
-		boolean nr3 = false;
-		try {
-			n3.action();
-			nr3 = true;
-		} catch (InterpreterException e) {
-			// Do nothing
-		}
-		assertFalse(nr3);
-
-		boolean nr4 = false;
-		try {
-			n4.action();
-			nr4 = true;
-		} catch (InterpreterException e) {
-			// Do nothing
-		}
-		assertFalse(nr4);
-
-		boolean nr5 = false;
-		try {
-			n5.action();
-			nr5 = true;
-		} catch (InterpreterException e) {
-			// Do nothing
-		}
-		assertFalse(nr5);
-
-		boolean nr6 = false;
-		try {
-			n6.action();
-			nr6 = true;
-		} catch (InterpreterException e) {
-			// Do nothing
-		}
-		assertFalse(nr6);
-
-		// Extension command
-		Command e1 = new Command(CommandType.EXTENSION, l1);
-		Command e2 = new Command(CommandType.EXTENSION, l2);
-		Command e3 = new Command(CommandType.EXTENSION, l3);
-		Command e4 = new Command(CommandType.EXTENSION, l4);
-		Command e5 = new Command(CommandType.EXTENSION, l5);
-		Command e6 = new Command(CommandType.EXTENSION, l6);
-
-		e1.action();
-		assertTrue(((TextVariable) e1.result()).getVar().equals(".rtf"));
-
-		boolean er2 = false;
-		try {
-			e2.action();
-			er2 = true;
-		} catch (InterpreterException e) {
-			// Do nothing
-		}
-		assertFalse(er2);
-
-		boolean er3 = false;
-		try {
-			e3.action();
-			er3 = true;
-		} catch (InterpreterException e) {
-			// Do nothing
-		}
-		assertFalse(er3);
-
-		boolean er4 = false;
-		try {
-			e4.action();
-			er4 = true;
-		} catch (InterpreterException e) {
-			// Do nothing
-		}
-		assertFalse(er4);
-
-		boolean er5 = false;
-		try {
-			e5.action();
-			er5 = true;
-		} catch (InterpreterException e) {
-			// Do nothing
-		}
-		assertFalse(er5);
-
-		boolean er6 = false;
-		try {
-			e6.action();
-			er6 = true;
-		} catch (InterpreterException e) {
-			// Do nothing
-		}
-		assertFalse(er6);
-
-		// Parent command
-		Command p1 = new Command(CommandType.PARENT, l1);
-		Command p2 = new Command(CommandType.PARENT, l2);
-		Command p3 = new Command(CommandType.PARENT, l3);
-		Command p4 = new Command(CommandType.PARENT, l4);
-		Command p5 = new Command(CommandType.PARENT, l5);
-		Command p6 = new Command(CommandType.PARENT, l6);
-
-		p1.action();
-		assertTrue(((FolderVariable) p1.result()).getVar().getName().equals("fileSet1"));
-		p2.action();
-		assertTrue(((FolderVariable) p2.result()).getVar().getName().equals("commandTest"));
-
-		boolean pr3 = false;
-		try {
-			p3.action();
-			pr3 = true;
-		} catch (InterpreterException e) {
-			// Do nothing
-		}
-		assertFalse(pr3);
-
-		boolean pr4 = false;
-		try {
-			p4.action();
-			pr4 = true;
-		} catch (InterpreterException e) {
-			// Do nothing
-		}
-		assertFalse(pr4);
-
-		boolean pr5 = false;
-		try {
-			p5.action();
-			pr5 = true;
-		} catch (InterpreterException e) {
-			// Do nothing
-		}
-		assertFalse(pr5);
-
-		boolean pr6 = false;
-		try {
-			p6.action();
-			pr6 = true;
-		} catch (InterpreterException e) {
-			// Do nothing
-		}
-		assertFalse(pr6);
-
-		// isFile command
-		Command f1 = new Command(CommandType.IS_FILE, l1);
-		Command f2 = new Command(CommandType.IS_FILE, l2);
-		Command f3 = new Command(CommandType.IS_FILE, l3);
-		Command f4 = new Command(CommandType.IS_FILE, l4);
-		Command f5 = new Command(CommandType.IS_FILE, l5);
-		Command f6 = new Command(CommandType.IS_FILE, l6);
+		// File
+		Arithmetic f1 = new Arithmetic(fil, ArithmeticType.ADDITION, fil2);
+		Arithmetic f2 = new Arithmetic(fil, ArithmeticType.ADDITION, fol);
+		Arithmetic f3 = new Arithmetic(fil, ArithmeticType.ADDITION, txt);
+		Arithmetic f4 = new Arithmetic(fil, ArithmeticType.ADDITION, num);
+		Arithmetic f5 = new Arithmetic(fil, ArithmeticType.ADDITION, arr);
+		Arithmetic f6 = new Arithmetic(fil, ArithmeticType.ADDITION, spe);
 
 		f1.action();
-		assertEquals(1, ((NumberVariable) f1.result()).getVar());
+		assertTrue(((FileVariable) f1.result()).getVar().getAbsolutePath().equals("C:\\temp\\docs\\dok4.txt"));
 		f2.action();
-		assertEquals(0, ((NumberVariable) f2.result()).getVar());
-
-		boolean fr3 = false;
-		try {
-			f3.action();
-			fr3 = true;
-		} catch (InterpreterException e) {
-			// Do nothing
-		}
-		assertFalse(fr3);
-
-		boolean fr4 = false;
-		try {
-			f4.action();
-			fr4 = true;
-		} catch (InterpreterException e) {
-			// Do nothing
-		}
-		assertFalse(fr4);
+		assertTrue(((FileVariable) f2.result()).getVar().getAbsolutePath().equals("C:\\temp\\code\\dok1.rtf"));
+		f3.action();
+		assertTrue(((FileVariable) f3.result()).getVar().getAbsolutePath().equals("C:\\temp\\docs\\dok1test TEXT.rtf"));
+		f4.action();
+		assertTrue(((FileVariable) f4.result()).getVar().getAbsolutePath().equals("C:\\temp\\docs\\dok1_14.rtf"));
 
 		boolean fr5 = false;
 		try {
@@ -243,57 +74,170 @@ public class ArithmeticTest {
 		}
 		assertFalse(fr6);
 
-		// isAvailable command
-		Command v1 = new Command(CommandType.IS_AVAILABLE, l1);
-		Command v2 = new Command(CommandType.IS_AVAILABLE, l2);
-		Command v3 = new Command(CommandType.IS_AVAILABLE, l3);
-		Command v4 = new Command(CommandType.IS_AVAILABLE, l4);
-		Command v5 = new Command(CommandType.IS_AVAILABLE, l5);
-		Command v6 = new Command(CommandType.IS_AVAILABLE, l6);
-		Command v7 = new Command(CommandType.IS_AVAILABLE, ln1);
+		// Folder
+		Arithmetic d1 = new Arithmetic(fol, ArithmeticType.ADDITION, fil);
+		Arithmetic d2 = new Arithmetic(fol, ArithmeticType.ADDITION, fol);
+		Arithmetic d3 = new Arithmetic(fol, ArithmeticType.ADDITION, txt);
+		Arithmetic d4 = new Arithmetic(fol, ArithmeticType.ADDITION, num);
+		Arithmetic d5 = new Arithmetic(fol, ArithmeticType.ADDITION, arr);
+		Arithmetic d6 = new Arithmetic(fol, ArithmeticType.ADDITION, spe);
 
-		v1.action();
-		assertEquals(1, ((NumberVariable) v1.result()).getVar());
-		v2.action();
-		assertEquals(1, ((NumberVariable) v2.result()).getVar());
-		v7.action();
-		assertEquals(0, ((NumberVariable) v7.result()).getVar());
+		d1.action();
+		assertTrue(((FileVariable) d1.result()).getVar().getAbsolutePath().equals("C:\\temp\\code\\dok1.rtf"));
+		d2.action();
+		assertTrue(((FolderVariable) d2.result()).getVar().getAbsolutePath().equals("C:\\temp\\code\\code"));
+		d3.action();
+		assertTrue(((FileVariable) d3.result()).getVar().getAbsolutePath().equals("C:\\temp\\codetest TEXT"));
+		d4.action();
+		assertTrue(((FileVariable) d4.result()).getVar().getAbsolutePath().equals("C:\\temp\\code_14"));
 
-		boolean vr3 = false;
+		boolean dr5 = false;
 		try {
-			v3.action();
-			vr3 = true;
+			d5.action();
+			dr5 = true;
 		} catch (InterpreterException e) {
 			// Do nothing
 		}
-		assertFalse(vr3);
+		assertFalse(dr5);
 
-		boolean vr4 = false;
+		boolean dr6 = false;
 		try {
-			v4.action();
-			vr4 = true;
+			d6.action();
+			dr6 = true;
 		} catch (InterpreterException e) {
 			// Do nothing
 		}
-		assertFalse(vr4);
+		assertFalse(dr6);
 
-		boolean vr5 = false;
+		// Text
+		Arithmetic t1 = new Arithmetic(txt, ArithmeticType.ADDITION, fil);
+		Arithmetic t2 = new Arithmetic(txt, ArithmeticType.ADDITION, fol);
+		Arithmetic t3 = new Arithmetic(txt, ArithmeticType.ADDITION, txt);
+		Arithmetic t4 = new Arithmetic(txt, ArithmeticType.ADDITION, num);
+		Arithmetic t5 = new Arithmetic(txt, ArithmeticType.ADDITION, arr);
+		Arithmetic t6 = new Arithmetic(txt, ArithmeticType.ADDITION, spe);
+
+		t1.action();
+		assertTrue(((TextVariable) t1.result()).getVar().equals("test TEXTC:\\temp\\docs\\dok1.rtf"));
+		t2.action();
+		assertTrue(((TextVariable) t2.result()).getVar().equals("test TEXTC:\\temp\\code"));
+		t3.action();
+		assertTrue(((TextVariable) t3.result()).getVar().equals("test TEXTtest TEXT"));
+		t4.action();
+		assertTrue(((TextVariable) t4.result()).getVar().equals("test TEXT14"));
+		t5.action();
+		assertTrue(((TextVariable) t5.result()).getVar()
+				.equals("test TEXTC:\\temp\\docs\\dok1.rtf, C:\\temp\\code, test TEXT, 15, $"));
+		t6.action();
+		assertTrue(((TextVariable) t6.result()).getVar().equals("test TEXT$"));
+
+		// Number
+		Arithmetic n1 = new Arithmetic(num, ArithmeticType.ADDITION, fil);
+		Arithmetic n2 = new Arithmetic(num, ArithmeticType.ADDITION, fol);
+		Arithmetic n3 = new Arithmetic(num, ArithmeticType.ADDITION, txt);
+		Arithmetic n4 = new Arithmetic(num, ArithmeticType.ADDITION, num);
+		Arithmetic n5 = new Arithmetic(num, ArithmeticType.ADDITION, arr);
+		Arithmetic n6 = new Arithmetic(num, ArithmeticType.ADDITION, spe);
+
+		n1.action();
+		assertTrue(((FileVariable) n1.result()).getVar().getAbsolutePath().equals("C:\\temp\\docs\\dok1_14.rtf"));
+		n2.action();
+		assertTrue(((FolderVariable) n2.result()).getVar().getAbsolutePath().equals("C:\\temp\\code_14"));
+		n3.action();
+		assertTrue(((TextVariable) n3.result()).getVar().equals("14test TEXT"));
+		n4.action();
+		assertTrue(((NumberVariable) n4.result()).getVar() == 28);
+
+		boolean nr5 = false;
 		try {
-			v5.action();
-			vr5 = true;
+			n5.action();
+			nr5 = true;
 		} catch (InterpreterException e) {
 			// Do nothing
 		}
-		assertFalse(vr5);
+		assertFalse(nr5);
 
-		boolean vr6 = false;
+		boolean nr6 = false;
 		try {
-			v6.action();
-			vr6 = true;
+			n6.action();
+			nr6 = true;
 		} catch (InterpreterException e) {
 			// Do nothing
 		}
-		assertFalse(vr6);
+		assertFalse(nr6);
+
+		// Array
+		Arithmetic a1 = new Arithmetic(arr, ArithmeticType.ADDITION, fil);
+		Arithmetic a2 = new Arithmetic(arr, ArithmeticType.ADDITION, fol);
+		Arithmetic a3 = new Arithmetic(arr, ArithmeticType.ADDITION, txt);
+		Arithmetic a4 = new Arithmetic(arr, ArithmeticType.ADDITION, num);
+		Arithmetic a5 = new Arithmetic(arr, ArithmeticType.ADDITION, arr);
+		Arithmetic a6 = new Arithmetic(arr, ArithmeticType.ADDITION, spe);
+
+		a1.action();
+		assertTrue(((FileVariable) ((ArrayVariable) a1.result()).getVar(5)).getVar().getAbsolutePath()
+				.equals("C:\\temp\\docs\\dok1.rtf"));
+		a2.action();
+		assertTrue(((FolderVariable) ((ArrayVariable) a2.result()).getVar(6)).getVar().getAbsolutePath()
+				.equals("C:\\temp\\code"));
+		a3.action();
+		assertTrue(((TextVariable) ((ArrayVariable) a3.result()).getVar(7)).getVar().equals("test TEXT"));
+		a4.action();
+		assertTrue(((NumberVariable) ((ArrayVariable) a4.result()).getVar(8)).getVar() == 15);
+		a5.action();
+		assertTrue(((FileVariable) ((ArrayVariable) a5.result()).getVar(9)).getVar().getAbsolutePath()
+				.equals("C:\\temp\\docs\\dok1.rtf"));
+		a6.action();
+		assertTrue(((ArrayVariable) a6.result()).getVar(14) instanceof SpecialVariable);
+
+		// Array
+		Arithmetic s1 = new Arithmetic(arr, ArithmeticType.ADDITION, fil);
+		Arithmetic s2 = new Arithmetic(arr, ArithmeticType.ADDITION, fol);
+		Arithmetic s3 = new Arithmetic(arr, ArithmeticType.ADDITION, txt);
+		Arithmetic s4 = new Arithmetic(arr, ArithmeticType.ADDITION, num);
+		Arithmetic s5 = new Arithmetic(arr, ArithmeticType.ADDITION, arr);
+		Arithmetic s6 = new Arithmetic(arr, ArithmeticType.ADDITION, spe);
+
+		s3.action();
+		assertTrue(((TextVariable) s3.result()).getVar().equals("$test TEXT"));
+		s6.action();
+		assertTrue(s6.result() instanceof SpecialVariable);
+
+		boolean sr1 = false;
+		try {
+			s1.action();
+			sr1 = true;
+		} catch (InterpreterException e) {
+			// Do nothing
+		}
+		assertFalse(sr1);
+
+		boolean sr2 = false;
+		try {
+			s2.action();
+			sr2 = true;
+		} catch (InterpreterException e) {
+			// Do nothing
+		}
+		assertFalse(sr2);
+
+		boolean sr4 = false;
+		try {
+			s4.action();
+			sr4 = true;
+		} catch (InterpreterException e) {
+			// Do nothing
+		}
+		assertFalse(sr4);
+
+		boolean sr5 = false;
+		try {
+			s5.action();
+			sr5 = true;
+		} catch (InterpreterException e) {
+			// Do nothing
+		}
+		assertFalse(sr5);
 	}
 
 }
