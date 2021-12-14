@@ -33,7 +33,7 @@ public class Arithmetic implements ResultantNode {
 						type, ((NumberVariable) right.result()).getVar()));
 			} else if (right.result().type == VariableType.TEXT) {
 				result = new TextVariable(
-						StringArithmeticHandler.interpret("" + ((NumberVariable) left.result()).getVar(), type,
+						TextArithmeticHandler.interpret("" + ((NumberVariable) left.result()).getVar(), type,
 								((TextVariable) right.result()).getVar()));
 			} else if (right.result().type == VariableType.FILE) {
 //			return new FileVariable(
@@ -44,11 +44,11 @@ public class Arithmetic implements ResultantNode {
 			}
 		} else if (left.result().type == VariableType.TEXT) {
 			if (right.result().type == VariableType.NUMBER) {
-				result = new TextVariable(StringArithmeticHandler.interpret(((TextVariable) left.result()).getVar(),
-						type, "" + ((NumberVariable) right.result()).getVar()));
+				result = new TextVariable(TextArithmeticHandler.interpret(((TextVariable) left.result()).getVar(), type,
+						"" + ((NumberVariable) right.result()).getVar()));
 			} else if (right.result().type == VariableType.TEXT) {
-				result = new TextVariable(StringArithmeticHandler.interpret(((TextVariable) left.result()).getVar(),
-						type, ((TextVariable) right.result()).getVar()));
+				result = new TextVariable(TextArithmeticHandler.interpret(((TextVariable) left.result()).getVar(), type,
+						((TextVariable) right.result()).getVar()));
 			} else if (right.result().type == VariableType.FILE) {
 //			return new StringVariable(
 //					fileArithmetic(((StringVariable) left).getVar(), operator, ((FileVariable) right).getVar()));
