@@ -20,4 +20,14 @@ public class NumberArithmeticHandler {
 			throw new UnsupportedArithmeticTypeException(operator);
 		}
 	}
+
+	public static String interpret(long left, ArithmeticType operator, String right)
+			throws UnsupportedArithmeticTypeException {
+		switch (operator) {
+		case ADDITION:
+			return "" + left + right;
+		default:
+			throw new UnsupportedArithmeticTypeException(operator);
+		}
+	}
 }

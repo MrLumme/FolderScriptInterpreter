@@ -39,8 +39,8 @@ public class Arithmetic implements ResultantNode {
 //			return new FileVariable(
 //					fileArithmetic(((IntVariable) left).getVar(), operator, ((FileVariable) right).getVar()));
 			} else if (right.result().type == VariableType.FOLDER) {
-				result = new FolderVariable(FolderArithmeticHandler.interpret(((NumberVariable) left.result()).getVar(),
-						type, ((FolderVariable) right).getVar()));
+//				result = new FolderVariable(FileArithmeticHandler.interpret(((NumberVariable) left.result()).getVar(),
+//						type, ((FolderVariable) right).getVar()));
 			}
 		} else if (left.result().type == VariableType.TEXT) {
 			if (right.result().type == VariableType.NUMBER) {
@@ -64,11 +64,11 @@ public class Arithmetic implements ResultantNode {
 				result = new FileVariable(FileArithmeticHandler.interpret(((FileVariable) left).getVar(), type,
 						((TextVariable) right).getVar()));
 			} else if (right.result().type == VariableType.FILE) {
-//			return new FileVariable(
-//					fileArithmetic(((FileVariable) left).getVar(), operator, ((IntVariable) right).getVar()));
+				result = new FileVariable(FileArithmeticHandler.interpret(((FileVariable) left).getVar(), type,
+						((FileVariable) right).getVar()));
 			} else if (right.result().type == VariableType.FOLDER) {
-				result = new FileVariable(FolderArithmeticHandler.interpret(((FileVariable) right).getVar(), type,
-						((FileVariable) left).getVar()));
+				result = new FileVariable(FolderArithmeticHandler.interpret(((FileVariable) left).getVar(), type,
+						((FolderVariable) right).getVar()));
 			}
 		} else if (left.result().type == VariableType.FOLDER) {
 			if (right.result().type == VariableType.NUMBER) {
@@ -78,8 +78,8 @@ public class Arithmetic implements ResultantNode {
 				result = new FolderVariable(FolderArithmeticHandler.interpret(((FileVariable) left).getVar(), type,
 						((TextVariable) right).getVar()));
 			} else if (right.result().type == VariableType.FILE) {
-//			return new FileVariable(
-//					fileArithmetic(((FileVariable) left).getVar(), operator, ((FileVariable) right).getVar()));
+				result = new FileVariable(FolderArithmeticHandler.interpret(((FolderVariable) left).getVar(), type,
+						((FileVariable) right).getVar()));
 			} else if (right.result().type == VariableType.FOLDER) {
 				result = new FileVariable(FolderArithmeticHandler.interpret(((FileVariable) left).getVar(), type,
 						((FileVariable) right).getVar()));
