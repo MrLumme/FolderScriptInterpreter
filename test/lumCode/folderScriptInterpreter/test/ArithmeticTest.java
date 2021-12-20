@@ -54,7 +54,7 @@ public class ArithmeticTest {
 		f3.action();
 		assertTrue(((FileVariable) f3.result()).getVar().getAbsolutePath().equals("C:\\temp\\docs\\dok1test TEXT.rtf"));
 		f4.action();
-		assertTrue(((FileVariable) f4.result()).getVar().getAbsolutePath().equals("C:\\temp\\docs\\dok1_14.rtf"));
+		assertTrue(((FileVariable) f4.result()).getVar().getAbsolutePath().equals("C:\\temp\\docs\\dok114.rtf"));
 
 		boolean fr5 = false;
 		try {
@@ -87,9 +87,9 @@ public class ArithmeticTest {
 		d2.action();
 		assertTrue(((FolderVariable) d2.result()).getVar().getAbsolutePath().equals("C:\\temp\\code\\code"));
 		d3.action();
-		assertTrue(((FileVariable) d3.result()).getVar().getAbsolutePath().equals("C:\\temp\\codetest TEXT"));
+		assertTrue(((FolderVariable) d3.result()).getVar().getAbsolutePath().equals("C:\\temp\\codetest TEXT"));
 		d4.action();
-		assertTrue(((FileVariable) d4.result()).getVar().getAbsolutePath().equals("C:\\temp\\code_14"));
+		assertTrue(((FolderVariable) d4.result()).getVar().getAbsolutePath().equals("C:\\temp\\code14"));
 
 		boolean dr5 = false;
 		try {
@@ -140,9 +140,9 @@ public class ArithmeticTest {
 		Arithmetic n6 = new Arithmetic(num, ArithmeticType.ADDITION, spe);
 
 		n1.action();
-		assertTrue(((FileVariable) n1.result()).getVar().getAbsolutePath().equals("C:\\temp\\docs\\dok1_14.rtf"));
+		assertTrue(((FileVariable) n1.result()).getVar().getAbsolutePath().equals("C:\\temp\\docs\\14dok1.rtf"));
 		n2.action();
-		assertTrue(((FolderVariable) n2.result()).getVar().getAbsolutePath().equals("C:\\temp\\code_14"));
+		assertTrue(((FolderVariable) n2.result()).getVar().getAbsolutePath().equals("C:\\temp\\14code"));
 		n3.action();
 		assertTrue(((TextVariable) n3.result()).getVar().equals("14test TEXT"));
 		n4.action();
@@ -183,7 +183,7 @@ public class ArithmeticTest {
 		a3.action();
 		assertTrue(((TextVariable) ((ArrayVariable) a3.result()).getVar(7)).getVar().equals("test TEXT"));
 		a4.action();
-		assertTrue(((NumberVariable) ((ArrayVariable) a4.result()).getVar(8)).getVar() == 15);
+		assertTrue(((NumberVariable) ((ArrayVariable) a4.result()).getVar(8)).getVar() == 14);
 		a5.action();
 		assertTrue(((FileVariable) ((ArrayVariable) a5.result()).getVar(9)).getVar().getAbsolutePath()
 				.equals("C:\\temp\\docs\\dok1.rtf"));
