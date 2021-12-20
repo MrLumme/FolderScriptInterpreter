@@ -12,25 +12,22 @@ import lumCode.folderScriptInterpreter.variables.VariableType;
 public class ArrayArithmeticHandler {
 
 	public static Variable calculate(ArrayVariable left, ArithmeticType type, Variable right)
-		int numb = 0;
-		for (Integer i : left.getAll().keySet()) {
-			if (i > numb) {
-				numb = i;
-			}
-		}
 			throws UnsupportedArithmeticTypeException, SameArrayArithmeticException {
+
 		if (right.type == VariableType.ARRAY) {
 			ArrayVariable r = ((ArrayVariable) right);
-			Iterator<Entry<Integer, Variable>> it = left.getAll().entrySet().iterator();
+			if (left == r) {
+				throw new SameArrayArithmeticException();
+			}
 			switch (type) {
 			case ADDITION:
-				while (it.hasNext()) {
-					Entry<Integer, Variable> e = it.next();
-					left.setVar(numb++, e.getValue());
+				for (Variable e : r.getAll().values()) {
+					left.setNextVar(e);
 				}
 				return left;
 			case SUBTRACTION:
 				for (Variable v : r.getAll().values()) {
+					Iterator<Entry<Integer, Variable>> it = left.getAll().entrySet().iterator();
 					while (it.hasNext()) {
 						Entry<Integer, Variable> e = it.next();
 						if (v.toString().equals(e.getValue().toString())) {
@@ -42,10 +39,12 @@ public class ArrayArithmeticHandler {
 			default:
 				throw new UnsupportedArithmeticTypeException(type);
 			}
-		} else {
+		} else
+
+		{
 			switch (type) {
 			case ADDITION:
-				left.setVar(numb + 1, right);
+				left.setNextVar(right);
 				return left;
 			case SUBTRACTION:
 				Iterator<Entry<Integer, Variable>> it = left.getAll().entrySet().iterator();

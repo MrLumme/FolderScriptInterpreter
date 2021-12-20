@@ -2,12 +2,16 @@ package lumCode.folderScriptInterpreter.variables;
 
 import java.util.HashMap;
 
+import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.ArrayPositionEmptyException;
+
 public class ArrayVariable extends Variable {
 	private HashMap<Integer, Variable> vars;
+	private int next;
 
 	public ArrayVariable() {
 		super(VariableType.ARRAY);
 		vars = new HashMap<Integer, Variable>();
+		next = 0;
 	}
 
 	protected ArrayVariable(HashMap<Integer, Variable> vars) {
@@ -27,10 +31,22 @@ public class ArrayVariable extends Variable {
 
 	public void setVar(int numb, Variable var) {
 		vars.put(numb, var);
+		if (numb >= next) {
+			next = numb + 1;
+		}
 	}
 
-	public Variable getVar(int numb) {
-		return vars.get(numb);
+	public void setNextVar(Variable var) {
+		vars.put(next, var);
+		next++;
+	}
+
+	public Variable getVar(int numb) throws ArrayPositionEmptyException {
+		Variable v = vars.get(numb);
+		if (v != null) {
+			return v;
+		}
+		throw new ArrayPositionEmptyException(numb);
 	}
 
 	public HashMap<Integer, Variable> getAll() {
