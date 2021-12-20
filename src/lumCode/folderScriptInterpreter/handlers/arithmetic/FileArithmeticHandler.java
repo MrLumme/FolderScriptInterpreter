@@ -4,48 +4,55 @@ import java.io.File;
 
 import lumCode.folderScriptInterpreter.exceptions.UndefinedArithmeticException;
 import lumCode.folderScriptInterpreter.exceptions.UnsupportedArithmeticTypeException;
+import lumCode.folderScriptInterpreter.variables.FileVariable;
+import lumCode.folderScriptInterpreter.variables.FolderVariable;
+import lumCode.folderScriptInterpreter.variables.NumberVariable;
+import lumCode.folderScriptInterpreter.variables.TextVariable;
+import lumCode.folderScriptInterpreter.variables.Variable;
+import lumCode.folderScriptInterpreter.variables.VariableType;
 
 public class FileArithmeticHandler {
-	public static File interpret(File left, ArithmeticType type, String right)
+
+	public static Variable calculate(FileVariable left, ArithmeticType type, Variable right)
 			throws UnsupportedArithmeticTypeException, UndefinedArithmeticException {
-		String path = left.getParent();
-		String name = left.getName();
-		String ext = left.getName().substring(left.getName().indexOf('.'));
-
-		switch (type) {
-		case ADDITION:
-			return new File(path + "\\" + name + right + "." + ext);
-		default:
-			throw new UndefinedArithmeticException(left.getAbsolutePath(), type, right);
-		}
-	}
-
-	public static File interpret(File left, ArithmeticType operator, long right)
-			throws UnsupportedArithmeticTypeException, UndefinedArithmeticException {
-		switch (operator) {
-		case ADDITION:
-			return new File(left.getParent() + "\\" + left.getName().replace(".", "" + right + "."));
-		default:
-			throw new UndefinedArithmeticException(left.getAbsolutePath(), operator, "" + right);
-		}
-	}
-
-	@SuppressWarnings("incomplete-switch")
-	public static File interpret(File left, ArithmeticType type, File right)
-			throws UndefinedArithmeticException, UnsupportedArithmeticTypeException {
-
-		if (right.isDirectory()) {
+		File l = left.getVar();
+		if (right.type == VariableType.NUMBER) {
+			long r = ((NumberVariable) right).getVar();
 			switch (type) {
 			case ADDITION:
-				return new File(right.getAbsolutePath() + "\\" + left.getName());
+				return new FileVariable(new File(l.getParent() + "\\" + l.getName().replace(".", "" + r + ".")));
+			default:
+				throw new UnsupportedArithmeticTypeException(type);
 			}
-		} else {
-			// Only files
+		} else if (right.type == VariableType.TEXT) {
+			String r = ((TextVariable) right).getVar();
 			switch (type) {
 			case ADDITION:
-				return new File(left.getParent() + "\\" + right.getName());
+				return new FileVariable(new File(l.getParent() + "\\" + l.getName().replace(".", r + ".")));
+			default:
+				throw new UnsupportedArithmeticTypeException(type);
 			}
+		} else if (right.type == VariableType.FILE) {
+			File r = ((FileVariable) right).getVar();
+			switch (type) {
+			case ADDITION:
+				return new FileVariable(new File(l.getParent() + "\\" + r.getName()));
+			default:
+				throw new UnsupportedArithmeticTypeException(type);
+			}
+		} else if (right.type == VariableType.FOLDER) {
+			File r = ((FolderVariable) right).getVar();
+			switch (type) {
+			case ADDITION:
+				return new FileVariable(new File(r.getAbsolutePath() + "\\" + l.getName()));
+			default:
+				throw new UnsupportedArithmeticTypeException(type);
+			}
+		} else if (right.type == VariableType.SPECIAL) {
+			// Not defined
+		} else if (right.type == VariableType.ARRAY) {
+			// Not defined
 		}
-		throw new UndefinedArithmeticException(left.getAbsolutePath(), type, right.getAbsolutePath());
+		throw new UndefinedArithmeticException(left.toString(), type, right.toString());
 	}
 }
