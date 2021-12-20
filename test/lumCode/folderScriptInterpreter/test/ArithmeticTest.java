@@ -38,6 +38,12 @@ public class ArithmeticTest {
 		arr.setVar(2, new TextVariable("test TEXT"));
 		arr.setVar(3, new NumberVariable(15));
 		arr.setVar(4, new SpecialVariable());
+		ArrayVariable arr2 = new ArrayVariable();
+		arr2.setVar(0, new FileVariable(new File("C:/temp/docs/dok1.rtf")));
+		arr2.setVar(1, new FolderVariable(new File("C:/temp/code")));
+		arr2.setVar(2, new TextVariable("test TEXT"));
+		arr2.setVar(3, new NumberVariable(15));
+		arr2.setVar(4, new SpecialVariable());
 
 		// File
 		Arithmetic f1 = new Arithmetic(fil, ArithmeticType.ADDITION, fil2);
@@ -171,7 +177,7 @@ public class ArithmeticTest {
 		Arithmetic a2 = new Arithmetic(arr, ArithmeticType.ADDITION, fol);
 		Arithmetic a3 = new Arithmetic(arr, ArithmeticType.ADDITION, txt);
 		Arithmetic a4 = new Arithmetic(arr, ArithmeticType.ADDITION, num);
-		Arithmetic a5 = new Arithmetic(arr, ArithmeticType.ADDITION, arr);
+		Arithmetic a5 = new Arithmetic(arr, ArithmeticType.ADDITION, arr2);
 		Arithmetic a6 = new Arithmetic(arr, ArithmeticType.ADDITION, spe);
 
 		a1.action();
@@ -195,7 +201,7 @@ public class ArithmeticTest {
 		Arithmetic s2 = new Arithmetic(arr, ArithmeticType.ADDITION, fol);
 		Arithmetic s3 = new Arithmetic(arr, ArithmeticType.ADDITION, txt);
 		Arithmetic s4 = new Arithmetic(arr, ArithmeticType.ADDITION, num);
-		Arithmetic s5 = new Arithmetic(arr, ArithmeticType.ADDITION, arr);
+		Arithmetic s5 = new Arithmetic(arr, ArithmeticType.ADDITION, arr2);
 		Arithmetic s6 = new Arithmetic(arr, ArithmeticType.ADDITION, spe);
 
 		s3.action();
