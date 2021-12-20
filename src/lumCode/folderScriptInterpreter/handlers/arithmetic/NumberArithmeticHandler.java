@@ -38,6 +38,18 @@ public class NumberArithmeticHandler {
 			switch (type) {
 			case ADDITION:
 				return new TextVariable("" + l + ((TextVariable) right).getVar());
+			case DIVISION:
+				// Not defined
+				break;
+			case MODULO:
+				// Not defined
+				break;
+			case MULTIPLICATION:
+				// Not defined
+				break;
+			case SUBTRACTION:
+				// Not defined
+				break;
 			default:
 				throw new UnsupportedArithmeticTypeException(type);
 			}
@@ -46,6 +58,18 @@ public class NumberArithmeticHandler {
 			switch (type) {
 			case ADDITION:
 				return new FileVariable(new File(r.getParent() + "\\" + l + r.getName()));
+			case DIVISION:
+				// Not defined
+				break;
+			case MODULO:
+				// Not defined
+				break;
+			case MULTIPLICATION:
+				// Not defined
+				break;
+			case SUBTRACTION:
+				// Not defined
+				break;
 			default:
 				throw new UnsupportedArithmeticTypeException(type);
 			}
@@ -54,13 +78,21 @@ public class NumberArithmeticHandler {
 			switch (type) {
 			case ADDITION:
 				return new FolderVariable(new File(r.getParent() + "\\" + l + r.getName()));
+			case DIVISION:
+				// Not defined
+				break;
+			case MODULO:
+				// Not defined
+				break;
+			case MULTIPLICATION:
+				// Not defined
+				break;
+			case SUBTRACTION:
+				// Not defined
+				break;
 			default:
 				throw new UnsupportedArithmeticTypeException(type);
 			}
-		} else if (right.type == VariableType.SPECIAL) {
-			// Not defined
-		} else if (right.type == VariableType.ARRAY) {
-			// Not defined
 		}
 		throw new UndefinedArithmeticException(left.toString(), type, right.toString());
 	}

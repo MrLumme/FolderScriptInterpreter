@@ -21,6 +21,18 @@ public class FileArithmeticHandler {
 			switch (type) {
 			case ADDITION:
 				return new FileVariable(new File(l.getParent() + "\\" + l.getName().replace(".", "" + r + ".")));
+			case DIVISION:
+				// Not defined
+				break;
+			case MODULO:
+				// Not defined
+				break;
+			case MULTIPLICATION:
+				// Not defined
+				break;
+			case SUBTRACTION:
+				// Not defined
+				break;
 			default:
 				throw new UnsupportedArithmeticTypeException(type);
 			}
@@ -29,6 +41,18 @@ public class FileArithmeticHandler {
 			switch (type) {
 			case ADDITION:
 				return new FileVariable(new File(l.getParent() + "\\" + l.getName().replace(".", r + ".")));
+			case DIVISION:
+				// Not defined
+				break;
+			case MODULO:
+				// Not defined
+				break;
+			case MULTIPLICATION:
+				// Not defined
+				break;
+			case SUBTRACTION:
+				// Not defined
+				break;
 			default:
 				throw new UnsupportedArithmeticTypeException(type);
 			}
@@ -37,6 +61,18 @@ public class FileArithmeticHandler {
 			switch (type) {
 			case ADDITION:
 				return new FileVariable(new File(l.getParent() + "\\" + r.getName()));
+			case DIVISION:
+				// Not defined
+				break;
+			case MODULO:
+				// Not defined
+				break;
+			case MULTIPLICATION:
+				// Not defined
+				break;
+			case SUBTRACTION:
+				// Not defined
+				break;
 			default:
 				throw new UnsupportedArithmeticTypeException(type);
 			}
@@ -45,13 +81,21 @@ public class FileArithmeticHandler {
 			switch (type) {
 			case ADDITION:
 				return new FileVariable(new File(r.getAbsolutePath() + "\\" + l.getName()));
+			case DIVISION:
+				// Not defined
+				break;
+			case MODULO:
+				// Not defined
+				break;
+			case MULTIPLICATION:
+				// Not defined
+				break;
+			case SUBTRACTION:
+				// Not defined
+				break;
 			default:
 				throw new UnsupportedArithmeticTypeException(type);
 			}
-		} else if (right.type == VariableType.SPECIAL) {
-			// Not defined
-		} else if (right.type == VariableType.ARRAY) {
-			// Not defined
 		}
 		throw new UndefinedArithmeticException(left.toString(), type, right.toString());
 	}

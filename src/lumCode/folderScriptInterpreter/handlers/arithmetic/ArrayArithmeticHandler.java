@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 
 import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.SameArrayArithmeticException;
 import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedArithmeticTypeException;
+import lumCode.folderScriptInterpreter.exceptions.undefinedExceptions.UndefinedArithmeticException;
 import lumCode.folderScriptInterpreter.variables.ArrayVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 import lumCode.folderScriptInterpreter.variables.VariableType;
@@ -12,7 +13,7 @@ import lumCode.folderScriptInterpreter.variables.VariableType;
 public class ArrayArithmeticHandler {
 
 	public static Variable calculate(ArrayVariable left, ArithmeticType type, Variable right)
-			throws UnsupportedArithmeticTypeException, SameArrayArithmeticException {
+			throws UnsupportedArithmeticTypeException, SameArrayArithmeticException, UndefinedArithmeticException {
 
 		if (right.type == VariableType.ARRAY) {
 			ArrayVariable r = ((ArrayVariable) right);
@@ -36,8 +37,8 @@ public class ArrayArithmeticHandler {
 					}
 				}
 				return left;
-			default:
-				throw new UnsupportedArithmeticTypeException(type);
+//			default:
+//				throw new UnsupportedArithmeticTypeException(type);
 			}
 		} else
 
@@ -55,9 +56,10 @@ public class ArrayArithmeticHandler {
 					}
 				}
 				return left;
-			default:
-				throw new UnsupportedArithmeticTypeException(type);
+//			default:
+//				throw new UnsupportedArithmeticTypeException(type);
 			}
 		}
+		throw new UndefinedArithmeticException(left.toString(), type, right.toString());
 	}
 }

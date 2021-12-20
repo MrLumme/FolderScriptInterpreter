@@ -2,7 +2,6 @@ package lumCode.folderScriptInterpreter.handlers.arithmetic;
 
 import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedArithmeticTypeException;
 import lumCode.folderScriptInterpreter.exceptions.undefinedExceptions.UndefinedArithmeticException;
-import lumCode.folderScriptInterpreter.variables.NumberVariable;
 import lumCode.folderScriptInterpreter.variables.SpecialVariable;
 import lumCode.folderScriptInterpreter.variables.TextVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
@@ -17,13 +16,37 @@ public class SpecialArithmeticHandler {
 			switch (type) {
 			case ADDITION:
 				return new TextVariable("$" + r);
+			case DIVISION:
+				// Not defined
+				break;
+			case MODULO:
+				// Not defined
+				break;
+			case MULTIPLICATION:
+				// Not defined
+				break;
+			case SUBTRACTION:
+				// Not defined
+				break;
 			default:
 				throw new UnsupportedArithmeticTypeException(type);
 			}
 		} else if (right.type == VariableType.SPECIAL) {
 			switch (type) {
 			case ADDITION:
-				return new NumberVariable(3141592653L);
+				return new SpecialVariable();
+			case DIVISION:
+				// Not defined
+				break;
+			case MODULO:
+				// Not defined
+				break;
+			case MULTIPLICATION:
+				// Not defined
+				break;
+			case SUBTRACTION:
+				// Not defined
+				break;
 			default:
 				throw new UnsupportedArithmeticTypeException(type);
 			}

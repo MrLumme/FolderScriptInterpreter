@@ -21,6 +21,15 @@ public class TextArithmeticHandler {
 			switch (type) {
 			case ADDITION:
 				return new TextVariable(left.getVar() + r);
+			case DIVISION:
+				// Not defined
+				break;
+			case MODULO:
+				// Not defined
+				break;
+			case MULTIPLICATION:
+				// Not defined
+				break;
 			case SUBTRACTION:
 				if (l.endsWith("" + r)) {
 					return new TextVariable(l.substring(0, l.length() - ("" + r).length()));
@@ -34,6 +43,15 @@ public class TextArithmeticHandler {
 			switch (type) {
 			case ADDITION:
 				return new TextVariable(left.getVar() + r);
+			case DIVISION:
+				// Not defined
+				break;
+			case MODULO:
+				// Not defined
+				break;
+			case MULTIPLICATION:
+				// Not defined
+				break;
 			case SUBTRACTION:
 				if (l.endsWith(r)) {
 					return new TextVariable(l.substring(0, l.length() - r.length()));
@@ -47,6 +65,15 @@ public class TextArithmeticHandler {
 			switch (type) {
 			case ADDITION:
 				return new TextVariable(l + r.getAbsolutePath());
+			case DIVISION:
+				// Not defined
+				break;
+			case MODULO:
+				// Not defined
+				break;
+			case MULTIPLICATION:
+				// Not defined
+				break;
 			case SUBTRACTION:
 				if (l.endsWith(r.getAbsolutePath())) {
 					return new TextVariable(l.substring(0, l.length() - r.getAbsolutePath().length()));
@@ -59,6 +86,15 @@ public class TextArithmeticHandler {
 			switch (type) {
 			case ADDITION:
 				return new TextVariable(left.getVar() + "$");
+			case DIVISION:
+				// Not defined
+				break;
+			case MODULO:
+				// Not defined
+				break;
+			case MULTIPLICATION:
+				// Not defined
+				break;
 			case SUBTRACTION:
 				if (l.endsWith("$")) {
 					return new TextVariable(l.substring(0, l.length() - 1));
@@ -81,6 +117,15 @@ public class TextArithmeticHandler {
 					str = str.substring(0, str.length() - 2);
 				}
 				return new TextVariable(str);
+			case DIVISION:
+				// Not defined
+				break;
+			case MODULO:
+				// Not defined
+				break;
+			case MULTIPLICATION:
+				// Not defined
+				break;
 			case SUBTRACTION:
 				if (l.endsWith("$")) {
 					return new TextVariable(l.substring(0, l.length() - 1));
