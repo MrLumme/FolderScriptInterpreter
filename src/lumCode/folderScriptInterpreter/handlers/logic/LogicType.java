@@ -1,6 +1,6 @@
 package lumCode.folderScriptInterpreter.handlers.logic;
 
-import lumCode.folderScriptInterpreter.exceptions.UnsupportedTypeException;
+import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedTypeException;
 
 public enum LogicType {
 	EQUAL('='), LESS('<'), GREATER('>'), NOT('!');

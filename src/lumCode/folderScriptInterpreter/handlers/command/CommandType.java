@@ -1,6 +1,6 @@
 package lumCode.folderScriptInterpreter.handlers.command;
 
-import lumCode.folderScriptInterpreter.exceptions.UnsupportedTypeException;
+import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedTypeException;
 
 public enum CommandType {
 	NAME('n', 1), EXTENSION('e', 1), PARENT('p', 1), IS_FILE('f', 1), IS_AVAILABLE('v', 1), COPY('c', 2), MOVE('m', 2),

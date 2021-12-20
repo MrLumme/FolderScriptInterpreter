@@ -1,4 +1,6 @@
-package lumCode.folderScriptInterpreter.exceptions;
+package lumCode.folderScriptInterpreter.exceptions.undefinedExceptions;
+
+import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 
 public class UndefinedException extends InterpreterException {
 	private static final long serialVersionUID = -6485336190190650214L;

@@ -7,7 +7,7 @@ import java.util.TreeMap;
 import lumCode.folderScriptInterpreter.Main;
 import lumCode.folderScriptInterpreter.exceptions.InfiniteLoopException;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
-import lumCode.folderScriptInterpreter.exceptions.IteratorTypeException;
+import lumCode.folderScriptInterpreter.exceptions.typeExceptions.IteratorTypeException;
 import lumCode.folderScriptInterpreter.handlers.Node;
 import lumCode.folderScriptInterpreter.handlers.ResultantNode;
 import lumCode.folderScriptInterpreter.variables.ArrayVariable;

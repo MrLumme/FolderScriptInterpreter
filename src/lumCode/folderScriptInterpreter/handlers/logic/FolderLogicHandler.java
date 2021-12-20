@@ -2,8 +2,8 @@ package lumCode.folderScriptInterpreter.handlers.logic;
 
 import java.io.File;
 
-import lumCode.folderScriptInterpreter.exceptions.UndefinedLogicException;
-import lumCode.folderScriptInterpreter.exceptions.UnsupportedLogicTypeException;
+import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedLogicTypeException;
+import lumCode.folderScriptInterpreter.exceptions.undefinedExceptions.UndefinedLogicException;
 
 public class FolderLogicHandler {
 

@@ -1,7 +1,7 @@
 package lumCode.folderScriptInterpreter.handlers.logic;
 
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
-import lumCode.folderScriptInterpreter.exceptions.UndefinedLogicException;
+import lumCode.folderScriptInterpreter.exceptions.undefinedExceptions.UndefinedLogicException;
 import lumCode.folderScriptInterpreter.handlers.ResultantNode;
 import lumCode.folderScriptInterpreter.variables.FileVariable;
 import lumCode.folderScriptInterpreter.variables.FolderVariable;

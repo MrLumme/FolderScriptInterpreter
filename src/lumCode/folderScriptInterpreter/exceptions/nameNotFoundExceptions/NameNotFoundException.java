@@ -1,4 +1,6 @@
-package lumCode.folderScriptInterpreter.exceptions;
+package lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions;
+
+import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 
 public class NameNotFoundException extends InterpreterException {
 	private static final long serialVersionUID = 965004424139859568L;

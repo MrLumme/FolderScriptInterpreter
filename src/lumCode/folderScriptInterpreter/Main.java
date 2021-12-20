@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import lumCode.folderScriptInterpreter.exceptions.ArgumentNameNotFoundException;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
-import lumCode.folderScriptInterpreter.exceptions.IteratorNameNotFoundException;
-import lumCode.folderScriptInterpreter.exceptions.VariableNameNotFoundException;
-import lumCode.folderScriptInterpreter.exceptions.VariableNotArrayException;
+import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.ArrayPositionEmptyException;
+import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.NotArrayException;
+import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.ArgumentNameNotFoundException;
+import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.IteratorNameNotFoundException;
+import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.VariableNameNotFoundException;
 import lumCode.folderScriptInterpreter.handlers.Node;
 import lumCode.folderScriptInterpreter.variables.ArrayVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
@@ -38,7 +39,8 @@ public class Main {
 		}
 	}
 
-	public static Variable lookUpVariable(String name) throws VariableNameNotFoundException {
+	public static Variable lookUpVariable(String name)
+			throws VariableNameNotFoundException, ArrayPositionEmptyException {
 		if (name.contains("[")) {
 			int numb = Integer.parseInt(name.substring(name.indexOf('[') + 1, name.indexOf(']')));
 			Variable var = v.get(name.substring(0, name.indexOf('[')));
@@ -72,13 +74,13 @@ public class Main {
 		throw new IteratorNameNotFoundException(n);
 	}
 
-	public static void setVariable(String name, String value) throws VariableNotArrayException {
+	public static void setVariable(String name, String value) throws NotArrayException {
 		if (name.contains("[")) {
 			int number = Integer.parseInt(name.substring(name.indexOf('[') + 1, name.indexOf(']')));
 			name = name.substring(0, name.indexOf('['));
 			Variable arr = v.get(name);
 			if (arr != null && !(arr instanceof ArrayVariable)) {
-				throw new VariableNotArrayException(name);
+				throw new NotArrayException(name);
 			}
 			if (arr == null) {
 				arr = new ArrayVariable();

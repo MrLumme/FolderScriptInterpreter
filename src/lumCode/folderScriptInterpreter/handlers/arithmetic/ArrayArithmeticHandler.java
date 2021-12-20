@@ -3,7 +3,8 @@ package lumCode.folderScriptInterpreter.handlers.arithmetic;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import lumCode.folderScriptInterpreter.exceptions.UnsupportedArithmeticTypeException;
+import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.SameArrayArithmeticException;
+import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedArithmeticTypeException;
 import lumCode.folderScriptInterpreter.variables.ArrayVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 import lumCode.folderScriptInterpreter.variables.VariableType;
@@ -11,13 +12,13 @@ import lumCode.folderScriptInterpreter.variables.VariableType;
 public class ArrayArithmeticHandler {
 
 	public static Variable calculate(ArrayVariable left, ArithmeticType type, Variable right)
-			throws UnsupportedArithmeticTypeException {
 		int numb = 0;
 		for (Integer i : left.getAll().keySet()) {
 			if (i > numb) {
 				numb = i;
 			}
 		}
+			throws UnsupportedArithmeticTypeException, SameArrayArithmeticException {
 		if (right.type == VariableType.ARRAY) {
 			ArrayVariable r = ((ArrayVariable) right);
 			Iterator<Entry<Integer, Variable>> it = left.getAll().entrySet().iterator();

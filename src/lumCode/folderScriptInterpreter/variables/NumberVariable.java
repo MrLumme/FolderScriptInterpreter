@@ -1,6 +1,6 @@
 package lumCode.folderScriptInterpreter.variables;
 
-import lumCode.folderScriptInterpreter.exceptions.LogicConversionException;
+import lumCode.folderScriptInterpreter.exceptions.undefinedExceptions.LogicConversionException;
 
 public class NumberVariable extends Variable {
 	private long var;

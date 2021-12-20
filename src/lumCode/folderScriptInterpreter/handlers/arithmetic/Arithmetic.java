@@ -1,7 +1,7 @@
 package lumCode.folderScriptInterpreter.handlers.arithmetic;
 
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
-import lumCode.folderScriptInterpreter.exceptions.UndefinedArithmeticException;
+import lumCode.folderScriptInterpreter.exceptions.undefinedExceptions.UndefinedArithmeticException;
 import lumCode.folderScriptInterpreter.handlers.ResultantNode;
 import lumCode.folderScriptInterpreter.variables.ArrayVariable;
 import lumCode.folderScriptInterpreter.variables.FileVariable;

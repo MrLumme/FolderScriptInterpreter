@@ -1,5 +1,6 @@
-package lumCode.folderScriptInterpreter.exceptions;
+package lumCode.folderScriptInterpreter.exceptions.undefinedExceptions;
 
+import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedLogicTypeException;
 import lumCode.folderScriptInterpreter.handlers.logic.LogicType;
 
 public class UndefinedLogicException extends UndefinedException {

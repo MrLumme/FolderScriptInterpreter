@@ -2,8 +2,8 @@ package lumCode.folderScriptInterpreter.handlers.arithmetic;
 
 import java.io.File;
 
-import lumCode.folderScriptInterpreter.exceptions.UndefinedArithmeticException;
-import lumCode.folderScriptInterpreter.exceptions.UnsupportedArithmeticTypeException;
+import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedArithmeticTypeException;
+import lumCode.folderScriptInterpreter.exceptions.undefinedExceptions.UndefinedArithmeticException;
 import lumCode.folderScriptInterpreter.variables.FileVariable;
 import lumCode.folderScriptInterpreter.variables.FolderVariable;
 import lumCode.folderScriptInterpreter.variables.NumberVariable;

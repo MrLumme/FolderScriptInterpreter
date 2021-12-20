@@ -1,4 +1,4 @@
-package lumCode.folderScriptInterpreter.exceptions;
+package lumCode.folderScriptInterpreter.exceptions.undefinedExceptions;
 
 import lumCode.folderScriptInterpreter.handlers.declaring.DeclarationType;
 import lumCode.folderScriptInterpreter.variables.Variable;

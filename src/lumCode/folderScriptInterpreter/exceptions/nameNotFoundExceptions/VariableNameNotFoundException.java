@@ -1,4 +1,4 @@
-package lumCode.folderScriptInterpreter.exceptions;
+package lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions;
 
 public class VariableNameNotFoundException extends NameNotFoundException {
 	private static final long serialVersionUID = -5823979350169533764L;

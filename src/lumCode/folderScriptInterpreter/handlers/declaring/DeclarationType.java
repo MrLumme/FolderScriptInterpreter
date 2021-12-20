@@ -1,6 +1,6 @@
 package lumCode.folderScriptInterpreter.handlers.declaring;
 
-import lumCode.folderScriptInterpreter.exceptions.UnsupportedTypeException;
+import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedTypeException;
 
 public enum DeclarationType {
 	EQUAL('='), NEGATE('!');

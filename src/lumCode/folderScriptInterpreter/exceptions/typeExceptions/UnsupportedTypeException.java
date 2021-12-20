@@ -1,4 +1,6 @@
-package lumCode.folderScriptInterpreter.exceptions;
+package lumCode.folderScriptInterpreter.exceptions.typeExceptions;
+
+import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 
 public class UnsupportedTypeException extends InterpreterException {
 	private static final long serialVersionUID = -8540818204257617736L;

@@ -1,5 +1,6 @@
-package lumCode.folderScriptInterpreter.exceptions;
+package lumCode.folderScriptInterpreter.exceptions.typeExceptions;
 
+import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.variables.Variable;
 
 public class IteratorTypeException extends InterpreterException {

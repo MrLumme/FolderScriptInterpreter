@@ -12,12 +12,12 @@ import org.apache.commons.io.FileUtils;
 
 import lumCode.folderScriptInterpreter.Main;
 import lumCode.folderScriptInterpreter.exceptions.CommandErrorException;
-import lumCode.folderScriptInterpreter.exceptions.IncorrectParameterTypeException;
 import lumCode.folderScriptInterpreter.exceptions.IncorrentParameterAmountException;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
-import lumCode.folderScriptInterpreter.exceptions.LogicConversionException;
-import lumCode.folderScriptInterpreter.exceptions.UndefinedCommandException;
-import lumCode.folderScriptInterpreter.exceptions.UnsupportedCommandTypeException;
+import lumCode.folderScriptInterpreter.exceptions.typeExceptions.IncorrectParameterTypeException;
+import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedCommandTypeException;
+import lumCode.folderScriptInterpreter.exceptions.undefinedExceptions.LogicConversionException;
+import lumCode.folderScriptInterpreter.exceptions.undefinedExceptions.UndefinedCommandException;
 import lumCode.folderScriptInterpreter.handlers.Node;
 import lumCode.folderScriptInterpreter.handlers.ResultantNode;
 import lumCode.folderScriptInterpreter.variables.ArrayVariable;

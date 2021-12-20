@@ -1,5 +1,6 @@
-package lumCode.folderScriptInterpreter.exceptions;
+package lumCode.folderScriptInterpreter.exceptions.undefinedExceptions;
 
+import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedArithmeticTypeException;
 import lumCode.folderScriptInterpreter.handlers.arithmetic.ArithmeticType;
 
 public class UndefinedArithmeticException extends UndefinedException {

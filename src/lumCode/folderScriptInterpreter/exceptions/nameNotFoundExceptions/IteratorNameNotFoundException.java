@@ -1,4 +1,4 @@
-package lumCode.folderScriptInterpreter.exceptions;
+package lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions;
 
 public class IteratorNameNotFoundException extends NameNotFoundException {
 	private static final long serialVersionUID = 2177236432847737156L;

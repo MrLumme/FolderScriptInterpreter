@@ -1,4 +1,6 @@
-package lumCode.folderScriptInterpreter.exceptions;
+package lumCode.folderScriptInterpreter.exceptions.undefinedExceptions;
+
+import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 
 public class LogicConversionException extends InterpreterException {
 	private static final long serialVersionUID = -644864876647259647L;

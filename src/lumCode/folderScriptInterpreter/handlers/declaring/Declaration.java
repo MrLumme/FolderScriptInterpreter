@@ -2,8 +2,8 @@ package lumCode.folderScriptInterpreter.handlers.declaring;
 
 import lumCode.folderScriptInterpreter.Main;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
-import lumCode.folderScriptInterpreter.exceptions.UndefinedDeclaringException;
-import lumCode.folderScriptInterpreter.exceptions.VariableNotArrayException;
+import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.NotArrayException;
+import lumCode.folderScriptInterpreter.exceptions.undefinedExceptions.UndefinedDeclaringException;
 import lumCode.folderScriptInterpreter.handlers.Node;
 import lumCode.folderScriptInterpreter.handlers.ResultantNode;
 import lumCode.folderScriptInterpreter.variables.NumberVariable;
@@ -15,7 +15,7 @@ public class Declaration implements Node {
 	private final Node action;
 	private final DeclarationType type;
 
-	public Declaration(String name, DeclarationType type, Node action) throws VariableNotArrayException {
+	public Declaration(String name, DeclarationType type, Node action) throws NotArrayException {
 		this.name = name;
 		this.action = action;
 		this.type = type;
@@ -23,7 +23,7 @@ public class Declaration implements Node {
 		Main.setVariable(name, "0");
 	}
 
-	public Declaration(String name, DeclarationType type, Variable value) throws VariableNotArrayException {
+	public Declaration(String name, DeclarationType type, Variable value) throws NotArrayException {
 		this.name = name;
 		this.value = value;
 		this.type = type;

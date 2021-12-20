@@ -1,6 +1,6 @@
 package lumCode.folderScriptInterpreter.handlers.arithmetic;
 
-import lumCode.folderScriptInterpreter.exceptions.UnsupportedTypeException;
+import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedTypeException;
 
 public enum ArithmeticType {
 	ADDITION('+'), SUBTRACTION('-'), MULTIPLICATION('*'), DIVISION('/'), MODULO('%');
