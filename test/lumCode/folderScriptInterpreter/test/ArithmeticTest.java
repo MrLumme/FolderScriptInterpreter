@@ -197,12 +197,12 @@ public class ArithmeticTest {
 		assertTrue(((ArrayVariable) a6.result()).getVar(14) instanceof SpecialVariable);
 
 		// Array
-		Arithmetic s1 = new Arithmetic(arr, ArithmeticType.ADDITION, fil);
-		Arithmetic s2 = new Arithmetic(arr, ArithmeticType.ADDITION, fol);
-		Arithmetic s3 = new Arithmetic(arr, ArithmeticType.ADDITION, txt);
-		Arithmetic s4 = new Arithmetic(arr, ArithmeticType.ADDITION, num);
-		Arithmetic s5 = new Arithmetic(arr, ArithmeticType.ADDITION, arr2);
-		Arithmetic s6 = new Arithmetic(arr, ArithmeticType.ADDITION, spe);
+		Arithmetic s1 = new Arithmetic(spe, ArithmeticType.ADDITION, fil);
+		Arithmetic s2 = new Arithmetic(spe, ArithmeticType.ADDITION, fol);
+		Arithmetic s3 = new Arithmetic(spe, ArithmeticType.ADDITION, txt);
+		Arithmetic s4 = new Arithmetic(spe, ArithmeticType.ADDITION, num);
+		Arithmetic s5 = new Arithmetic(spe, ArithmeticType.ADDITION, arr);
+		Arithmetic s6 = new Arithmetic(spe, ArithmeticType.ADDITION, spe);
 
 		s3.action();
 		assertTrue(((TextVariable) s3.result()).getVar().equals("$test TEXT"));
