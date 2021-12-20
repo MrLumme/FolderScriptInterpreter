@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
@@ -18,33 +19,32 @@ import lumCode.folderScriptInterpreter.variables.SpecialVariable;
 import lumCode.folderScriptInterpreter.variables.TextVariable;
 
 public class ArithmeticTest {
+	FileVariable fil = new FileVariable(new File("C:/temp/docs/dok1.rtf"));
+	FileVariable fil2 = new FileVariable(new File("C:/temp/code/dok4.txt"));
+	FolderVariable fol = new FolderVariable(new File("C:/temp/code"));
+	TextVariable txt = new TextVariable("test TEXT");
+	NumberVariable num = new NumberVariable(14);
+	SpecialVariable spe = new SpecialVariable();
+	ArrayVariable arr = new ArrayVariable();
+	ArrayVariable arr2 = new ArrayVariable();
 
-	@Test
+	@Before
 	void preTest() throws InterpreterException {
-		// Pre-test
-	}
-
-	@Test
-	void additionTest() throws InterpreterException {
-		FileVariable fil = new FileVariable(new File("C:/temp/docs/dok1.rtf"));
-		FileVariable fil2 = new FileVariable(new File("C:/temp/code/dok4.txt"));
-		FolderVariable fol = new FolderVariable(new File("C:/temp/code"));
-		TextVariable txt = new TextVariable("test TEXT");
-		NumberVariable num = new NumberVariable(14);
-		SpecialVariable spe = new SpecialVariable();
-		ArrayVariable arr = new ArrayVariable();
 		arr.setVar(0, new FileVariable(new File("C:/temp/docs/dok1.rtf")));
 		arr.setVar(1, new FolderVariable(new File("C:/temp/code")));
 		arr.setVar(2, new TextVariable("test TEXT"));
 		arr.setVar(3, new NumberVariable(15));
 		arr.setVar(4, new SpecialVariable());
-		ArrayVariable arr2 = new ArrayVariable();
+
 		arr2.setVar(0, new FileVariable(new File("C:/temp/docs/dok1.rtf")));
 		arr2.setVar(1, new FolderVariable(new File("C:/temp/code")));
 		arr2.setVar(2, new TextVariable("test TEXT"));
 		arr2.setVar(3, new NumberVariable(15));
 		arr2.setVar(4, new SpecialVariable());
+	}
 
+	@Test
+	void additionTest() throws InterpreterException {
 		// File
 		Arithmetic f1 = new Arithmetic(fil, ArithmeticType.ADDITION, fil2);
 		Arithmetic f2 = new Arithmetic(fil, ArithmeticType.ADDITION, fol);

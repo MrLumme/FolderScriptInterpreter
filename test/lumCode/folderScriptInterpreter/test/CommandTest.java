@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
@@ -24,7 +25,7 @@ public class CommandTest {
 	private static final File fs1 = new File("resources/commandTest/fileSet1");
 	private static final File fs2 = new File("resources/commandTest/fileSet2");
 
-	@Test
+	@Before
 	void preTest() throws InterpreterException {
 		// Pre-test
 		assertTrue(new File(fs1.getAbsolutePath() + "/dok1.rtf").exists());

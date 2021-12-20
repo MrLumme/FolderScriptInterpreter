@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 
 import lumCode.folderScriptInterpreter.Main;
@@ -12,7 +13,7 @@ import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 public class InterpretationTest {
 	private static final File tf1 = new File("resources/interpretationTest/test2");
 
-	@Test
+	@Before
 	void preTest() throws InterpreterException {
 		// Pre-test
 		assertTrue(new File(tf1.getAbsolutePath() + "/dok1.rtf").exists());
