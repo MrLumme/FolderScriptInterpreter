@@ -1,8 +1,12 @@
 package lumCode.folderScriptInterpreter;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
+
+import org.apache.commons.io.FileUtils;
 
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.ArrayPositionEmptyException;
@@ -17,6 +21,7 @@ import lumCode.folderScriptInterpreter.variables.Variable;
 public class Main {
 	public static boolean overwrite = false;
 	public static boolean caseSensitive = false;
+	public static File tempDir = new File(System.getProperty("java.io.tmpdir") + "FolderScript-" + UUID.randomUUID());
 	public static String script = "";
 	public static final HashMap<Integer, Variable> a = new HashMap<Integer, Variable>();
 	public static final HashMap<Integer, Variable> i = new HashMap<Integer, Variable>();
@@ -37,6 +42,8 @@ public class Main {
 		for (Node n : nodes) {
 			n.action();
 		}
+
+		FileUtils.deleteQuietly(tempDir);
 	}
 
 	public static Variable lookUpVariable(String name)
