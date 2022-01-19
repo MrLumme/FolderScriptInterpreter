@@ -32,7 +32,7 @@ public class ArrayArithmeticHandler {
 					while (it.hasNext()) {
 						Entry<Integer, Variable> e = it.next();
 						if (v.toString().equals(e.getValue().toString())) {
-							left.getAll().remove(e.getKey());
+							it.remove();
 						}
 					}
 				}
@@ -40,9 +40,7 @@ public class ArrayArithmeticHandler {
 //			default:
 //				throw new UnsupportedArithmeticTypeException(type);
 			}
-		} else
-
-		{
+		} else {
 			switch (type) {
 			case ADDITION:
 				left.setNextVar(right);
@@ -52,7 +50,7 @@ public class ArrayArithmeticHandler {
 				while (it.hasNext()) {
 					Entry<Integer, Variable> e = it.next();
 					if (right.toString().equals(e.getValue().toString())) {
-						left.getAll().remove(e.getKey());
+						it.remove();
 					}
 				}
 				return left;

@@ -31,10 +31,7 @@ public class TextArithmeticHandler {
 				// Not defined
 				break;
 			case SUBTRACTION:
-				if (l.endsWith("" + r)) {
-					return new TextVariable(l.substring(0, l.length() - ("" + r).length()));
-				}
-				return new TextVariable(l);
+				return new TextVariable(l.substring(0, (int) (l.length() - r)));
 			default:
 				throw new UnsupportedArithmeticTypeException(type);
 			}
@@ -53,10 +50,7 @@ public class TextArithmeticHandler {
 				// Not defined
 				break;
 			case SUBTRACTION:
-				if (l.endsWith(r)) {
-					return new TextVariable(l.substring(0, l.length() - r.length()));
-				}
-				return new TextVariable(l);
+				return new TextVariable(l.replace(r, ""));
 			default:
 				throw new UnsupportedArithmeticTypeException(type);
 			}
@@ -75,10 +69,7 @@ public class TextArithmeticHandler {
 				// Not defined
 				break;
 			case SUBTRACTION:
-				if (l.endsWith(r.getAbsolutePath())) {
-					return new TextVariable(l.substring(0, l.length() - r.getAbsolutePath().length()));
-				}
-				return new TextVariable(l);
+				return new TextVariable(l.replace(r.getAbsolutePath(), ""));
 			default:
 				throw new UnsupportedArithmeticTypeException(type);
 			}
@@ -96,18 +87,15 @@ public class TextArithmeticHandler {
 				// Not defined
 				break;
 			case SUBTRACTION:
-				if (l.endsWith("$")) {
-					return new TextVariable(l.substring(0, l.length() - 1));
-				}
-				return new TextVariable(l);
+				return new TextVariable(l.replace("$", ""));
 			default:
 				throw new UnsupportedArithmeticTypeException(type);
 			}
 		} else if (right.type == VariableType.ARRAY) {
 			ArrayVariable r = (ArrayVariable) right;
+			String str = left.getVar();
 			switch (type) {
 			case ADDITION:
-				String str = left.getVar();
 				boolean rem = false;
 				for (Variable v : r.getAll().values()) {
 					str += v.toString() + ", ";
@@ -127,10 +115,10 @@ public class TextArithmeticHandler {
 				// Not defined
 				break;
 			case SUBTRACTION:
-				if (l.endsWith("$")) {
-					return new TextVariable(l.substring(0, l.length() - 1));
+				for (Variable v : r.getAll().values()) {
+					str = str.replace(v.toString(), "");
 				}
-				return new TextVariable(l);
+				return new TextVariable(str);
 			default:
 				throw new UnsupportedArithmeticTypeException(type);
 			}

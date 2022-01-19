@@ -31,8 +31,8 @@ public class FolderArithmeticHandler {
 				// Not defined
 				break;
 			case SUBTRACTION:
-				// Not defined
-				break;
+				return new FolderVariable(
+						new File(l.getParent() + "\\" + l.getName().substring(0, (int) (l.getName().length() - r))));
 			default:
 				throw new UnsupportedArithmeticTypeException(type);
 			}
@@ -51,8 +51,7 @@ public class FolderArithmeticHandler {
 				// Not defined
 				break;
 			case SUBTRACTION:
-				// Not defined
-				break;
+				return new FolderVariable(new File(l.getParent() + "\\" + l.getName().replace(r, "")));
 			default:
 				throw new UnsupportedArithmeticTypeException(type);
 			}
@@ -90,6 +89,11 @@ public class FolderArithmeticHandler {
 			case MULTIPLICATION:
 				// Not defined
 				break;
+			case SUBTRACTION:
+				return new FolderVariable(new File(l.getAbsolutePath().replace(r.getName() + "\\", "")));
+			default:
+				throw new UnsupportedArithmeticTypeException(type);
+			}
 			case SUBTRACTION:
 				// Not defined
 				break;

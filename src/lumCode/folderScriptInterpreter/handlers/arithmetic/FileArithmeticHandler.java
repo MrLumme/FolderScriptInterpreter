@@ -31,8 +31,8 @@ public class FileArithmeticHandler {
 				// Not defined
 				break;
 			case SUBTRACTION:
-				// Not defined
-				break;
+				return new FileVariable(new File(l.getParent() + "\\"
+						+ left.getName().substring(0, (int) (left.getName().length() - r)) + left.getExtension()));
 			default:
 				throw new UnsupportedArithmeticTypeException(type);
 			}
@@ -51,8 +51,7 @@ public class FileArithmeticHandler {
 				// Not defined
 				break;
 			case SUBTRACTION:
-				// Not defined
-				break;
+				return new FileVariable(new File(l.getParent() + "\\" + l.getName().replace(r, "")));
 			default:
 				throw new UnsupportedArithmeticTypeException(type);
 			}
@@ -90,6 +89,11 @@ public class FileArithmeticHandler {
 			case MULTIPLICATION:
 				// Not defined
 				break;
+			case SUBTRACTION:
+				return new FileVariable(new File(l.getAbsolutePath().replace(r.getName() + "\\", "")));
+			default:
+				throw new UnsupportedArithmeticTypeException(type);
+			}
 			case SUBTRACTION:
 				// Not defined
 				break;
