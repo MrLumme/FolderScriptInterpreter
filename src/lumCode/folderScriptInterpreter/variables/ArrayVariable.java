@@ -1,6 +1,7 @@
 package lumCode.folderScriptInterpreter.variables;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.ArrayPositionEmptyException;
 
@@ -51,5 +52,14 @@ public class ArrayVariable extends Variable {
 
 	public HashMap<Integer, Variable> getAll() {
 		return vars;
+	}
+
+	public boolean contains(Variable var) {
+		for (Entry<Integer, Variable> e : vars.entrySet()) {
+			if (e.getValue().toString().equals(var.toString())) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
