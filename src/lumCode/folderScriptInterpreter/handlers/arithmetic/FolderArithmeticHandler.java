@@ -3,6 +3,7 @@ package lumCode.folderScriptInterpreter.handlers.arithmetic;
 import java.io.File;
 
 import lumCode.folderScriptInterpreter.Main;
+import lumCode.folderScriptInterpreter.exceptions.ArithmeticErrorException;
 import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedArithmeticTypeException;
 import lumCode.folderScriptInterpreter.exceptions.undefinedExceptions.UndefinedArithmeticException;
 import lumCode.folderScriptInterpreter.variables.FileVariable;
@@ -15,7 +16,7 @@ import lumCode.folderScriptInterpreter.variables.VariableType;
 public class FolderArithmeticHandler {
 
 	public static Variable calculate(FolderVariable left, ArithmeticType type, Variable right)
-			throws UnsupportedArithmeticTypeException, UndefinedArithmeticException {
+			throws UnsupportedArithmeticTypeException, UndefinedArithmeticException, ArithmeticErrorException {
 		File l = left.getVar();
 		if (right.type == VariableType.NUMBER) {
 			long r = ((NumberVariable) right).getVar();
@@ -23,8 +24,16 @@ public class FolderArithmeticHandler {
 			case ADDITION:
 				return new FolderVariable(new File(l.getParent() + "\\" + l.getName() + r));
 			case DIVISION:
-				// Not defined
-				break;
+				try {
+					File f = l;
+					for (int i = 0; i < r; i++) {
+						f = f.getParentFile();
+					}
+					return new FolderVariable(f);
+				} catch (NullPointerException e) {
+					throw new ArithmeticErrorException(left.toString(), type, right.toString(),
+							"Division resulted in less than root folder.");
+				}
 			case MODULO:
 				// Not defined
 				break;
