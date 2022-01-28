@@ -348,10 +348,25 @@ public class Command implements ResultantNode {
 		return new NumberVariable(((FolderVariable) vars[0]).getVar().exists() ? 1 : 0);
 	}
 
-	private NumberVariable randomCommand() {
-		double u = ((NumberVariable) vars[0]).getVar()
-				+ (Math.random() * (((NumberVariable) vars[1]).getVar() - ((NumberVariable) vars[0]).getVar()));
-		return new NumberVariable((int) Math.floor(u));
+	private Variable randomCommand() throws CommandErrorException {
+		if (vars[0].type == VariableType.NUMBER) {
+			return new NumberVariable((int) Math.floor(Math.random() * ((NumberVariable) vars[0]).getVar()));
+		} else if (vars[0].type == VariableType.ARRAY) {
+			ArrayVariable a = ((ArrayVariable) vars[0]);
+			try {
+				return a.getVar((int) Math.floor(Math.random() * a.getAll().size()));
+			} catch (ArrayPositionEmptyException e) {
+				throw new CommandErrorException("Array position empty: " + e.getMessage());
+			}
+		} else if (vars[0].type == VariableType.FOLDER) {
+			File[] fl = ((FolderVariable) vars[0]).getVar().listFiles();
+			File f = fl[(int) Math.floor(Math.random() * fl.length)];
+			return f.isFile() ? new FileVariable(f) : new FolderVariable(f);
+		} else if (vars[0].type == VariableType.TEXT) {
+			String s = ((TextVariable) vars[0]).getVar();
+			return new TextVariable("" + s.charAt((int) Math.floor(Math.random() * s.length())));
+		}
+		return new NumberVariable(0);
 	}
 
 	private void overwriteCommand() throws LogicConversionException {
