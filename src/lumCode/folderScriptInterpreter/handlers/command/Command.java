@@ -92,7 +92,7 @@ public class Command implements ResultantNode {
 				if (vars[i].type != VariableType.NUMBER || ((NumberVariable) vars[i]).isBoolean()) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
-			} else if (type == CommandType.PRINT && i == 1) {
+			} else if (type == CommandType.OUTPUT && i == 1) {
 				if (vars[i].type != VariableType.FILE && vars[i].type != VariableType.SPECIAL) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
@@ -123,8 +123,8 @@ public class Command implements ResultantNode {
 			output = replaceCommand();
 		} else if (type == CommandType.SUBSTRING) {
 			output = substringCommand();
-		} else if (type == CommandType.PRINT) {
-			printCommand();
+		} else if (type == CommandType.OUTPUT) {
+			outputCommand();
 		} else if (type == CommandType.MOVE) {
 			output = moveCommand();
 		} else if (type == CommandType.COPY) {
@@ -267,7 +267,7 @@ public class Command implements ResultantNode {
 		return new NumberVariable(1);
 	}
 
-	private void printCommand() throws UnsupportedCommandTypeException, CommandErrorException {
+	private void outputCommand() throws UnsupportedCommandTypeException, CommandErrorException {
 		if (vars[1] instanceof SpecialVariable) {
 			System.out.print(vars[0].toString());
 		} else if (vars[1] instanceof FileVariable) {
@@ -294,14 +294,12 @@ public class Command implements ResultantNode {
 		String base = vars[0].toString();
 		String look = vars[1].toString();
 		String replace = vars[2].toString();
-
 		String str;
 		if (vars[1] instanceof TextVariable && ((TextVariable) vars[1]).isRegex()) {
 			str = base.replaceAll(look, replace);
 		} else {
 			str = base.replace(look, replace);
 		}
-
 		return Variable.fromString(str);
 	}
 
