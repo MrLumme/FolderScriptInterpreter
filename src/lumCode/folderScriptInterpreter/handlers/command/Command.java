@@ -139,8 +139,29 @@ public class Command implements ResultantNode {
 			sleepCommmand();
 		} else if (type == CommandType.EXIT) {
 			exitCommand();
+		} else if (type == CommandType.READ) {
+			output = readCommand();
 		} else {
 			throw new UndefinedCommandException(type, vars);
+		}
+	}
+
+	private Variable readCommand() throws CommandErrorException {
+		File f = ((FileVariable) vars[0]).getVar();
+		try {
+			BufferedReader r = new BufferedReader(new FileReader(f));
+			String o = "";
+			String l = r.readLine();
+			while (l != null) {
+				o += l;
+				l = r.readLine();
+			}
+			r.close();
+			return new TextVariable(o);
+		} catch (FileNotFoundException e) {
+			throw new CommandErrorException("File '" + f.getAbsolutePath() + "' could not be found.");
+		} catch (IOException e) {
+			throw new CommandErrorException("Encountered a reading error on file '" + f.getAbsolutePath() + "'.");
 		}
 	}
 
