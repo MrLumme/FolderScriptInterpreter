@@ -1,6 +1,9 @@
 package lumCode.folderScriptInterpreter.handlers.command;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -11,12 +14,15 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 
 import lumCode.folderScriptInterpreter.Main;
+import lumCode.folderScriptInterpreter.Utilities;
 import lumCode.folderScriptInterpreter.exceptions.CommandErrorException;
 import lumCode.folderScriptInterpreter.exceptions.IncorrentParameterAmountException;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.exceptions.LogicConversionException;
+import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.ArrayPositionEmptyException;
 import lumCode.folderScriptInterpreter.exceptions.typeExceptions.IncorrectParameterTypeException;
 import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedCommandTypeException;
+import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedVariableTypeException;
 import lumCode.folderScriptInterpreter.exceptions.undefinedExceptions.UndefinedCommandException;
 import lumCode.folderScriptInterpreter.handlers.Node;
 import lumCode.folderScriptInterpreter.handlers.ResultantNode;
@@ -141,8 +147,14 @@ public class Command implements ResultantNode {
 	private Variable listCommand() throws CommandErrorException {
 		ArrayVariable out = new ArrayVariable();
 		if (vars[0].type == VariableType.NUMBER) {
-			for (int i = 0; i < ((NumberVariable) vars[0]).getVar(); i++) {
-				out.setVar(i, new NumberVariable(i));
+			if (vars[1] instanceof SpecialVariable) {
+				for (int i = (int) ((NumberVariable) vars[0]).getVar(); i >= 0; i--) {
+					out.setNextVar(new NumberVariable(i));
+				}
+			} else {
+				for (int i = (int) ((NumberVariable) vars[1]).getVar(); i < ((NumberVariable) vars[0]).getVar(); i++) {
+					out.setNextVar(new NumberVariable(i));
+				}
 			}
 		} else if (vars[0].type == VariableType.ARRAY) {
 			HashMap<Integer, Variable> a = ((ArrayVariable) vars[0]).getAll();
@@ -154,10 +166,11 @@ public class Command implements ResultantNode {
 				out.setVar(v, n);
 			}
 		} else if (vars[0].type == VariableType.FOLDER) {
-			int i = 0;
-			for (File f : ((FolderVariable) vars[0]).getVar().listFiles()) {
-				out.setVar(i, new TextVariable(f.getAbsolutePath()));
-				i++;
+			List<File> list = Utilities.listFolder(((FolderVariable) vars[0]).getVar(),
+					vars[1] instanceof SpecialVariable ? Integer.MAX_VALUE : (int) ((NumberVariable) vars[1]).getVar(),
+					true);
+			for (File f : list) {
+				out.setNextVar(f.isFile() ? new FileVariable(f) : new FolderVariable(f));
 			}
 		} else if (vars[0].type == VariableType.FILE) {
 			String[] spl = ((FileVariable) vars[0]).getVar().getAbsolutePath()
@@ -174,19 +187,12 @@ public class Command implements ResultantNode {
 		return out;
 	}
 
-	private Variable sizeCommand() {
-		if (vars[0].type == VariableType.NUMBER) {
-			return new NumberVariable(Math.abs(((NumberVariable) vars[0]).getVar()));
-		} else if (vars[0].type == VariableType.ARRAY) {
-			return new NumberVariable(((ArrayVariable) vars[0]).getAll().size());
-		} else if (vars[0].type == VariableType.FOLDER) {
-			return new NumberVariable(((FolderVariable) vars[0]).getVar().list().length);
-		} else if (vars[0].type == VariableType.FILE) {
-			return new NumberVariable(((FileVariable) vars[0]).getVar().length());
-		} else if (vars[0].type == VariableType.TEXT) {
-			return new NumberVariable(((TextVariable) vars[0]).getVar().length());
+	private Variable sizeCommand() throws CommandErrorException {
+		try {
+			return new NumberVariable(Utilities.varSize(vars[0]));
+		} catch (UnsupportedVariableTypeException e) {
+			throw new CommandErrorException("Unsupported variable: " + e.getMessage());
 		}
-		return null;
 	}
 
 	private void sleepCommmand() {

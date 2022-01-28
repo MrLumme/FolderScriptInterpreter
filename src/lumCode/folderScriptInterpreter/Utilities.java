@@ -11,6 +11,14 @@ import java.util.List;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import lumCode.folderScriptInterpreter.exceptions.ScriptErrorException;
+import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedVariableTypeException;
+import lumCode.folderScriptInterpreter.variables.ArrayVariable;
+import lumCode.folderScriptInterpreter.variables.FileVariable;
+import lumCode.folderScriptInterpreter.variables.FolderVariable;
+import lumCode.folderScriptInterpreter.variables.NumberVariable;
+import lumCode.folderScriptInterpreter.variables.TextVariable;
+import lumCode.folderScriptInterpreter.variables.Variable;
+import lumCode.folderScriptInterpreter.variables.VariableType;
 
 public class Utilities {
 
@@ -26,16 +34,34 @@ public class Utilities {
 		return md5;
 	}
 
-	public static List<File> listFiles(File dir, int level) {
-		List<File> out = new ArrayList<File>();
-		for (File f : dir.listFiles()) {
-			if (f.isFile() || level == 0) {
+	public static List<File> listFolder(File fol, int depth, boolean incDir) {
+		ArrayList<File> out = new ArrayList<File>();
+		for (File f : fol.listFiles()) {
+			if (f.isDirectory() && depth > 0) {
+				out.addAll(listFolder(f, depth - 1, incDir));
+			}
+			if (f.isFile() || incDir) {
 				out.add(f);
-			} else {
-				out.addAll(listFiles(f, level - 1));
 			}
 		}
 		return out;
+	}
+
+	public static long varSize(Variable var) throws UnsupportedVariableTypeException {
+		if (var.type == VariableType.NUMBER) {
+			return Math.abs(((NumberVariable) var).getVar());
+		} else if (var.type == VariableType.ARRAY) {
+			return ((ArrayVariable) var).getAll().size();
+		} else if (var.type == VariableType.FOLDER) {
+			return ((FolderVariable) var).getVar().list().length;
+		} else if (var.type == VariableType.FILE) {
+			return ((FileVariable) var).getVar().length();
+		} else if (var.type == VariableType.TEXT) {
+			return ((TextVariable) var).getVar().length();
+		} else if (var.type == VariableType.SPECIAL) {
+			return Main.script.length();
+		}
+		throw new UnsupportedVariableTypeException(var.type);
 	}
 
 	public static String extractBracket(String str, int position) {
