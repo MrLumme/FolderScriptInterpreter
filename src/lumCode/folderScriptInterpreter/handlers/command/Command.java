@@ -234,17 +234,19 @@ public class Command implements ResultantNode {
 
 	private Variable copyCommand() throws UnsupportedCommandTypeException, CommandErrorException {
 		try {
-			if (Main.overwrite || !((FileVariable) vars[0]).getVar().exists()) {
+			if (Main.overwrite || vars[1] instanceof FolderVariable
+					|| (vars[1] instanceof FileVariable && !((FileVariable) vars[1]).getVar().exists())) {
 				if (vars[0] instanceof FileVariable) {
 					if (vars[1] instanceof FileVariable) {
 						FileUtils.copyFile(((FileVariable) vars[0]).getVar(), ((FileVariable) vars[1]).getVar());
 					} else {
-						throw new CommandErrorException("Can not copy the folder \"" + vars[0].toString()
-								+ "\" to the file \"" + vars[0].toString() + "\".");
+						FileUtils.copyFileToDirectory(((FileVariable) vars[0]).getVar(),
+								((FolderVariable) vars[1]).getVar(), true);
 					}
 				} else {
 					if (vars[1] instanceof FileVariable) {
-						FileUtils.copyFile(((FileVariable) vars[0]).getVar(), ((FileVariable) vars[1]).getVar());
+						throw new CommandErrorException("Can not copy the folder \"" + vars[0].toString()
+								+ "\" to the file \"" + vars[0].toString() + "\".");
 					} else {
 						FileUtils.copyDirectory(((FolderVariable) vars[0]).getVar(),
 								((FolderVariable) vars[1]).getVar());
@@ -262,17 +264,19 @@ public class Command implements ResultantNode {
 
 	private Variable moveCommand() throws UnsupportedCommandTypeException, CommandErrorException {
 		try {
-			if (Main.overwrite || !((FileVariable) vars[0]).getVar().exists()) {
+			if (Main.overwrite || vars[1] instanceof FolderVariable
+					|| (vars[1] instanceof FileVariable && !((FileVariable) vars[1]).getVar().exists())) {
 				if (vars[0] instanceof FileVariable) {
 					if (vars[1] instanceof FileVariable) {
 						FileUtils.moveFile(((FileVariable) vars[0]).getVar(), ((FileVariable) vars[1]).getVar());
 					} else {
-						throw new CommandErrorException("Can not copy the folder \"" + vars[0].toString()
-								+ "\" to the file \"" + vars[0].toString() + "\".");
+						FileUtils.moveFileToDirectory(((FileVariable) vars[0]).getVar(),
+								((FolderVariable) vars[1]).getVar(), true);
 					}
 				} else {
 					if (vars[1] instanceof FileVariable) {
-						FileUtils.moveFile(((FileVariable) vars[0]).getVar(), ((FileVariable) vars[1]).getVar());
+						throw new CommandErrorException("Can not move \"" + vars[0].toString() + "\" to the file \""
+								+ vars[0].toString() + "\".");
 					} else {
 						FileUtils.moveDirectory(((FolderVariable) vars[0]).getVar(),
 								((FolderVariable) vars[1]).getVar());
