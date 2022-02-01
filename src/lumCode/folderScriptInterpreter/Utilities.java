@@ -38,6 +38,10 @@ public class Utilities {
 		return md5;
 	}
 
+	public static String getMD5(String txt) {
+		return DigestUtils.md5Hex(txt);
+	}
+
 	public static List<File> listFolder(File fol, int depth, boolean incDir) {
 		ArrayList<File> out = new ArrayList<File>();
 		for (File f : fol.listFiles()) {
