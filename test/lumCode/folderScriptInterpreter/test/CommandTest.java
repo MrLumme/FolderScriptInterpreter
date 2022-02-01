@@ -5,8 +5,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 
@@ -32,8 +34,9 @@ public class CommandTest {
 		assertTrue(new File(fs1.getAbsolutePath() + "/dok2.txt").exists());
 		assertTrue(new File(fs1.getAbsolutePath() + "/dok3.xml").exists());
 
-		assertFalse(new File(fs2.getAbsolutePath() + "/dok1.rtf").exists());
-		assertFalse(new File(fs2.getAbsolutePath() + "/dok2.rtf").exists());
+		assertFalse(new File(fs2.getAbsolutePath() + "/dok1.txt").exists());
+		assertFalse(new File(fs2.getAbsolutePath() + "/dok2.txt").exists());
+		assertFalse(new File(fs2.getAbsolutePath() + "/folder/dok3.txt").exists());
 	}
 
 	@Test
@@ -317,26 +320,32 @@ public class CommandTest {
 	}
 
 	@Test
-	void ioTest() throws InterpreterException {
+	void ioTest() throws InterpreterException, IOException {
 		FileVariable doc1 = new FileVariable(new File(fs2.getAbsolutePath() + "/doc1.txt"));
 		FileVariable doc2 = new FileVariable(new File(fs2.getAbsolutePath() + "/doc2.txt"));
 		FolderVariable fol = new FolderVariable(new File(fs2.getAbsolutePath() + "/folder"));
+		FileVariable doc3 = new FileVariable(new File(fol.getVar().getAbsolutePath() + "/" + doc1.getVar().getName()));
 		TextVariable txt = new TextVariable("This is a piece of text which will be outputted into a file.");
+		FileUtils.deleteDirectory(fol.getVar());
+		doc1.getVar().delete();
+		doc2.getVar().delete();
+		doc3.getVar().delete();
 
-		// Output command
+		// Output
 		ArrayList<Node> lo = new ArrayList<Node>();
 		lo.add(txt);
 		lo.add(doc1);
-		Command o = new Command(CommandType.PRINT, lo);
+		Command o = new Command(CommandType.OUTPUT, lo);
 		o.action();
 		assertTrue(doc1.getVar().exists());
 
-		lo.remove(doc1);
-		Command o1 = new Command(CommandType.PRINT, lo);
+		ArrayList<Node> lo2 = new ArrayList<Node>();
+		lo2.add(txt);
 		lo2.add(SpecialVariable.getInstance());
+		Command o2 = new Command(CommandType.OUTPUT, lo2);
 		boolean or = false;
 		try {
-			o1.action();
+			o2.action();
 			or = true;
 		} catch (InterpreterException e) {
 			e.printStackTrace();
@@ -355,9 +364,101 @@ public class CommandTest {
 		ArrayList<Node> lm = new ArrayList<Node>();
 		lm.add(doc1);
 		lm.add(fol);
-		Command m = new Command(CommandType.COPY, lc);
+		Command m = new Command(CommandType.MOVE, lm);
 		m.action();
-		assertTrue(new File(fol.getVar().getAbsolutePath() + "/" + doc1.getVar().getName()).exists());
+		assertTrue(doc3.getVar().exists());
+
+		// List
+		ArrayList<Node> ll = new ArrayList<Node>();
+		ll.add(new FolderVariable(fs2));
+		ll.add(new NumberVariable(0));
+		Command l = new Command(CommandType.LIST, ll);
+		l.action();
+		assertTrue(((ArrayVariable) l.result()).getAll().size() == 2);
+
+		ArrayList<Node> ll2 = new ArrayList<Node>();
+		ll2.add(new FolderVariable(fs2));
+		ll2.add(SpecialVariable.getInstance());
+		Command l2 = new Command(CommandType.LIST, ll2);
+		l2.action();
+		assertTrue(((ArrayVariable) l2.result()).getAll().size() == 3);
+
+		ArrayList<Node> ll3 = new ArrayList<Node>();
+		ll3.add(new NumberVariable(12));
+		ll3.add(SpecialVariable.getInstance());
+		Command l3 = new Command(CommandType.LIST, ll3);
+		l3.action();
+		assertTrue(((ArrayVariable) l3.result()).getAll().size() == 12);
+		assertTrue(((NumberVariable) ((ArrayVariable) l3.result()).getVar(0)).getVar() == 11);
+		assertTrue(((NumberVariable) ((ArrayVariable) l3.result()).getVar(11)).getVar() == 0);
+
+		ArrayList<Node> ll3a = new ArrayList<Node>();
+		ll3a.add(new NumberVariable(-12));
+		ll3a.add(SpecialVariable.getInstance());
+		Command l3a = new Command(CommandType.LIST, ll3a);
+		l3a.action();
+		assertTrue(((ArrayVariable) l3a.result()).getAll().size() == 12);
+		assertTrue(((NumberVariable) ((ArrayVariable) l3a.result()).getVar(0)).getVar() == 0);
+		assertTrue(((NumberVariable) ((ArrayVariable) l3a.result()).getVar(11)).getVar() == -11);
+
+		ArrayList<Node> ll4 = new ArrayList<Node>();
+		ll4.add(new TextVariable("This is text!"));
+		ll4.add(new NumberVariable(6));
+		Command l4 = new Command(CommandType.LIST, ll4);
+		l4.action();
+		assertTrue(((ArrayVariable) l4.result()).getAll().size() == 7);
+		assertTrue(((TextVariable) ((ArrayVariable) l4.result()).getVar(0)).getVar().equals("s"));
+		assertTrue(((TextVariable) ((ArrayVariable) l4.result()).getVar(6)).getVar().equals("!"));
+
+		ArrayVariable a = new ArrayVariable();
+		a.setNextVar(new NumberVariable(13));
+		a.setNextVar(new NumberVariable(38));
+		a.setNextVar(new NumberVariable(875));
+		a.setNextVar(new TextVariable("This is text!"));
+		a.setNextVar(new TextVariable("But not this? But it is longest"));
+		a.setNextVar(new TextVariable("Yes, it is."));
+		a.setNextVar(new FileVariable(new File("C:/folder/file.rtf")));
+		a.setNextVar(new FileVariable(new File("C:/folder/fileBig.txt")));
+
+		ArrayList<Node> ll5 = new ArrayList<Node>();
+		ll5.add(a);
+		ll5.add(new NumberVariable(0));
+		Command l5 = new Command(CommandType.LIST, ll5);
+		l5.action();
+		assertTrue(((ArrayVariable) l5.result()).getAll().size() == 8);
+		assertTrue(((FileVariable) ((ArrayVariable) l5.result()).getVar(0)).getVar().getAbsolutePath()
+				.equals("C:\\folder\\file.rtf"));
+		assertTrue(((TextVariable) ((ArrayVariable) l5.result()).getVar(7)).getVar()
+				.equals("But not this? But it is longest"));
+
+		ArrayList<Node> ll5a = new ArrayList<Node>();
+		ll5a.add(a);
+		ll5a.add(new NumberVariable(1));
+		Command l5a = new Command(CommandType.LIST, ll5a);
+		l5a.action();
+		assertTrue(((ArrayVariable) l5a.result()).getAll().size() == 8);
+		assertTrue(((NumberVariable) ((ArrayVariable) l5a.result()).getVar(0)).getVar() == 13);
+		assertTrue(((TextVariable) ((ArrayVariable) l5a.result()).getVar(7)).getVar().equals("Yes, it is."));
+
+		// Read
+		ArrayList<Node> lr = new ArrayList<Node>();
+		lr.add(doc2);
+		Command r = new Command(CommandType.READ, lr);
+		r.action();
+		assertTrue(((TextVariable) r.result()).getVar().equals(txt.getVar()));
+
+		// Delete
+		ArrayList<Node> ld = new ArrayList<Node>();
+		ld.add(fol);
+		Command d = new Command(CommandType.DELETE, ld);
+		d.action();
+		assertFalse(doc3.getVar().exists());
+
+		ArrayList<Node> ld2 = new ArrayList<Node>();
+		ld2.add(doc2);
+		Command d2 = new Command(CommandType.DELETE, ld2);
+		d2.action();
+		assertFalse(doc2.getVar().exists());
 	}
 
 }
