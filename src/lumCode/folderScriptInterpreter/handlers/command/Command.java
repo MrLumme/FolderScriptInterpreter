@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -306,26 +305,50 @@ public class Command implements ResultantNode {
 
 	private Variable copyCommand() throws UnsupportedCommandTypeException, CommandErrorException {
 		try {
-			if (Main.overwrite || vars[1] instanceof FolderVariable
-					|| (vars[1] instanceof FileVariable && !((FileVariable) vars[1]).getVar().exists())) {
-				if (vars[0] instanceof FileVariable) {
-					if (vars[1] instanceof FileVariable) {
-						FileUtils.copyFile(((FileVariable) vars[0]).getVar(), ((FileVariable) vars[1]).getVar());
+			if (!Main.overwrite) {
+				if (vars[1] instanceof FileVariable) {
+					if (vars[0] instanceof FileVariable) {
+						if (((FileVariable) vars[1]).getVar().exists()) {
+							return new NumberVariable(0);
+						}
 					} else {
-						FileUtils.copyFileToDirectory(((FileVariable) vars[0]).getVar(),
-								((FolderVariable) vars[1]).getVar(), true);
-					}
-				} else {
-					if (vars[1] instanceof FileVariable) {
 						throw new CommandErrorException("Can not copy the folder \"" + vars[0].toString()
 								+ "\" to the file \"" + vars[0].toString() + "\".");
+					}
+				} else {
+					if (vars[0] instanceof FileVariable) {
+						FileVariable f = ((FileVariable) vars[1]);
+						if (new File(((FolderVariable) vars[0]).getPath() + f.getName() + f.getExtension()).exists()) {
+							return new NumberVariable(0);
+						}
 					} else {
-						FileUtils.copyDirectory(((FolderVariable) vars[0]).getVar(),
-								((FolderVariable) vars[1]).getVar());
+						List<File> l = Utilities.listFolder(((FolderVariable) vars[0]).getVar(), Integer.MAX_VALUE,
+								true);
+						String pR = ((FolderVariable) vars[1]).getPath();
+						String pO = ((FolderVariable) vars[0]).getParent().getAbsolutePath();
+						for (File f : l) {
+							if (new File(f.getAbsolutePath().replace(pO, pR)).exists()) {
+								return new NumberVariable(0);
+							}
+						}
 					}
 				}
+			}
+
+			if (vars[0] instanceof FileVariable) {
+				if (vars[1] instanceof FileVariable) {
+					FileUtils.copyFile(((FileVariable) vars[0]).getVar(), ((FileVariable) vars[1]).getVar(), true);
+				} else {
+					FileUtils.copyFileToDirectory(((FileVariable) vars[0]).getVar(),
+							((FolderVariable) vars[1]).getVar(), true);
+				}
 			} else {
-				return new NumberVariable(0);
+				if (vars[1] instanceof FileVariable) {
+					throw new CommandErrorException("Can not copy the folder \"" + vars[0].toString()
+							+ "\" to the file \"" + vars[0].toString() + "\".");
+				} else {
+					FileUtils.copyDirectory(((FolderVariable) vars[0]).getVar(), ((FolderVariable) vars[1]).getVar());
+				}
 			}
 		} catch (IOException e) {
 			throw new CommandErrorException(
