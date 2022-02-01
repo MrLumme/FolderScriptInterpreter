@@ -446,6 +446,24 @@ public class CommandTest {
 		Command r = new Command(CommandType.READ, lr);
 		r.action();
 		assertTrue(((TextVariable) r.result()).getVar().equals(txt.getVar()));
+		// MD5
+		ArrayList<Node> lmd = new ArrayList<Node>();
+		lmd.add(doc2);
+		Command md = new Command(CommandType.GEN_MD5, lmd);
+		md.action();
+		assertTrue(((TextVariable) md.result()).getVar().equals("2a4b4693e339376289d091985db973c7"));
+
+		ArrayList<Node> lmd2 = new ArrayList<Node>();
+		lmd2.add(txt);
+		Command md2 = new Command(CommandType.GEN_MD5, lmd2);
+		md2.action();
+		assertTrue(((TextVariable) md2.result()).getVar().equals("2a4b4693e339376289d091985db973c7"));
+
+		ArrayList<Node> lmd3 = new ArrayList<Node>();
+		lmd3.add(new NumberVariable(90845786));
+		Command md3 = new Command(CommandType.GEN_MD5, lmd3);
+		md3.action();
+		assertTrue(((TextVariable) md3.result()).getVar().equals("64f2122b28829ca0577b755d7e1d7682"));
 
 		// Delete
 		ArrayList<Node> ld = new ArrayList<Node>();

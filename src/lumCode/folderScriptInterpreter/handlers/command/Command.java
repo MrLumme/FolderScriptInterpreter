@@ -176,9 +176,25 @@ public class Command implements ResultantNode {
 			exitCommand();
 		} else if (type == CommandType.READ) {
 			output = readCommand();
+		} else if (type == CommandType.GEN_MD5) {
+			output = genMD5Command();
 		} else {
 			throw new UndefinedCommandException(type, vars);
 		}
+	}
+
+	private Variable genMD5Command() throws CommandErrorException {
+		if (vars[0].type == VariableType.NUMBER) {
+			return new TextVariable(Utilities.getMD5("" + ((NumberVariable) vars[0]).getVar()));
+		} else if (vars[0].type == VariableType.FILE) {
+			return new TextVariable(Utilities.getMD5(((FileVariable) vars[0]).getVar()));
+		} else if (vars[0].type == VariableType.TEXT) {
+			return new TextVariable(Utilities.getMD5("" + ((TextVariable) vars[0]).getVar()));
+		} else if (vars[0].type == VariableType.SPECIAL) {
+			return new TextVariable(Utilities.getMD5(Main.script));
+		}
+		throw new CommandErrorException("Command '" + type.getChar() + "' does not supported variables of type '"
+				+ vars[0].type.name().toLowerCase() + "'.");
 	}
 
 	private Variable readCommand() throws CommandErrorException {
