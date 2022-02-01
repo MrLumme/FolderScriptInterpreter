@@ -445,7 +445,9 @@ public class CommandTest {
 		lr.add(doc2);
 		Command r = new Command(CommandType.READ, lr);
 		r.action();
-		assertTrue(((TextVariable) r.result()).getVar().equals(txt.getVar()));
+		assertTrue(((TextVariable) r.result()).getVar()
+				.equals("This is a piece of text which will be outputted into a file."));
+
 		// MD5
 		ArrayList<Node> lmd = new ArrayList<Node>();
 		lmd.add(doc2);

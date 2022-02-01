@@ -399,6 +399,7 @@ public class Command implements ResultantNode {
 					Files.write(Paths.get(f.getAbsolutePath()), vars[0].toString().getBytes(),
 							StandardOpenOption.APPEND);
 				} else {
+					f.getParentFile().mkdirs();
 					Files.write(Paths.get(f.getAbsolutePath()), vars[0].toString().getBytes(),
 							StandardOpenOption.CREATE);
 				}
