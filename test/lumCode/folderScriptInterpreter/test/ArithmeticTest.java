@@ -39,7 +39,7 @@ public class ArithmeticTest {
 		txt4 = new TextVariable("t T");
 		num = new NumberVariable(14);
 		num2 = new NumberVariable(2);
-		spe = new SpecialVariable();
+		spe = SpecialVariable.getInstance();
 		arr = new ArrayVariable();
 		arr2 = new ArrayVariable();
 
@@ -47,13 +47,13 @@ public class ArithmeticTest {
 		arr.setVar(1, new FolderVariable(new File("C:/temp/code")));
 		arr.setVar(2, new TextVariable("test TEXT"));
 		arr.setVar(3, new NumberVariable(14));
-		arr.setVar(4, new SpecialVariable());
+		arr.setVar(4, SpecialVariable.getInstance());
 
 		arr2.setVar(0, new FileVariable(new File("C:/temp/docs/dok1.rtf")));
 		arr2.setVar(1, new FolderVariable(new File("C:/temp/code")));
 		arr2.setVar(2, new TextVariable("test TEXT"));
 		arr2.setVar(3, new NumberVariable(15));
-		arr2.setVar(4, new SpecialVariable());
+		arr2.setVar(4, SpecialVariable.getInstance());
 	}
 
 	@Test

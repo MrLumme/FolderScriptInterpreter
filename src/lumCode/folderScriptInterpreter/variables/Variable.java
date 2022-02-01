@@ -27,7 +27,7 @@ public class Variable implements ResultantNode {
 				return new FolderVariable(new File(var));
 			}
 		} else if (var.equals("$")) {
-			return new SpecialVariable();
+			return SpecialVariable.getInstance();
 		} else {
 			TextVariable s = new TextVariable(var);
 			if (var.startsWith("{") && var.endsWith("}")) {

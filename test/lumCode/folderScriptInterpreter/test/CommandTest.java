@@ -47,13 +47,13 @@ public class CommandTest {
 		ArrayList<Node> l4 = new ArrayList<Node>();
 		l4.add(new NumberVariable(14));
 		ArrayList<Node> l5 = new ArrayList<Node>();
-		l5.add(new SpecialVariable());
+		l5.add(SpecialVariable.getInstance());
 		ArrayVariable arr = new ArrayVariable();
 		arr.setVar(0, new FileVariable(new File(fs1.getAbsolutePath() + "/dok1.rtf")));
 		arr.setVar(1, new FolderVariable(fs1));
 		arr.setVar(2, new TextVariable("test TEXT"));
 		arr.setVar(3, new NumberVariable(15));
-		arr.setVar(4, new SpecialVariable());
+		arr.setVar(4, SpecialVariable.getInstance());
 		ArrayList<Node> l6 = new ArrayList<Node>();
 		l6.add(arr);
 
@@ -332,8 +332,8 @@ public class CommandTest {
 		assertTrue(doc1.getVar().exists());
 
 		lo.remove(doc1);
-		lo.add(new SpecialVariable());
 		Command o1 = new Command(CommandType.PRINT, lo);
+		lo2.add(SpecialVariable.getInstance());
 		boolean or = false;
 		try {
 			o1.action();
