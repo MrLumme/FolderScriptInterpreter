@@ -215,16 +215,30 @@ public class Command implements ResultantNode {
 		}
 	}
 
-	private Variable listCommand() throws CommandErrorException {
+	private ArrayVariable listCommand() throws CommandErrorException {
 		ArrayVariable out = new ArrayVariable();
 		if (vars[0].type == VariableType.NUMBER) {
-			if (vars[1] instanceof SpecialVariable) {
-				for (int i = (int) ((NumberVariable) vars[0]).getVar(); i >= 0; i--) {
-					out.setNextVar(new NumberVariable(i));
+			if (((NumberVariable) vars[0]).getVar() < 0) {
+				if (vars[1] instanceof SpecialVariable) {
+					for (int i = 0; i >= (int) ((NumberVariable) vars[0]).getVar() + 1; i--) {
+						out.setNextVar(new NumberVariable(i));
+					}
+				} else {
+					for (int i = (int) ((NumberVariable) vars[0]).getVar(); i < ((NumberVariable) vars[1])
+							.getVar(); i--) {
+						out.setNextVar(new NumberVariable(i));
+					}
 				}
 			} else {
-				for (int i = (int) ((NumberVariable) vars[1]).getVar(); i < ((NumberVariable) vars[0]).getVar(); i++) {
-					out.setNextVar(new NumberVariable(i));
+				if (vars[1] instanceof SpecialVariable) {
+					for (int i = (int) ((NumberVariable) vars[0]).getVar() - 1; i >= 0; i--) {
+						out.setNextVar(new NumberVariable(i));
+					}
+				} else {
+					for (int i = (int) ((NumberVariable) vars[1]).getVar(); i < ((NumberVariable) vars[0])
+							.getVar(); i++) {
+						out.setNextVar(new NumberVariable(i));
+					}
 				}
 			}
 		} else if (vars[0].type == VariableType.ARRAY) {
@@ -244,13 +258,23 @@ public class Command implements ResultantNode {
 		} else if (vars[0].type == VariableType.FILE) {
 			String[] spl = ((FileVariable) vars[0]).getVar().getAbsolutePath()
 					.split(System.getProperty("file.separator"));
-			for (int i = 0; i < spl.length; i++) {
-				out.setVar(i, Variable.fromString(spl[i]));
+			for (String s : spl) {
+				out.setNextVar(Variable.fromString(s));
 			}
 		} else if (vars[0].type == VariableType.TEXT) {
 			String str = ((TextVariable) vars[0]).getVar();
-			for (int i = 0; i < str.length(); i++) {
-				out.setVar(i, new TextVariable("" + str.charAt(i)));
+			if (vars[1] instanceof SpecialVariable) {
+				for (char c : str.toCharArray()) {
+					out.setNextVar(new TextVariable("" + c));
+				}
+			} else if (((NumberVariable) vars[1]).getVar() > 0) {
+				for (int i = (int) ((NumberVariable) vars[1]).getVar(); i < str.length(); i++) {
+					out.setNextVar(new TextVariable("" + str.charAt(i)));
+				}
+			} else {
+				for (int i = 0; i < ((NumberVariable) vars[1]).getVar() && i < str.length(); i++) {
+					out.setNextVar(new TextVariable("" + str.charAt(i)));
+				}
 			}
 		}
 		return out;
