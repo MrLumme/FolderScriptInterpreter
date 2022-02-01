@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -19,6 +20,9 @@ import lumCode.folderScriptInterpreter.variables.NumberVariable;
 import lumCode.folderScriptInterpreter.variables.TextVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 import lumCode.folderScriptInterpreter.variables.VariableType;
+import lumCode.folderScriptInterpreter.variables.comparator.VariableSizeComparator;
+import lumCode.folderScriptInterpreter.variables.comparator.VariableTypeComparator;
+import lumCode.folderScriptInterpreter.variables.comparator.VariableValueComparator;
 
 public class Utilities {
 
@@ -43,6 +47,21 @@ public class Utilities {
 			if (f.isFile() || incDir) {
 				out.add(f);
 			}
+		}
+		return out;
+	}
+
+	public static ArrayVariable sortArray(ArrayVariable array, int mode) {
+		ArrayVariable out = new ArrayVariable();
+		ArrayList<Variable> l = new ArrayList<Variable>(array.getAll().values());
+		if (mode == 0) {
+			Collections.sort(l, new VariableSizeComparator<Variable>());
+			Collections.sort(l, new VariableTypeComparator());
+		} else if (mode == 1) {
+			Collections.sort(l, new VariableValueComparator<Variable>());
+		}
+		for (Variable e : l) {
+			out.setNextVar(e);
 		}
 		return out;
 	}

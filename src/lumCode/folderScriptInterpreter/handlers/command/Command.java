@@ -178,13 +178,11 @@ public class Command implements ResultantNode {
 				}
 			}
 		} else if (vars[0].type == VariableType.ARRAY) {
-			HashMap<Integer, Variable> a = ((ArrayVariable) vars[0]).getAll();
-			for (Integer v : a.keySet()) {
-				Variable n = a.get(v);
-				if (n.type != VariableType.ARRAY) {
-					n = Variable.fromString(a.get(v).toString());
-				}
-				out.setVar(v, n);
+			if (vars[1].type == VariableType.NUMBER) {
+				out = Utilities.sortArray((ArrayVariable) vars[0], (int) ((NumberVariable) vars[1]).getVar());
+			} else {
+				throw new CommandErrorException(
+						"Second input in list command must be a number when first input is an array.");
 			}
 		} else if (vars[0].type == VariableType.FOLDER) {
 			List<File> list = Utilities.listFolder(((FolderVariable) vars[0]).getVar(),
