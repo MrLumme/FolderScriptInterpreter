@@ -71,45 +71,37 @@ public class Command implements ResultantNode {
 						|| type == CommandType.SLEEP || type == CommandType.TEST || type == CommandType.EXIT
 						|| type == CommandType.OVERWRITE || type == CommandType.CASE_SENSITIVE) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
-				} else if (i == 2 && type == CommandType.ZIP) {
-					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 1 && type == CommandType.LIST) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
 			} else if (vars[i].type == VariableType.FOLDER) {
 				if (type == CommandType.REPLACE || type == CommandType.EXTENSION || type == CommandType.SUBSTRING
 						|| type == CommandType.RANDOM || type == CommandType.SLEEP || type == CommandType.TEST
-						|| type == CommandType.EXIT || type == CommandType.OVERWRITE
+						|| type == CommandType.EXIT || type == CommandType.OVERWRITE || type == CommandType.GEN_MD5
 						|| type == CommandType.CASE_SENSITIVE) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
-				} else if (i == 2 && type == CommandType.ZIP) {
-					throw new IncorrectParameterTypeException(type, vars[i]);
-				} else if (i == 1
-						&& (type == CommandType.LIST || type == CommandType.ZIP || type == CommandType.OUTPUT)) {
+				} else if (i == 1 && (type == CommandType.LIST || type == CommandType.OUTPUT)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
 			} else if (vars[i].type == VariableType.TEXT) {
 				if (type == CommandType.NAME || type == CommandType.EXTENSION || type == CommandType.PARENT
 						|| type == CommandType.IS_FILE || type == CommandType.IS_AVAILABLE || type == CommandType.COPY
 						|| type == CommandType.MOVE || type == CommandType.DELETE || type == CommandType.READ
-						|| type == CommandType.GEN_MD5 || type == CommandType.RANDOM || type == CommandType.SLEEP
-						|| type == CommandType.TEST || type == CommandType.EXIT || type == CommandType.OVERWRITE
+						|| type == CommandType.RANDOM || type == CommandType.SLEEP || type == CommandType.TEST
+						|| type == CommandType.EXIT || type == CommandType.OVERWRITE
 						|| type == CommandType.CASE_SENSITIVE) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 2 && type == CommandType.SUBSTRING) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
-				} else if (i == 1 && (type == CommandType.OUTPUT || type == CommandType.LIST
-						|| type == CommandType.SUBSTRING || type == CommandType.ZIP)) {
-					throw new IncorrectParameterTypeException(type, vars[i]);
-				} else if (i == 0 && (type == CommandType.ZIP)) {
+				} else if (i == 1
+						&& (type == CommandType.OUTPUT || type == CommandType.LIST || type == CommandType.SUBSTRING)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
 			} else if (vars[i].type == VariableType.NUMBER) {
 				if (type == CommandType.NAME || type == CommandType.EXTENSION || type == CommandType.PARENT
 						|| type == CommandType.IS_FILE || type == CommandType.IS_AVAILABLE || type == CommandType.COPY
 						|| type == CommandType.MOVE || type == CommandType.DELETE || type == CommandType.READ
-						|| type == CommandType.GEN_MD5 || type == CommandType.ZIP || type == CommandType.REPLACE
-						|| type == CommandType.TEST) {
+						|| type == CommandType.REPLACE || type == CommandType.TEST) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 0 && (type == CommandType.SUBSTRING)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
@@ -128,25 +120,19 @@ public class Command implements ResultantNode {
 						|| type == CommandType.EXIT || type == CommandType.OVERWRITE
 						|| type == CommandType.CASE_SENSITIVE) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
-				} else if (i == 1
-						&& (type == CommandType.ZIP || type == CommandType.LIST || type == CommandType.OUTPUT)) {
-					throw new IncorrectParameterTypeException(type, vars[i]);
-				} else if (i == 2 && (type == CommandType.ZIP)) {
+				} else if (i == 1 && (type == CommandType.LIST || type == CommandType.OUTPUT)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
 			} else if (vars[i].type == VariableType.SPECIAL) {
 				if (type == CommandType.NAME || type == CommandType.EXTENSION || type == CommandType.PARENT
 						|| type == CommandType.IS_FILE || type == CommandType.IS_AVAILABLE || type == CommandType.COPY
 						|| type == CommandType.MOVE || type == CommandType.DELETE || type == CommandType.READ
-						|| type == CommandType.GEN_MD5 || type == CommandType.REPLACE || type == CommandType.SUBSTRING
-						|| type == CommandType.RANDOM || type == CommandType.SLEEP || type == CommandType.TEST
-						|| type == CommandType.EXIT || type == CommandType.OVERWRITE
-						|| type == CommandType.CASE_SENSITIVE) {
+						|| type == CommandType.REPLACE || type == CommandType.SUBSTRING || type == CommandType.RANDOM
+						|| type == CommandType.SLEEP || type == CommandType.TEST || type == CommandType.EXIT
+						|| type == CommandType.OVERWRITE || type == CommandType.CASE_SENSITIVE) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
-				} else if (i == 0 && (type == CommandType.SUBSTRING || type == CommandType.LIST
-						|| type == CommandType.OUTPUT || type == CommandType.ZIP)) {
-					throw new IncorrectParameterTypeException(type, vars[i]);
-				} else if (i == 1 && (type == CommandType.ZIP)) {
+				} else if (i == 0
+						&& (type == CommandType.SUBSTRING || type == CommandType.LIST || type == CommandType.OUTPUT)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
 			}
