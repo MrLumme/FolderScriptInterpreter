@@ -1,0 +1,72 @@
+a[]		argument	a[0]
+
+?(){}	conditional	?(a[1] = ""){^do stuff^,^do other stuff^}
+i0(){}	iterate		i2(a[0]){^do stuff^}
+b		break loop
+#var	variable	#tal = 50 ^names can only contain alphanumeric charecters and '_'^
+#var[]	array		#file[#numb] = "path"
+^	^	comment		c(a[0], a[1]) ^m(a[0], a[1])^
+h		help		h c
+"	"	mark as text
+"{ }"	mark as regex command
+,		separator	^funtions as an input and command separator^
+
++		addition	5 + 4 = 9
+-		subtraction	5 - 3 = 2
+*		multiplication
+/		division
+%		modulo		5 % 2 = 1
+
+<		less
+>		greater
+!		negate		?(!f([0])){^do stuff^}
+=		equal
+&		and
+|		or
+
+0		0 or false
+1		1 or true
+$		special
+
+n()		name
+e()		extension	e(a[0])
+p()		parent		p(a[0])
+f()		is file		f(a[0])
+v()		is available
+
+c(,)	copy		c(a[0], #path)
+m(,)	move		^Doubles as a rename funtion^
+d()		delete
+l(,)	lists var	l(a[0], 3) ^Functions as sorting for array variables. Second input is how to sort the array; 0: by variable type and size (utilizing s() function), 1: by alpha-numeric value^
+o(,)	output		o("Text to add", a[0])
+g()		read		#text = g(a[0])
+y()		gen MD5		y(a[0])
+j(,,)	pack as zip	j(l(a[0],0),a[1], a[2]) ^Zips all files in directory a[0] and ignores folders and save the archive to a[1]. Encrypted with a password given by a[2]. If $ is given, it will not be encrypted^ 
+
+s()		size		s(l(a[0], $)) ^if you do of a number it will return the absolute value fx: size(-21) will return 21^
+r(,,)	replace		#var = r(a[0], "name0", #newname)
+u(,,)	substring	u(#text, #from, #to)
+q()		random		q(5) ^Gives either a number, ^
+
+z()		sleep		z(1000) ^sleeps for 1 second^´
+t()		test		#bool = t(c(a[0], #file))
+x()		exit		x(0)
+
+w()		overwrite	w(1)
+k()		ignore case	k(0)
+
+Example:
+i0(l(a[0],$)){?(n(i0)=a[1]){d(i0)}}
+
+iterates through files in the first argument and all
+subdirectories and if the file's name is equal to the
+second argument, the file is deleted
+
+
+i0(l(a[0],0)){o(i0+"\r",a[1]),o(i0+"\r",$)};
+
+lists all files in a folder given by the first argument
+and writes it to a file given by the second argument and
+outputs the file to the console
+
+i0(l(a[0],$)){Pa}
