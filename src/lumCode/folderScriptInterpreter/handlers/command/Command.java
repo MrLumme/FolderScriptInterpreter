@@ -242,9 +242,10 @@ public class Command implements ResultantNode {
 					}
 				}
 			}
+			return out;
 		} else if (vars[0].type == VariableType.ARRAY) {
 			if (vars[1].type == VariableType.NUMBER) {
-				out = Utilities.sortArray((ArrayVariable) vars[0], (int) ((NumberVariable) vars[1]).getVar());
+				return Utilities.sortArray((ArrayVariable) vars[0], (int) ((NumberVariable) vars[1]).getVar());
 			} else {
 				throw new CommandErrorException(
 						"Second input in list command must be a number when first input is an array.");
@@ -256,12 +257,14 @@ public class Command implements ResultantNode {
 			for (File f : list) {
 				out.setNextVar(f.isFile() ? new FileVariable(f) : new FolderVariable(f));
 			}
+			return out;
 		} else if (vars[0].type == VariableType.FILE) {
 			String[] spl = ((FileVariable) vars[0]).getVar().getAbsolutePath()
 					.split(System.getProperty("file.separator"));
 			for (String s : spl) {
 				out.setNextVar(Variable.fromString(s));
 			}
+			return out;
 		} else if (vars[0].type == VariableType.TEXT) {
 			String str = ((TextVariable) vars[0]).getVar();
 			if (vars[1] instanceof SpecialVariable) {
@@ -277,8 +280,11 @@ public class Command implements ResultantNode {
 					out.setNextVar(new TextVariable("" + str.charAt(i)));
 				}
 			}
+			return out;
 		}
-		return out;
+		throw new CommandErrorException(
+				"Command '" + type.getChar() + "' does not supported variables of the type combination '"
+						+ vars[0].type.name().toLowerCase() + "' and '" + vars[1].type.name().toLowerCase() + "'.");
 	}
 
 	private Variable sizeCommand() throws CommandErrorException {
