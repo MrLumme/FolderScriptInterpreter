@@ -39,4 +39,9 @@ public class FolderVariable extends Variable {
 	public String toString() {
 		return var.getAbsolutePath();
 	}
+
+	@Override
+	public FolderVariable copy() {
+		return new FolderVariable(var);
+	}
 }

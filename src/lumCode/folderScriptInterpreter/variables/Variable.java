@@ -10,7 +10,7 @@ import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.Iterato
 import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.VariableNameNotFoundException;
 import lumCode.folderScriptInterpreter.handlers.ResultantNode;
 
-public class Variable implements ResultantNode {
+public abstract class Variable implements ResultantNode {
 	public final VariableType type;
 
 	protected Variable(VariableType type) {
@@ -67,6 +67,8 @@ public class Variable implements ResultantNode {
 		}
 		return false;
 	}
+
+	public abstract Variable copy();
 
 	@Override
 	public void action() throws InterpreterException {

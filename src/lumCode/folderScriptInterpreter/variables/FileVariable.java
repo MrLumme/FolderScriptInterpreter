@@ -16,4 +16,9 @@ public class FileVariable extends FolderVariable {
 	public String getExtension() {
 		return getVar().getName().substring(getVar().getName().indexOf('.'));
 	}
+
+	@Override
+	public FileVariable copy() {
+		return new FileVariable(getVar());
+	}
 }

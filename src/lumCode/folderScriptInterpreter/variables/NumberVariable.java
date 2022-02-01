@@ -40,4 +40,9 @@ public class NumberVariable extends Variable {
 			return false;
 		}
 	}
+
+	@Override
+	public NumberVariable copy() {
+		return new NumberVariable(var);
+	}
 }

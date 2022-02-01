@@ -62,4 +62,12 @@ public class ArrayVariable extends Variable {
 		}
 		return false;
 	}
+
+	@Override
+	public ArrayVariable copy() {
+		ArrayVariable a = new ArrayVariable();
+		a.vars.putAll(vars);
+		a.next = next;
+		return a;
+	}
 }

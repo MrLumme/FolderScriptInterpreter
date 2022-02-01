@@ -18,4 +18,9 @@ public class SpecialVariable extends Variable {
 	public String toString() {
 		return "$";
 	}
+
+	@Override
+	public SpecialVariable copy() {
+		return getInstance();
+	}
 }

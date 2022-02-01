@@ -10,6 +10,12 @@ public class TextVariable extends Variable {
 		this.regex = false;
 	}
 
+	private TextVariable(String var, boolean regex) {
+		super(VariableType.TEXT);
+		this.var = var;
+		this.regex = regex;
+	}
+
 	public String getVar() {
 		return var;
 	}
@@ -29,5 +35,10 @@ public class TextVariable extends Variable {
 
 	public void setRegex(boolean regex) {
 		this.regex = regex;
+	}
+
+	@Override
+	public TextVariable copy() {
+		return new TextVariable(var, regex);
 	}
 }
