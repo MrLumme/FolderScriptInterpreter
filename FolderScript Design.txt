@@ -3,7 +3,7 @@ a[]		argument	a[0]
 ?(){}	conditional	?(a[1] = ""){^do stuff^,^do other stuff^}
 i0(){}	iterate		i2(a[0]){^do stuff^}
 b		break loop
-#var	variable	#tal = 50 ^names can only contain alphanumeric charecters and '_'^
+#var	variable	#tal = 50 ^names can only contain alphanumeric characters and '_'^
 #var[]	array		#file[#numb] = "path"
 ^	^	comment		c(a[0], a[1]) ^m(a[0], a[1])^
 h		help		h c
@@ -39,14 +39,13 @@ m(,)	move		^Doubles as a rename funtion^
 d()		delete
 l(,)	lists var	l(a[0], 3) ^Functions as sorting for array variables. Second input is how to sort the array; 0: by variable type and size (utilizing s() function), 1: by alpha-numeric value^
 o(,)	output		o("Text to add", a[0])
-g()		read		#text = g(a[0])
-y()		gen MD5		y(a[0])
-j(,,)	pack as zip	j(l(a[0],0),a[1], a[2]) ^Zips all files in directory a[0] and ignores folders and save the archive to a[1]. Encrypted with a password given by a[2]. If $ is given, it will not be encrypted^ 
+r()		read		#text = r(a[0])
+g()		gen MD5		g(a[0])
 
 s()		size		s(l(a[0], $)) ^if you do of a number it will return the absolute value fx: size(-21) will return 21^
-r(,,)	replace		#var = r(a[0], "name0", #newname)
+y(,,)	replace		#var = y(a[0], "name0", #newname)
 u(,,)	substring	u(#text, #from, #to)
-q()		random		q(5) ^Gives either a number, ^
+q()		random		q(5) ^Gives either a random whole number between 0 and the input number, a random item of a given array, a random file or folder in a given folder, or a random letter in a given piece of text^
 
 z()		sleep		z(1000) ^sleeps for 1 second^´
 t()		test		#bool = t(c(a[0], #file))
@@ -54,6 +53,11 @@ x()		exit		x(0)
 
 w()		overwrite	w(1)
 k()		ignore case	k(0)
+
+Available letters:
+j
+Available symbols:
+¤':;.
 
 Example:
 i0(l(a[0],$)){?(n(i0)=a[1]){d(i0)}}
