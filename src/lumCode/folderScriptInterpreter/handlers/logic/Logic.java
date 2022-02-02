@@ -11,12 +11,12 @@ import lumCode.folderScriptInterpreter.variables.Variable;
 import lumCode.folderScriptInterpreter.variables.VariableType;
 
 public class Logic implements ResultantNode {
-	private final Variable left, right;
+	private final ResultantNode left, right;
 	private final LogicType type;
 
 	private boolean result;
 
-	public Logic(Variable left, LogicType type, Variable right) {
+	public Logic(ResultantNode left, LogicType type, ResultantNode right) {
 		this.left = left;
 		this.right = right;
 		this.type = type;
@@ -25,26 +25,30 @@ public class Logic implements ResultantNode {
 	@Override
 	public void action() throws InterpreterException {
 		boolean found = false;
-		if (left.type == VariableType.NUMBER) {
-			if (right.type == VariableType.NUMBER) {
+		left.action();
+		right.action();
+		Variable l = left.result();
+		Variable r = right.result();
+		if (l.type == VariableType.NUMBER) {
+			if (r.type == VariableType.NUMBER) {
 				result = NumberLogicHandler.Interpret(((NumberVariable) left).getVar(), type,
 						((NumberVariable) right).getVar());
 				found = true;
 			}
-		} else if (left.type == VariableType.TEXT) {
-			if (right.type == VariableType.TEXT) {
+		} else if (l.type == VariableType.TEXT) {
+			if (r.type == VariableType.TEXT) {
 				result = StringLogicHandler.Interpret(((TextVariable) left).getVar(), type,
 						((TextVariable) right).getVar());
 				found = true;
 			}
-		} else if (left.type == VariableType.FILE) {
-			if (right.type == VariableType.FILE) {
+		} else if (l.type == VariableType.FILE) {
+			if (r.type == VariableType.FILE) {
 				result = FileLogicHandler.Interpret(((FileVariable) left).getVar(), type,
 						((FileVariable) right).getVar());
 				found = true;
 			}
-		} else if (left.type == VariableType.FOLDER) {
-			if (right.type == VariableType.FOLDER) {
+		} else if (l.type == VariableType.FOLDER) {
+			if (r.type == VariableType.FOLDER) {
 				result = FolderLogicHandler.Interpret(((FolderVariable) left).getVar(), type,
 						((FolderVariable) right).getVar());
 				found = true;

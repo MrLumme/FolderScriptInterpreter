@@ -3,7 +3,7 @@ package lumCode.folderScriptInterpreter.handlers.logic;
 import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedTypeException;
 
 public enum LogicType {
-	EQUAL('='), LESS('<'), GREATER('>'), NOT('!');
+	EQUAL('='), LESS('<'), GREATER('>'), NOT('!'), AND('&'), OR('|');
 
 	private char symbol;
 

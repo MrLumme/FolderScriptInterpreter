@@ -16,6 +16,10 @@ public class NumberLogicHandler {
 			return left < right;
 		case NOT:
 			return left != right;
+		case AND:
+			return left == 1 && right == 1;
+		case OR:
+			return left == 1 || right == 1;
 		}
 		throw new UndefinedLogicException("" + left, operator, "" + right);
 	}
