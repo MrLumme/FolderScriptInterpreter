@@ -1,7 +1,7 @@
 package lumCode.folderScriptInterpreter.variables;
 
 public class SpecialVariable extends Variable {
-	public static SpecialVariable instance = null;
+	private static SpecialVariable instance = null;
 
 	private SpecialVariable() {
 		super(VariableType.SPECIAL);
