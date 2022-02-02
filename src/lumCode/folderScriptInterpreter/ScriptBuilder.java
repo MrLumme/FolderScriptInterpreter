@@ -55,6 +55,7 @@ public class ScriptBuilder {
 		char c = script.charAt(0);
 
 		if (Utilities.isArithmeticExpression(script)) {
+			// Arithmetic logic
 			List<String> arith = splitArithmetically(script);
 
 			c = arith.get(arith.size() - 1).charAt(0);
@@ -68,8 +69,10 @@ public class ScriptBuilder {
 
 			return breakDownArithmetic(arith.get(0), type, right);
 		} else if (c == 'a') {
+			// Argument logic
 			return breakDownVariable(script);
 		} else if (CommandType.valid(c)) {
+			// Command logic
 			if (script.charAt(1) != '(') {
 				throw new ScriptErrorException(script, "Parenthesis should follow after command, but is missing.");
 			}
@@ -82,6 +85,7 @@ public class ScriptBuilder {
 
 			return breakDownCommand(CommandType.fromChar(c), Utilities.charSplitter(inputs, ','));
 		} else if (c == '#') {
+			// Variable and Declaration logic
 			Pattern p = Pattern.compile("^#[A-Za-z0-9_]{1,}(?=(\\[[0-9]{1,}\\]){0,1})");
 			Matcher m = p.matcher(script);
 			String name;
@@ -107,6 +111,7 @@ public class ScriptBuilder {
 		} else if (c == '?') {
 			// Conditional logic
 		} else if (c == 'i') {
+			// Iteration logic
 			int n;
 			int ip = script.indexOf('(');
 			if (ip != -1) {
@@ -127,7 +132,9 @@ public class ScriptBuilder {
 			return new BreakNode();
 		} else if (c == 'h') {
 			// Help logic
+			// TODO
 		} else if (script.startsWith("\"") || script.startsWith("$") || script.matches("^-{0,1}[0-9]{1,}$")) {
+			// Data logic
 			if (script.startsWith("\"") && script.endsWith("\"")) {
 				script = script.substring(1, script.length() - 1);
 			}
@@ -227,9 +234,9 @@ public class ScriptBuilder {
 		}
 	}
 
-	private static Command breakDownCommand(CommandType c, List<String> inputs) throws VariableNameNotFoundException,
-			ScriptErrorException, BreakDownException, IncorrentParameterAmountException, CommandErrorException,
-			UnsupportedTypeException, NotArrayException {
+	private static Command breakDownCommand(CommandType c, List<String> inputs)
+			throws VariableNameNotFoundException, ScriptErrorException, BreakDownException,
+			IncorrentParameterAmountException, CommandErrorException, UnsupportedTypeException, NotArrayException {
 		List<Node> ins = new ArrayList<Node>();
 		for (String input : inputs) {
 			ins.add(breakDownScript(input));
