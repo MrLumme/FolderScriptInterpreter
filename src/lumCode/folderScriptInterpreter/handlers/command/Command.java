@@ -287,11 +287,11 @@ public class Command implements ResultantNode {
 						+ vars[0].type.name().toLowerCase() + "' and '" + vars[1].type.name().toLowerCase() + "'.");
 	}
 
-	private Variable sizeCommand() throws CommandErrorException {
+	private Variable sizeCommand() throws UnsupportedVariableTypeException, CommandErrorException {
 		try {
 			return new NumberVariable(Utilities.varSize(vars[0]));
-		} catch (UnsupportedVariableTypeException e) {
-			throw new CommandErrorException("Unsupported variable: " + e.getMessage());
+		} catch (FileNotFoundException e) {
+			throw new CommandErrorException("Command failed with message: " + e.getMessage());
 		}
 	}
 

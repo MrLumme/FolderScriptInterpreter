@@ -70,14 +70,20 @@ public class Utilities {
 		return out;
 	}
 
-	public static long varSize(Variable var) throws UnsupportedVariableTypeException {
+	public static long varSize(Variable var) throws UnsupportedVariableTypeException, FileNotFoundException {
 		if (var.type == VariableType.NUMBER) {
 			return Math.abs(((NumberVariable) var).getVar());
 		} else if (var.type == VariableType.ARRAY) {
 			return ((ArrayVariable) var).getAll().size();
 		} else if (var.type == VariableType.FOLDER) {
+			if (!((FolderVariable) var).getVar().exists()) {
+				throw new FileNotFoundException("Folder '" + ((FolderVariable) var).getVar() + "' does not exist.");
+			}
 			return ((FolderVariable) var).getVar().list().length;
 		} else if (var.type == VariableType.FILE) {
+			if (!((FileVariable) var).getVar().exists()) {
+				throw new FileNotFoundException("File '" + ((FileVariable) var).getVar() + "' does not exist.");
+			}
 			return ((FileVariable) var).getVar().length();
 		} else if (var.type == VariableType.TEXT) {
 			return ((TextVariable) var).getVar().length();
