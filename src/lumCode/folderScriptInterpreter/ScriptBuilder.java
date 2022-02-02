@@ -18,10 +18,12 @@ import lumCode.folderScriptInterpreter.handlers.arithmetic.Arithmetic;
 import lumCode.folderScriptInterpreter.handlers.arithmetic.ArithmeticType;
 import lumCode.folderScriptInterpreter.handlers.command.Command;
 import lumCode.folderScriptInterpreter.handlers.command.CommandType;
+import lumCode.folderScriptInterpreter.handlers.conditional.Conditional;
 import lumCode.folderScriptInterpreter.handlers.declaring.Declaration;
 import lumCode.folderScriptInterpreter.handlers.declaring.DeclarationType;
 import lumCode.folderScriptInterpreter.handlers.iteration.BreakNode;
 import lumCode.folderScriptInterpreter.handlers.iteration.Iteration;
+import lumCode.folderScriptInterpreter.handlers.logic.Logic;
 import lumCode.folderScriptInterpreter.variables.NumberVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 
@@ -110,6 +112,9 @@ public class ScriptBuilder {
 			return breakDownVariable(name);
 		} else if (c == '?') {
 			// Conditional logic
+			String query = Utilities.extractBracket(script, script.indexOf('('));
+			return breakDownConditional(query,
+					Utilities.charSplitter(Utilities.extractBracket(script, script.lastIndexOf('}')), ','));
 		} else if (c == 'i') {
 			// Iteration logic
 			int n;
@@ -142,6 +147,23 @@ public class ScriptBuilder {
 		}
 
 		return null;
+	}
+
+	private static Node breakDownConditional(String query, List<String> script)
+			throws ScriptErrorException, VariableNameNotFoundException, BreakDownException, UnsupportedTypeException,
+			IncorrentParameterAmountException, CommandErrorException, NotArrayException {
+		Node node = breakDownScript(query);
+		if (!(node instanceof Logic)) {
+			throw new ScriptErrorException(script.toString(),
+					"Syntax error; conditional ('?') must have an input capable of giving a boolean result (true / false).");
+		}
+		Logic var = (Logic) node;
+
+		List<Node> com = new ArrayList<Node>();
+		for (String s : script) {
+			com.add(breakDownScript(s));
+		}
+		return new Conditional(var, com);
 	}
 
 	private static Arithmetic breakDownArithmetic(String left, ArithmeticType type, String right)
