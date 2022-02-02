@@ -63,4 +63,22 @@ public class InterpretationTest {
 		System.out.println();
 	}
 
+	@Test
+	void test4() throws InterpreterException {
+		// Test4 - Output numbers from 0 to 100 but break the loop after first output
+		System.out.println("Test4");
+		clear();
+		Main.main(new String[] { "i0(100){?(i0=50){b},o(i0+\", \",$)}" });
+		System.out.println();
+	}
+
+	@Test
+	void test5() throws InterpreterException {
+		// Test5 - Output numbers from 0 to 100 that are divisible with both 5 and 3
+		System.out.println("Test5");
+		clear();
+		Main.main(new String[] { "i0(100){?(i0%5=0&i0%3=0){o(i0+\": ding!\",$)}}" });
+		System.out.println();
+	}
+
 }
