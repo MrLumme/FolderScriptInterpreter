@@ -1,3 +1,0 @@
-dok1.rtf
-dok2.txt
-dok3.xml

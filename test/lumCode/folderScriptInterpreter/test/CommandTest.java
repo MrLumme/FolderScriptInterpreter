@@ -12,6 +12,7 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 
+import lumCode.folderScriptInterpreter.Main;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.handlers.Node;
 import lumCode.folderScriptInterpreter.handlers.command.Command;
@@ -26,6 +27,7 @@ import lumCode.folderScriptInterpreter.variables.TextVariable;
 public class CommandTest {
 	private static final File fs1 = new File("resources/commandTest/fileSet1");
 	private static final File fs2 = new File("resources/commandTest/fileSet2");
+	private static final File fs3 = new File("resources/commandTest/fileSet3");
 
 	@Before
 	void preTest() throws InterpreterException {
@@ -37,6 +39,11 @@ public class CommandTest {
 		assertFalse(new File(fs2.getAbsolutePath() + "/dok1.txt").exists());
 		assertFalse(new File(fs2.getAbsolutePath() + "/dok2.txt").exists());
 		assertFalse(new File(fs2.getAbsolutePath() + "/folder/dok3.txt").exists());
+
+		assertFalse(new File(fs3.getAbsolutePath() + "/test.txt").exists());
+		assertFalse(new File(fs3.getAbsolutePath() + "/folder/d1.txt").exists());
+		assertFalse(new File(fs3.getAbsolutePath() + "/folder/d2.txt").exists());
+		assertFalse(new File(fs3.getAbsolutePath() + "/folder/d3.txt").exists());
 	}
 
 	@Test
@@ -479,6 +486,176 @@ public class CommandTest {
 		Command d2 = new Command(CommandType.DELETE, ld2);
 		d2.action();
 		assertFalse(doc2.getVar().exists());
+	}
+
+	@Test
+	void auxTest() throws InterpreterException, IOException {
+		FileVariable doc = new FileVariable(new File(fs3.getAbsolutePath() + "/test.txt"));
+		FolderVariable fol = new FolderVariable(new File(fs3.getAbsolutePath() + "/folder"));
+		TextVariable txt = new TextVariable("This is a piece of text which will be used for size command.");
+		NumberVariable num = new NumberVariable(-2345);
+		ArrayVariable arr = new ArrayVariable();
+		arr.setNextVar(new NumberVariable(13));
+		arr.setNextVar(new NumberVariable(38));
+		arr.setNextVar(new NumberVariable(875));
+		arr.setNextVar(new TextVariable("This is text!"));
+		arr.setNextVar(new TextVariable("But not this? But it is longest"));
+		arr.setNextVar(new TextVariable("Yes, it is."));
+		arr.setNextVar(new FileVariable(new File("C:/folder/file.rtf")));
+		arr.setNextVar(new FileVariable(new File("C:/folder/fileBig.txt")));
+
+		// Random
+		ArrayList<Node> ar = new ArrayList<Node>();
+		ar.add(fol);
+		Command r = new Command(CommandType.RANDOM, ar);
+		r.action();
+		boolean rr = false;
+		for (File f : fol.getVar().listFiles()) {
+			if (((FileVariable) r.result()).getVar().getAbsolutePath().equals(f.getAbsolutePath())) {
+				rr = true;
+			}
+		}
+		assertTrue(rr);
+
+		ArrayList<Node> ar2 = new ArrayList<Node>();
+		ar2.add(arr);
+		Command r2 = new Command(CommandType.RANDOM, ar2);
+		r2.action();
+		assertTrue(arr.contains(r2.result()));
+
+		ArrayList<Node> ar3 = new ArrayList<Node>();
+		ar3.add(txt);
+		Command r3 = new Command(CommandType.RANDOM, ar3);
+		r3.action();
+		assertTrue(txt.getVar().contains(((TextVariable) r3.result()).getVar()));
+
+		ArrayList<Node> ar4 = new ArrayList<Node>();
+		ar4.add(num);
+		Command r4 = new Command(CommandType.RANDOM, ar4);
+		r4.action();
+		assertTrue(((NumberVariable) r4.result()).getVar() > num.getVar());
+
+		ArrayList<Node> ar5 = new ArrayList<Node>();
+		ar5.add(SpecialVariable.getInstance());
+		Command r5 = new Command(CommandType.RANDOM, ar5);
+		boolean rr5 = false;
+		try {
+			r5.action();
+			rr5 = true;
+		} catch (InterpreterException e) {
+			e.printStackTrace();
+		}
+		assertFalse(rr5);
+
+		ArrayList<Node> ar6 = new ArrayList<Node>();
+		ar6.add(doc);
+		Command r6 = new Command(CommandType.RANDOM, ar6);
+		boolean rr6 = false;
+		try {
+			r6.action();
+			rr6 = true;
+		} catch (InterpreterException e) {
+			e.printStackTrace();
+		}
+		assertFalse(rr6);
+
+		// Size
+		ArrayList<Node> as = new ArrayList<Node>();
+		as.add(doc);
+		Command s = new Command(CommandType.SIZE, as);
+		s.action();
+		assertTrue(((NumberVariable) s.result()).getVar() == 34);
+
+		ArrayList<Node> as2 = new ArrayList<Node>();
+		as2.add(fol);
+		Command s2 = new Command(CommandType.SIZE, as2);
+		s2.action();
+		assertTrue(((NumberVariable) s2.result()).getVar() == 3);
+
+		ArrayList<Node> as3 = new ArrayList<Node>();
+		as3.add(txt);
+		Command s3 = new Command(CommandType.SIZE, as3);
+		s3.action();
+		assertTrue(((NumberVariable) s3.result()).getVar() == 60);
+
+		ArrayList<Node> as4 = new ArrayList<Node>();
+		as4.add(num);
+		Command s4 = new Command(CommandType.SIZE, as4);
+		s4.action();
+		assertTrue(((NumberVariable) s4.result()).getVar() == 2345);
+
+		ArrayList<Node> as5 = new ArrayList<Node>();
+		as5.add(arr);
+		Command s5 = new Command(CommandType.SIZE, as5);
+		s5.action();
+		assertTrue(((NumberVariable) s5.result()).getVar() == 8);
+
+		ArrayList<Node> as6 = new ArrayList<Node>();
+		as6.add(SpecialVariable.getInstance());
+		Command s6 = new Command(CommandType.SIZE, as6);
+		s6.action();
+		assertTrue(((NumberVariable) s6.result()).getVar() == 0);
+
+		// Sleep
+		ArrayList<Node> az = new ArrayList<Node>();
+		az.add(new NumberVariable(2000));
+		Command z = new Command(CommandType.SLEEP, az);
+		long old = System.currentTimeMillis();
+		z.action();
+		long now = System.currentTimeMillis();
+		assertTrue(now >= old + 2000);
+
+		// Replace
+		ArrayList<Node> ay = new ArrayList<Node>();
+		ay.add(txt);
+		ay.add(new TextVariable("text"));
+		ay.add(new TextVariable("cake"));
+		Command y = new Command(CommandType.REPLACE, ay);
+		y.action();
+		assertTrue(((TextVariable) y.result()).getVar()
+				.equals("This is a piece of cake which will be used for size command."));
+
+		// Substring
+		ArrayList<Node> au = new ArrayList<Node>();
+		au.add(txt);
+		au.add(new NumberVariable(19));
+		au.add(new NumberVariable(19 + 4));
+		Command u = new Command(CommandType.SUBSTRING, au);
+		u.action();
+		assertTrue(((TextVariable) u.result()).getVar().equals("text"));
+
+		// Casing
+		ArrayList<Node> ak = new ArrayList<Node>();
+		ak.add(new NumberVariable(1));
+		Command k = new Command(CommandType.CASE_SENSITIVE, ak);
+		k.action();
+		assertTrue(Main.caseSensitive);
+
+		ArrayList<Node> ak2 = new ArrayList<Node>();
+		ak2.add(new NumberVariable(0));
+		Command k2 = new Command(CommandType.CASE_SENSITIVE, ak2);
+		k2.action();
+		assertFalse(Main.caseSensitive);
+
+		// Overwrite
+		ArrayList<Node> aw = new ArrayList<Node>();
+		aw.add(new NumberVariable(1));
+		Command w = new Command(CommandType.OVERWRITE, aw);
+		w.action();
+		assertTrue(Main.overwrite);
+
+		ArrayList<Node> aw2 = new ArrayList<Node>();
+		aw2.add(new NumberVariable(0));
+		Command w2 = new Command(CommandType.OVERWRITE, aw2);
+		w2.action();
+		assertFalse(Main.overwrite);
+
+		// Exit
+//		ArrayList<Node> ax = new ArrayList<Node>();
+//		ax.add(new NumberVariable(1337));
+//		Command x = new Command(CommandType.EXIT, ax);
+//		x.action();
+//		assertTrue(false);
 	}
 
 }
