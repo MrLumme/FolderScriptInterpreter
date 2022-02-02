@@ -1,5 +1,7 @@
 package lumCode.folderScriptInterpreter.handlers.conditional;
 
+import java.util.List;
+
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.handlers.Node;
 import lumCode.folderScriptInterpreter.handlers.logic.Logic;
@@ -7,9 +9,9 @@ import lumCode.folderScriptInterpreter.variables.NumberVariable;
 
 public class Conditional implements Node {
 	private final Logic condition;
-	private final Node[] script;
+	private final List<Node> script;
 
-	public Conditional(Logic condition, Node[] script) {
+	public Conditional(Logic condition, List<Node> script) {
 		this.condition = condition;
 		this.script = script;
 	}
@@ -32,7 +34,7 @@ public class Conditional implements Node {
 		return condition;
 	}
 
-	public Node[] getScript() {
+	public List<Node> getScript() {
 		return script;
 	}
 }
