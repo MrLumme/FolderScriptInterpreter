@@ -20,6 +20,7 @@ import lumCode.folderScriptInterpreter.handlers.command.Command;
 import lumCode.folderScriptInterpreter.handlers.command.CommandType;
 import lumCode.folderScriptInterpreter.handlers.declaring.Declaration;
 import lumCode.folderScriptInterpreter.handlers.declaring.DeclarationType;
+import lumCode.folderScriptInterpreter.handlers.iteration.BreakNode;
 import lumCode.folderScriptInterpreter.handlers.iteration.Iteration;
 import lumCode.folderScriptInterpreter.variables.NumberVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
@@ -122,7 +123,8 @@ public class ScriptBuilder {
 				return breakDownVariable(script);
 			}
 		} else if (c == 'b') {
-			// Break loop logic
+			// Break logic
+			return new BreakNode();
 		} else if (c == 'h') {
 			// Help logic
 		} else if (script.startsWith("\"") || script.startsWith("$") || script.matches("^-{0,1}[0-9]{1,}$")) {

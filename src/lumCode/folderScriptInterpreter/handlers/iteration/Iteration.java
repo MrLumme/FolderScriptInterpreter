@@ -18,6 +18,8 @@ import lumCode.folderScriptInterpreter.variables.TextVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 
 public class Iteration implements Node {
+	public static boolean breakCalled = false;
+
 	private final int number;
 	private final ResultantNode iterant;
 	private final List<Node> script;
@@ -56,7 +58,11 @@ public class Iteration implements Node {
 			int till = (int) ((NumberVariable) var).getVar();
 			while (((NumberVariable) Main.i.get(number)).getVar() < till) {
 				for (Node n : script) {
-					n.action();
+					if (!breakCalled) {
+						n.action();
+					} else {
+						breakCalled = false;
+					}
 				}
 				((NumberVariable) Main.i.get(number))
 						.setVar((int) (((NumberVariable) Main.i.get(number)).getVar() + 1));
@@ -66,7 +72,11 @@ public class Iteration implements Node {
 			for (File f : list) {
 				((FileVariable) Main.i.get(number)).setVar(f);
 				for (Node n : script) {
-					n.action();
+					if (!breakCalled) {
+						n.action();
+					} else {
+						breakCalled = false;
+					}
 				}
 			}
 		} else if (type == IterationType.STRING_ITERATION) {
@@ -74,7 +84,11 @@ public class Iteration implements Node {
 			for (char c : seq) {
 				((TextVariable) Main.i.get(number)).setVar("" + c);
 				for (Node n : script) {
-					n.action();
+					if (!breakCalled) {
+						n.action();
+					} else {
+						breakCalled = false;
+					}
 				}
 			}
 		} else if (type == IterationType.LIST_ITERATION) {
@@ -83,7 +97,11 @@ public class Iteration implements Node {
 			for (Variable v : list.values()) {
 				Main.i.put(number, v);
 				for (Node n : script) {
-					n.action();
+					if (!breakCalled) {
+						n.action();
+					} else {
+						breakCalled = false;
+					}
 				}
 			}
 		}
@@ -127,5 +145,9 @@ public class Iteration implements Node {
 		s = s.substring(0, s.length() - 1);
 
 		return "i" + number + "(" + iterant.toString() + ")" + "{" + s + "}";
+	}
+
+	public static void callBreak() {
+		breakCalled = true;
 	}
 }
