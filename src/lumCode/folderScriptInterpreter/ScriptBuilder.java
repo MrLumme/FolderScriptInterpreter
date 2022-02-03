@@ -26,6 +26,7 @@ import lumCode.folderScriptInterpreter.handlers.iteration.Iteration;
 import lumCode.folderScriptInterpreter.handlers.logic.Logic;
 import lumCode.folderScriptInterpreter.variables.NumberVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
+import lumCode.folderScriptInterpreter.variables.VariableLookUp;
 
 public class ScriptBuilder {
 

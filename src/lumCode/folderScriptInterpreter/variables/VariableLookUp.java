@@ -1,8 +1,7 @@
-package lumCode.folderScriptInterpreter;
+package lumCode.folderScriptInterpreter.variables;
 
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.handlers.ResultantNode;
-import lumCode.folderScriptInterpreter.variables.Variable;
 
 public class VariableLookUp implements ResultantNode {
 	private final String name;
