@@ -7,7 +7,7 @@ public class VariableLookUp implements ResultantNode {
 	private final String name;
 	private Variable res;
 
-	protected VariableLookUp(String name) {
+	public VariableLookUp(String name) {
 		this.name = name;
 	}
 
