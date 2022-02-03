@@ -61,8 +61,12 @@ public class Iteration implements Node {
 					if (!breakCalled) {
 						n.action();
 					} else {
-						breakCalled = false;
+						break;
 					}
+				}
+				if (breakCalled) {
+					breakCalled = false;
+					break;
 				}
 				((NumberVariable) Main.i.get(number))
 						.setVar((int) (((NumberVariable) Main.i.get(number)).getVar() + 1));
@@ -75,8 +79,12 @@ public class Iteration implements Node {
 					if (!breakCalled) {
 						n.action();
 					} else {
-						breakCalled = false;
+						break;
 					}
+				}
+				if (breakCalled) {
+					breakCalled = false;
+					break;
 				}
 			}
 		} else if (type == IterationType.STRING_ITERATION) {
@@ -87,8 +95,12 @@ public class Iteration implements Node {
 					if (!breakCalled) {
 						n.action();
 					} else {
-						breakCalled = false;
+						break;
 					}
+				}
+				if (breakCalled) {
+					breakCalled = false;
+					break;
 				}
 			}
 		} else if (type == IterationType.LIST_ITERATION) {
@@ -100,8 +112,12 @@ public class Iteration implements Node {
 					if (!breakCalled) {
 						n.action();
 					} else {
-						breakCalled = false;
+						break;
 					}
+				}
+				if (breakCalled) {
+					breakCalled = false;
+					break;
 				}
 			}
 		}
