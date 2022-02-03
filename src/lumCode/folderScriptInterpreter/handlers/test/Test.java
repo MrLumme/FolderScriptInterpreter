@@ -1,4 +1,4 @@
-package lumCode.folderScriptInterpreter;
+package lumCode.folderScriptInterpreter.handlers.test;
 
 import java.util.List;
 
