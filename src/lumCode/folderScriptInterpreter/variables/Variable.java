@@ -3,7 +3,6 @@ package lumCode.folderScriptInterpreter.variables;
 import java.io.File;
 
 import lumCode.folderScriptInterpreter.Main;
-import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.ArrayPositionEmptyException;
 import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.ArgumentNameNotFoundException;
 import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.IteratorNameNotFoundException;
@@ -71,7 +70,8 @@ public abstract class Variable implements ResultantNode {
 	public abstract Variable copy();
 
 	@Override
-	public void action() throws InterpreterException {
+	public void action() {
+		// Do nothing
 	}
 
 	@Override
