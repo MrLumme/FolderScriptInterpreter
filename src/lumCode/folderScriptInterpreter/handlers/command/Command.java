@@ -68,17 +68,16 @@ public class Command implements ResultantNode {
 		for (int i = 0; i < vars.length; i++) {
 			if (vars[i].type == VariableType.FILE) {
 				if (type == CommandType.REPLACE || type == CommandType.SUBSTRING || type == CommandType.RANDOM
-						|| type == CommandType.SLEEP || type == CommandType.TEST || type == CommandType.EXIT
-						|| type == CommandType.OVERWRITE || type == CommandType.CASE_SENSITIVE) {
+						|| type == CommandType.SLEEP || type == CommandType.EXIT || type == CommandType.OVERWRITE
+						|| type == CommandType.CASE_SENSITIVE) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 1 && type == CommandType.LIST) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
 			} else if (vars[i].type == VariableType.FOLDER) {
 				if (type == CommandType.REPLACE || type == CommandType.EXTENSION || type == CommandType.SUBSTRING
-						|| type == CommandType.SLEEP || type == CommandType.TEST || type == CommandType.EXIT
-						|| type == CommandType.OVERWRITE || type == CommandType.GEN_MD5
-						|| type == CommandType.CASE_SENSITIVE) {
+						|| type == CommandType.SLEEP || type == CommandType.EXIT || type == CommandType.OVERWRITE
+						|| type == CommandType.GEN_MD5 || type == CommandType.CASE_SENSITIVE) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 1 && (type == CommandType.LIST || type == CommandType.OUTPUT)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
@@ -87,8 +86,8 @@ public class Command implements ResultantNode {
 				if (type == CommandType.NAME || type == CommandType.EXTENSION || type == CommandType.PARENT
 						|| type == CommandType.IS_FILE || type == CommandType.IS_AVAILABLE || type == CommandType.COPY
 						|| type == CommandType.MOVE || type == CommandType.DELETE || type == CommandType.READ
-						|| type == CommandType.SLEEP || type == CommandType.TEST || type == CommandType.EXIT
-						|| type == CommandType.OVERWRITE || type == CommandType.CASE_SENSITIVE) {
+						|| type == CommandType.SLEEP || type == CommandType.EXIT || type == CommandType.OVERWRITE
+						|| type == CommandType.CASE_SENSITIVE) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 2 && type == CommandType.SUBSTRING) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
@@ -100,7 +99,7 @@ public class Command implements ResultantNode {
 				if (type == CommandType.NAME || type == CommandType.EXTENSION || type == CommandType.PARENT
 						|| type == CommandType.IS_FILE || type == CommandType.IS_AVAILABLE || type == CommandType.COPY
 						|| type == CommandType.MOVE || type == CommandType.DELETE || type == CommandType.READ
-						|| type == CommandType.REPLACE || type == CommandType.TEST) {
+						|| type == CommandType.REPLACE) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 0 && (type == CommandType.SUBSTRING)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
@@ -115,8 +114,8 @@ public class Command implements ResultantNode {
 						|| type == CommandType.IS_FILE || type == CommandType.IS_AVAILABLE || type == CommandType.COPY
 						|| type == CommandType.MOVE || type == CommandType.DELETE || type == CommandType.READ
 						|| type == CommandType.GEN_MD5 || type == CommandType.REPLACE || type == CommandType.SUBSTRING
-						|| type == CommandType.SLEEP || type == CommandType.TEST || type == CommandType.EXIT
-						|| type == CommandType.OVERWRITE || type == CommandType.CASE_SENSITIVE) {
+						|| type == CommandType.SLEEP || type == CommandType.EXIT || type == CommandType.OVERWRITE
+						|| type == CommandType.CASE_SENSITIVE) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 1 && (type == CommandType.LIST || type == CommandType.OUTPUT)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
@@ -126,8 +125,8 @@ public class Command implements ResultantNode {
 						|| type == CommandType.IS_FILE || type == CommandType.IS_AVAILABLE || type == CommandType.COPY
 						|| type == CommandType.MOVE || type == CommandType.DELETE || type == CommandType.READ
 						|| type == CommandType.REPLACE || type == CommandType.SUBSTRING || type == CommandType.RANDOM
-						|| type == CommandType.SLEEP || type == CommandType.TEST || type == CommandType.EXIT
-						|| type == CommandType.OVERWRITE || type == CommandType.CASE_SENSITIVE) {
+						|| type == CommandType.SLEEP || type == CommandType.EXIT || type == CommandType.OVERWRITE
+						|| type == CommandType.CASE_SENSITIVE) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 0
 						&& (type == CommandType.SUBSTRING || type == CommandType.LIST || type == CommandType.OUTPUT)) {

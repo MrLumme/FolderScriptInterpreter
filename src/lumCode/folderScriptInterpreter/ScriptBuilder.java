@@ -155,6 +155,12 @@ public class ScriptBuilder {
 		} else if (c == 'h') {
 			// Help logic
 			// TODO
+		} else if (c == 't') {
+			// Test logic
+			if (script.charAt(1) != '{') {
+				throw new ScriptErrorException(script, "Test command 't' requires a command segment ('{' and '}').");
+			}
+			return breakDownTest(Utilities.charSplitter(Utilities.extractBracket(script, script.charAt(1)), ','));
 		} else if (script.startsWith("\"") || script.startsWith("$") || script.matches("^-{0,1}[0-9]{1,}$")) {
 			// Data logic
 			if (script.startsWith("\"") && script.endsWith("\"")) {
@@ -275,6 +281,16 @@ public class ScriptBuilder {
 			return les;
 		}
 		return null;
+	}
+
+	private static Node breakDownTest(List<String> script)
+			throws VariableNameNotFoundException, ScriptErrorException, BreakDownException, UnsupportedTypeException,
+			IncorrentParameterAmountException, CommandErrorException, NotArrayException {
+		List<Node> com = new ArrayList<Node>();
+		for (String s : script) {
+			com.add(breakDownScript(s));
+		}
+		return new Test(com);
 	}
 
 	private static Iteration breakDownIteration(int n, String iterant, List<String> script)
