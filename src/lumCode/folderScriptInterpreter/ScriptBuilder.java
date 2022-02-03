@@ -24,6 +24,7 @@ import lumCode.folderScriptInterpreter.handlers.declaring.DeclarationType;
 import lumCode.folderScriptInterpreter.handlers.iteration.BreakNode;
 import lumCode.folderScriptInterpreter.handlers.iteration.Iteration;
 import lumCode.folderScriptInterpreter.handlers.logic.Logic;
+import lumCode.folderScriptInterpreter.handlers.logic.LogicType;
 import lumCode.folderScriptInterpreter.variables.NumberVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 import lumCode.folderScriptInterpreter.variables.VariableLookUp;
@@ -57,6 +58,21 @@ public class ScriptBuilder {
 			IncorrentParameterAmountException, CommandErrorException, NotArrayException {
 		char c = script.charAt(0);
 
+		if (Utilities.isLogicExpression(script)) {
+			// Logic logic
+			List<String> logic = splitLogically(script);
+
+			c = logic.get(logic.size() - 1).charAt(0);
+			LogicType type = LogicType.fromChar(c);
+
+			String right = "";
+			for (int i = 1; i < logic.size() - 1; i++) {
+				right += logic.get(i) + c;
+			}
+			right = right.substring(0, right.length() - 1);
+
+			return breakDownLogic(logic.get(0), type, right);
+		}
 		if (Utilities.isArithmeticExpression(script)) {
 			// Arithmetic logic
 			List<String> arith = splitArithmetically(script);
@@ -181,6 +197,20 @@ public class ScriptBuilder {
 		}
 	}
 
+	private static Node breakDownLogic(String left, LogicType type, String right)
+			throws VariableNameNotFoundException, ScriptErrorException, BreakDownException, UnsupportedTypeException,
+			IncorrentParameterAmountException, CommandErrorException, NotArrayException {
+		Node ln = breakDownScript(left);
+		Node rn = breakDownScript(right);
+
+		if (ln instanceof ResultantNode && rn instanceof ResultantNode) {
+			return new Logic((ResultantNode) ln, type, (ResultantNode) rn);
+		} else {
+			throw new ScriptErrorException(left + type.getChar() + right,
+					"Logic function requires result giving inputs only");
+		}
+	}
+
 	private static List<String> splitArithmetically(String script) throws ScriptErrorException {
 		List<String> plu = Utilities.charSplitter(script, '+');
 		if (plu.size() > 1) {
@@ -206,6 +236,43 @@ public class ScriptBuilder {
 		if (mod.size() > 1) {
 			mod.add("%");
 			return mod;
+		}
+		return null;
+	}
+
+	private static List<String> splitLogically(String script) throws ScriptErrorException {
+		List<String> and = Utilities.charSplitter(script, '&');
+		if (and.size() > 1) {
+			and.add("&");
+			return and;
+		}
+		List<String> or = Utilities.charSplitter(script, '|');
+		if (or.size() > 1) {
+			or.add("|");
+			return or;
+		}
+		if (script.charAt(0) == '!') {
+			script = "1" + script;
+		}
+		List<String> not = Utilities.charSplitter(script, '!');
+		if (not.size() > 1) {
+			not.add("!");
+			return not;
+		}
+		List<String> equ = Utilities.charSplitter(script, '=');
+		if (equ.size() > 1) {
+			equ.add("=");
+			return equ;
+		}
+		List<String> gre = Utilities.charSplitter(script, '>');
+		if (gre.size() > 1) {
+			gre.add(">");
+			return gre;
+		}
+		List<String> les = Utilities.charSplitter(script, '<');
+		if (les.size() > 1) {
+			les.add("<");
+			return les;
 		}
 		return null;
 	}
