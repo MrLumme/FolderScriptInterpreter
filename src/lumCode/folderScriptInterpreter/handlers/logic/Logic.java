@@ -31,26 +31,24 @@ public class Logic implements ResultantNode {
 		Variable r = right.result();
 		if (l.type == VariableType.NUMBER) {
 			if (r.type == VariableType.NUMBER) {
-				result = NumberLogicHandler.Interpret(((NumberVariable) left).getVar(), type,
-						((NumberVariable) right).getVar());
+				result = NumberLogicHandler.Interpret(((NumberVariable) l).getVar(), type,
+						((NumberVariable) r).getVar());
 				found = true;
 			}
 		} else if (l.type == VariableType.TEXT) {
 			if (r.type == VariableType.TEXT) {
-				result = StringLogicHandler.Interpret(((TextVariable) left).getVar(), type,
-						((TextVariable) right).getVar());
+				result = StringLogicHandler.Interpret(((TextVariable) l).getVar(), type, ((TextVariable) r).getVar());
 				found = true;
 			}
 		} else if (l.type == VariableType.FILE) {
 			if (r.type == VariableType.FILE) {
-				result = FileLogicHandler.Interpret(((FileVariable) left).getVar(), type,
-						((FileVariable) right).getVar());
+				result = FileLogicHandler.Interpret(((FileVariable) l).getVar(), type, ((FileVariable) r).getVar());
 				found = true;
 			}
 		} else if (l.type == VariableType.FOLDER) {
 			if (r.type == VariableType.FOLDER) {
-				result = FolderLogicHandler.Interpret(((FolderVariable) left).getVar(), type,
-						((FolderVariable) right).getVar());
+				result = FolderLogicHandler.Interpret(((FolderVariable) l).getVar(), type,
+						((FolderVariable) r).getVar());
 				found = true;
 			}
 		}
