@@ -21,7 +21,7 @@ import lumCode.folderScriptInterpreter.handlers.command.CommandType;
 import lumCode.folderScriptInterpreter.handlers.conditional.Conditional;
 import lumCode.folderScriptInterpreter.handlers.declaring.Declaration;
 import lumCode.folderScriptInterpreter.handlers.declaring.DeclarationType;
-import lumCode.folderScriptInterpreter.handlers.iteration.BreakNode;
+import lumCode.folderScriptInterpreter.handlers.iteration.Break;
 import lumCode.folderScriptInterpreter.handlers.iteration.Iteration;
 import lumCode.folderScriptInterpreter.handlers.logic.Logic;
 import lumCode.folderScriptInterpreter.handlers.logic.LogicType;
@@ -151,7 +151,7 @@ public class ScriptBuilder {
 			}
 		} else if (c == 'b') {
 			// Break logic
-			return new BreakNode();
+			return new Break();
 		} else if (c == 'h') {
 			// Help logic
 			// TODO
