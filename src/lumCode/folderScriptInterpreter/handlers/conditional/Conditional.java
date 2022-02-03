@@ -37,4 +37,15 @@ public class Conditional implements Node {
 	public List<Node> getScript() {
 		return script;
 	}
+
+	@Override
+	public String toString() {
+		String s = "";
+		for (Node n : script) {
+			s += n.toString() + ",";
+		}
+		s = s.substring(0, s.length() - 1);
+
+		return "?(" + condition.toString() + ")" + "{" + s + "}";
+	}
 }
