@@ -598,12 +598,12 @@ public class CommandTest {
 
 		// Sleep
 		ArrayList<Node> az = new ArrayList<Node>();
-		az.add(new NumberVariable(2000));
+		az.add(new NumberVariable(500));
 		Command z = new Command(CommandType.SLEEP, az);
 		long old = System.currentTimeMillis();
 		z.action();
 		long now = System.currentTimeMillis();
-		assertTrue(now >= old + 2000);
+		assertTrue(now >= old + 500);
 
 		// Replace
 		ArrayList<Node> ay = new ArrayList<Node>();
