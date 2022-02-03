@@ -16,4 +16,9 @@ public class BreakNode implements Node {
 
 	}
 
+	@Override
+	public String toString() {
+		return "b";
+	}
+
 }
