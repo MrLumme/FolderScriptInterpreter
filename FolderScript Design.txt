@@ -2,6 +2,7 @@ a[]		argument	a[0]
 
 ?(){}	conditional	?(a[1] = ""){^do stuff^,^do other stuff^}
 i0(){}	iterate		i2(a[0]){^do stuff^}
+t{}		test		#bool = t{c(a[0], #file)}
 b		break loop
 #var	variable	#tal = 50 ^names can only contain alphanumeric characters and '_'^
 #var[]	array		#file[#numb] = "path"
@@ -47,8 +48,7 @@ y(,,)	replace		#var = y(a[0], "name0", #newname)
 u(,,)	substring	u(#text, #from, #to)
 q()		random		q(5) ^Gives either a random whole number between 0 and the input number, a random item of a given array, a random file or folder in a given folder, or a random letter in a given piece of text^
 
-z()		sleep		z(1000) ^sleeps for 1 second^´
-t()		test		#bool = t(c(a[0], #file))
+z()		sleep		z(1000) ^sleeps for 1 second^
 x()		exit		x(0)
 
 w()		overwrite	w(1)
