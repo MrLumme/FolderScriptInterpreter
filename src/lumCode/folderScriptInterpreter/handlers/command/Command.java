@@ -323,8 +323,8 @@ public class Command implements ResultantNode {
 					}
 				} else {
 					if (vars[0] instanceof FileVariable) {
-						FileVariable f = ((FileVariable) vars[1]);
-						if (new File(((FolderVariable) vars[0]).getPath() + f.getName() + f.getExtension()).exists()) {
+						FileVariable f = ((FileVariable) vars[0]);
+						if (new File(((FolderVariable) vars[1]).getPath() + f.getName() + f.getExtension()).exists()) {
 							return new NumberVariable(0);
 						}
 					} else {
@@ -365,26 +365,50 @@ public class Command implements ResultantNode {
 
 	private Variable moveCommand() throws UnsupportedCommandTypeException, CommandErrorException {
 		try {
-			if (Main.overwrite || vars[1] instanceof FolderVariable
-					|| (vars[1] instanceof FileVariable && !((FileVariable) vars[1]).getVar().exists())) {
-				if (vars[0] instanceof FileVariable) {
-					if (vars[1] instanceof FileVariable) {
-						FileUtils.moveFile(((FileVariable) vars[0]).getVar(), ((FileVariable) vars[1]).getVar());
+			if (!Main.overwrite) {
+				if (vars[1] instanceof FileVariable) {
+					if (vars[0] instanceof FileVariable) {
+						if (((FileVariable) vars[1]).getVar().exists()) {
+							return new NumberVariable(0);
+						}
 					} else {
-						FileUtils.moveFileToDirectory(((FileVariable) vars[0]).getVar(),
-								((FolderVariable) vars[1]).getVar(), true);
+						throw new CommandErrorException("Can not move the folder \"" + vars[0].toString()
+								+ "\" to the file \"" + vars[0].toString() + "\".");
 					}
 				} else {
-					if (vars[1] instanceof FileVariable) {
-						throw new CommandErrorException("Can not move \"" + vars[0].toString() + "\" to the file \""
-								+ vars[0].toString() + "\".");
+					if (vars[0] instanceof FileVariable) {
+						FileVariable f = ((FileVariable) vars[0]);
+						if (new File(((FolderVariable) vars[1]).getPath() + f.getName() + f.getExtension()).exists()) {
+							return new NumberVariable(0);
+						}
 					} else {
-						FileUtils.moveDirectory(((FolderVariable) vars[0]).getVar(),
-								((FolderVariable) vars[1]).getVar());
+						List<File> l = Utilities.listFolder(((FolderVariable) vars[0]).getVar(), Integer.MAX_VALUE,
+								true);
+						String pR = ((FolderVariable) vars[1]).getPath();
+						String pO = ((FolderVariable) vars[0]).getParent().getAbsolutePath();
+						for (File f : l) {
+							if (new File(f.getAbsolutePath().replace(pO, pR)).exists()) {
+								return new NumberVariable(0);
+							}
+						}
 					}
 				}
+			}
+
+			if (vars[0] instanceof FileVariable) {
+				if (vars[1] instanceof FileVariable) {
+					FileUtils.moveFile(((FileVariable) vars[0]).getVar(), ((FileVariable) vars[1]).getVar());
+				} else {
+					FileUtils.moveFileToDirectory(((FileVariable) vars[0]).getVar(),
+							((FolderVariable) vars[1]).getVar(), true);
+				}
 			} else {
-				return new NumberVariable(0);
+				if (vars[1] instanceof FileVariable) {
+					throw new CommandErrorException("Can not move the folder \"" + vars[0].toString()
+							+ "\" to the file \"" + vars[0].toString() + "\".");
+				} else {
+					FileUtils.moveDirectory(((FolderVariable) vars[0]).getVar(), ((FolderVariable) vars[1]).getVar());
+				}
 			}
 		} catch (IOException e) {
 			throw new CommandErrorException(
@@ -418,11 +442,11 @@ public class Command implements ResultantNode {
 	}
 
 	private Variable replaceCommand() {
-		String base = vars[0].toString();
-		String look = vars[1].toString();
-		String replace = vars[2].toString();
+		String base = ((TextVariable) vars[0]).getVar();
+		String look = ((TextVariable) vars[1]).getVar();
+		String replace = ((TextVariable) vars[2]).getVar();
 		String str;
-		if (vars[1] instanceof TextVariable && ((TextVariable) vars[1]).isRegex()) {
+		if (((TextVariable) vars[1]).isRegex()) {
 			str = base.replaceAll(look, replace);
 		} else {
 			str = base.replace(look, replace);
@@ -431,7 +455,7 @@ public class Command implements ResultantNode {
 	}
 
 	private Variable substringCommand() throws UnsupportedCommandTypeException, CommandErrorException {
-		String base = vars[0].toString();
+		String base = ((TextVariable) vars[0]).getVar();
 		int arg[] = new int[2];
 		arg[0] = 0;
 		arg[1] = base.length();
@@ -473,16 +497,12 @@ public class Command implements ResultantNode {
 		return new NumberVariable(((FolderVariable) vars[0]).getVar().exists() ? 1 : 0);
 	}
 
-	private Variable randomCommand() throws CommandErrorException {
+	private Variable randomCommand() throws CommandErrorException, ArrayPositionEmptyException {
 		if (vars[0].type == VariableType.NUMBER) {
 			return new NumberVariable((int) Math.floor(Math.random() * ((NumberVariable) vars[0]).getVar()));
 		} else if (vars[0].type == VariableType.ARRAY) {
 			ArrayVariable a = ((ArrayVariable) vars[0]);
-			try {
-				return a.getVar((int) Math.floor(Math.random() * a.getAll().size()));
-			} catch (ArrayPositionEmptyException e) {
-				throw new CommandErrorException("Array position empty: " + e.getMessage());
-			}
+			return a.getVar((int) Math.floor(Math.random() * a.getAll().size()));
 		} else if (vars[0].type == VariableType.FOLDER) {
 			File[] fl = ((FolderVariable) vars[0]).getVar().listFiles();
 			File f = fl[(int) Math.floor(Math.random() * fl.length)];
@@ -491,7 +511,8 @@ public class Command implements ResultantNode {
 			String s = ((TextVariable) vars[0]).getVar();
 			return new TextVariable("" + s.charAt((int) Math.floor(Math.random() * s.length())));
 		}
-		return new NumberVariable(0);
+		throw new CommandErrorException(
+				"Command 'q' does not support input of type '" + vars[0].type.name().toLowerCase() + "'.");
 	}
 
 	private void overwriteCommand() throws LogicConversionException {
