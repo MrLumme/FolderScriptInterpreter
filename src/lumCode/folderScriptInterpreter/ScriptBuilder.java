@@ -60,7 +60,7 @@ public class ScriptBuilder {
 
 		if (Utilities.isLogicExpression(script)) {
 			// Logic logic
-			List<String> logic = splitLogically(script);
+			List<String> logic = Utilities.splitLogically(script);
 
 			c = logic.get(logic.size() - 1).charAt(0);
 			LogicType type = LogicType.fromChar(c);
@@ -75,7 +75,7 @@ public class ScriptBuilder {
 		}
 		if (Utilities.isArithmeticExpression(script)) {
 			// Arithmetic logic
-			List<String> arith = splitArithmetically(script);
+			List<String> arith = Utilities.splitArithmetically(script);
 
 			c = arith.get(arith.size() - 1).charAt(0);
 			ArithmeticType type = ArithmeticType.fromChar(c);
@@ -215,72 +215,6 @@ public class ScriptBuilder {
 			throw new ScriptErrorException(left + type.getChar() + right,
 					"Logic function requires result giving inputs only");
 		}
-	}
-
-	private static List<String> splitArithmetically(String script) throws ScriptErrorException {
-		List<String> plu = Utilities.charSplitter(script, '+');
-		if (plu.size() > 1) {
-			plu.add("+");
-			return plu;
-		}
-		List<String> min = Utilities.charSplitter(script, '-');
-		if (min.size() > 1) {
-			min.add("-");
-			return min;
-		}
-		List<String> mul = Utilities.charSplitter(script, '*');
-		if (mul.size() > 1) {
-			mul.add("*");
-			return mul;
-		}
-		List<String> div = Utilities.charSplitter(script, '/');
-		if (div.size() > 1) {
-			div.add("/");
-			return div;
-		}
-		List<String> mod = Utilities.charSplitter(script, '%');
-		if (mod.size() > 1) {
-			mod.add("%");
-			return mod;
-		}
-		return null;
-	}
-
-	private static List<String> splitLogically(String script) throws ScriptErrorException {
-		List<String> and = Utilities.charSplitter(script, '&');
-		if (and.size() > 1) {
-			and.add("&");
-			return and;
-		}
-		List<String> or = Utilities.charSplitter(script, '|');
-		if (or.size() > 1) {
-			or.add("|");
-			return or;
-		}
-		if (script.charAt(0) == '!') {
-			script = "1" + script;
-		}
-		List<String> not = Utilities.charSplitter(script, '!');
-		if (not.size() > 1) {
-			not.add("!");
-			return not;
-		}
-		List<String> equ = Utilities.charSplitter(script, '=');
-		if (equ.size() > 1) {
-			equ.add("=");
-			return equ;
-		}
-		List<String> gre = Utilities.charSplitter(script, '>');
-		if (gre.size() > 1) {
-			gre.add(">");
-			return gre;
-		}
-		List<String> les = Utilities.charSplitter(script, '<');
-		if (les.size() > 1) {
-			les.add("<");
-			return les;
-		}
-		return null;
 	}
 
 	private static Node breakDownTest(List<String> script)
