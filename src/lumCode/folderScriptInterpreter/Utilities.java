@@ -270,6 +270,9 @@ public class Utilities {
 
 	public static boolean isLogicExpression(String string) {
 		boolean inString = false;
+		if (string.charAt(0) == '#') {
+			return false;
+		}
 		for (int i = 0; i < string.length(); i++) {
 			if (string.charAt(i) == '\"') {
 				inString = !inString;
