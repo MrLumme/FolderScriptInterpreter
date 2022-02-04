@@ -1,16 +1,15 @@
 a[]		argument	a[0]
+#var	variable	#tal = 50 ^names can only contain alphanumeric characters and '_'^
+#var[]	array		#file[#numb] = "path"
 
 ?(){}	conditional	?(a[1] = ""){^do stuff^,^do other stuff^}
 i0(){}	iterate		i2(a[0]){^do stuff^}
-t{}		test		#bool = t{c(a[0], #file)}
 b		break loop
-#var	variable	#tal = 50 ^names can only contain alphanumeric characters and '_'^
-#var[]	array		#file[#numb] = "path"
-^	^	comment		c(a[0], a[1]) ^m(a[0], a[1])^
+t{}		test		#bool = t{c(a[0], #file)}
 h		help		h c
-"	"	mark as text
-"{ }"	mark as regex command
 ,		separator	^funtions as an input and command separator^
+
+^	^	comment		c(a[0], a[1]) ^m(a[0], a[1])^
 
 +		addition	5 + 4 = 9
 -		subtraction	5 - 3 = 2
@@ -28,6 +27,8 @@ h		help		h c
 0		0 or false
 1		1 or true
 $		special
+"	"	mark as text
+"{ }"	mark as regex command
 
 n()		name
 e()		extension	e(a[0])
@@ -74,5 +75,3 @@ i0(l(a[0],0)){o(i0+"\r",a[1]),o(i0+"\r",$)};
 lists all files in a folder given by the first argument
 and writes it to a file given by the second argument and
 outputs the file to the console
-
-i0(l(a[0],$)){Pa}
