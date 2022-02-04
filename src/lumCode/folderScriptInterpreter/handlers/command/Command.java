@@ -241,12 +241,8 @@ public class Command implements ResultantNode {
 			}
 			return out;
 		} else if (vars[0].type == VariableType.ARRAY) {
-			if (vars[1].type == VariableType.NUMBER) {
-				return Utilities.sortArray((ArrayVariable) vars[0], (int) ((NumberVariable) vars[1]).getVar());
-			} else {
-				throw new CommandErrorException(
-						"Second input in list command must be a number when first input is an array.");
-			}
+			return Utilities.sortArray((ArrayVariable) vars[0],
+					vars[1] instanceof SpecialVariable ? -1 : (int) ((NumberVariable) vars[1]).getVar());
 		} else if (vars[0].type == VariableType.FOLDER) {
 			List<File> list = Utilities.listFolder(((FolderVariable) vars[0]).getVar(),
 					vars[1] instanceof SpecialVariable ? Integer.MAX_VALUE : (int) ((NumberVariable) vars[1]).getVar(),

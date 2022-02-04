@@ -64,6 +64,8 @@ public class Utilities {
 			Collections.sort(l, new VariableTypeComparator());
 		} else if (mode == 1) {
 			Collections.sort(l, new VariableValueComparator<Variable>());
+		} else if (mode == -1) {
+			Collections.reverse(l);
 		}
 		for (Variable e : l) {
 			out.setNextVar(e);
