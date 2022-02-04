@@ -1,5 +1,7 @@
 package lumCode.folderScriptInterpreter.handlers.logic;
 
+import java.io.FileNotFoundException;
+
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.exceptions.undefinedExceptions.UndefinedLogicException;
 import lumCode.folderScriptInterpreter.handlers.ResultantNode;
@@ -42,13 +44,21 @@ public class Logic implements ResultantNode {
 			}
 		} else if (l.type == VariableType.FILE) {
 			if (r.type == VariableType.FILE) {
-				result = FileLogicHandler.Interpret(((FileVariable) l).getVar(), type, ((FileVariable) r).getVar());
+				try {
+					result = FileLogicHandler.Interpret(((FileVariable) l).getVar(), type, ((FileVariable) r).getVar());
+				} catch (FileNotFoundException e) {
+					throw new InterpreterException("Interpreter failed with the following message: " + e.getMessage());
+				}
 				found = true;
 			}
 		} else if (l.type == VariableType.FOLDER) {
 			if (r.type == VariableType.FOLDER) {
-				result = FolderLogicHandler.Interpret(((FolderVariable) l).getVar(), type,
-						((FolderVariable) r).getVar());
+				try {
+					result = FolderLogicHandler.Interpret(((FolderVariable) l).getVar(), type,
+							((FolderVariable) r).getVar());
+				} catch (FileNotFoundException e) {
+					throw new InterpreterException("Interpreter failed with the following message: " + e.getMessage());
+				}
 				found = true;
 			}
 		}

@@ -13,6 +13,10 @@ public class StringLogicHandler {
 			return left.equals(right);
 		case NOT:
 			return !left.equals(right);
+		case LESS:
+			return left.length() < right.length();
+		case GREATER:
+			return left.length() > right.length();
 		}
 		throw new UndefinedLogicException(left, operator, right);
 	}

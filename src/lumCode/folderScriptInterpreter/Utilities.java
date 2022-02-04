@@ -79,21 +79,29 @@ public class Utilities {
 		} else if (var.type == VariableType.ARRAY) {
 			return ((ArrayVariable) var).getAll().size();
 		} else if (var.type == VariableType.FOLDER) {
-			if (!((FolderVariable) var).getVar().exists()) {
-				throw new FileNotFoundException("Folder '" + ((FolderVariable) var).getVar() + "' does not exist.");
-			}
-			return ((FolderVariable) var).getVar().list().length;
+			return folderSize(((FolderVariable) var).getVar());
 		} else if (var.type == VariableType.FILE) {
-			if (!((FileVariable) var).getVar().exists()) {
-				throw new FileNotFoundException("File '" + ((FileVariable) var).getVar() + "' does not exist.");
-			}
-			return ((FileVariable) var).getVar().length();
+			return fileSize(((FileVariable) var).getVar());
 		} else if (var.type == VariableType.TEXT) {
 			return ((TextVariable) var).getVar().length();
 		} else if (var.type == VariableType.SPECIAL) {
 			return Main.script.length();
 		}
 		throw new UnsupportedVariableTypeException(var.type);
+	}
+
+	public static long fileSize(File file) throws FileNotFoundException {
+		if (!file.exists()) {
+			throw new FileNotFoundException("File '" + file.getAbsolutePath() + "' does not exist.");
+		}
+		return file.length();
+	}
+
+	public static long folderSize(File file) throws FileNotFoundException {
+		if (!file.exists()) {
+			throw new FileNotFoundException("Folder '" + file.getAbsolutePath() + "' does not exist.");
+		}
+		return file.list().length;
 	}
 
 	public static String extractBracket(String str, int position) {
