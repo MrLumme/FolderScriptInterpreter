@@ -13,9 +13,9 @@ public class FolderLogicHandler {
 			throws UndefinedLogicException, UnsupportedLogicTypeException, FileNotFoundException {
 		switch (operator) {
 		case EQUAL:
-			return StringLogicHandler.Interpret(left.getAbsolutePath(), operator, left.getAbsolutePath());
+			return TextLogicHandler.Interpret(left.getAbsolutePath(), operator, left.getAbsolutePath());
 		case NOT:
-			return StringLogicHandler.Interpret(left.getAbsolutePath(), operator, left.getAbsolutePath());
+			return TextLogicHandler.Interpret(left.getAbsolutePath(), operator, left.getAbsolutePath());
 		case LESS:
 			return Utilities.folderSize(left) < Utilities.folderSize(right);
 		case GREATER:

@@ -3,7 +3,7 @@ package lumCode.folderScriptInterpreter.handlers.logic;
 import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedLogicTypeException;
 import lumCode.folderScriptInterpreter.exceptions.undefinedExceptions.UndefinedLogicException;
 
-public class StringLogicHandler {
+public class TextLogicHandler {
 
 	@SuppressWarnings("incomplete-switch")
 	protected static boolean Interpret(String left, LogicType operator, String right)

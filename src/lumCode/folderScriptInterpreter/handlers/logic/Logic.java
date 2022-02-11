@@ -39,7 +39,7 @@ public class Logic implements ResultantNode {
 			}
 		} else if (l.type == VariableType.TEXT) {
 			if (r.type == VariableType.TEXT) {
-				result = StringLogicHandler.Interpret(((TextVariable) l).getVar(), type, ((TextVariable) r).getVar());
+				result = TextLogicHandler.Interpret(((TextVariable) l).getVar(), type, ((TextVariable) r).getVar());
 				found = true;
 			}
 		} else if (l.type == VariableType.FILE) {
