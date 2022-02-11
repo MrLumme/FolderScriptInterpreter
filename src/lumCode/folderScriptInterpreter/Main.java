@@ -43,6 +43,7 @@ public class Main {
 			n.action();
 		}
 
+		// Delete temp folder
 		FileUtils.deleteQuietly(tempDir);
 	}
 
