@@ -14,17 +14,23 @@ import org.apache.commons.io.FileUtils;
 
 import lumCode.folderScriptInterpreter.Main;
 import lumCode.folderScriptInterpreter.Utilities;
+import lumCode.folderScriptInterpreter.exceptions.ArithmeticErrorException;
 import lumCode.folderScriptInterpreter.exceptions.CommandErrorException;
 import lumCode.folderScriptInterpreter.exceptions.IncorrentParameterAmountException;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.exceptions.LogicConversionException;
 import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.ArrayPositionEmptyException;
 import lumCode.folderScriptInterpreter.exceptions.typeExceptions.IncorrectParameterTypeException;
+import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedArithmeticTypeException;
 import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedCommandTypeException;
 import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedVariableTypeException;
+import lumCode.folderScriptInterpreter.exceptions.undefinedExceptions.UndefinedArithmeticException;
 import lumCode.folderScriptInterpreter.exceptions.undefinedExceptions.UndefinedCommandException;
 import lumCode.folderScriptInterpreter.handlers.Node;
 import lumCode.folderScriptInterpreter.handlers.ResultantNode;
+import lumCode.folderScriptInterpreter.handlers.arithmetic.ArithmeticType;
+import lumCode.folderScriptInterpreter.handlers.arithmetic.FileArithmeticHandler;
+import lumCode.folderScriptInterpreter.handlers.arithmetic.FolderArithmeticHandler;
 import lumCode.folderScriptInterpreter.variables.ArrayVariable;
 import lumCode.folderScriptInterpreter.variables.FileVariable;
 import lumCode.folderScriptInterpreter.variables.FolderVariable;
@@ -122,14 +128,14 @@ public class Command implements ResultantNode {
 				}
 			} else if (vars[i].type == VariableType.SPECIAL) {
 				if (type == CommandType.NAME || type == CommandType.EXTENSION || type == CommandType.PARENT
-						|| type == CommandType.IS_FILE || type == CommandType.IS_AVAILABLE || type == CommandType.COPY
-						|| type == CommandType.MOVE || type == CommandType.DELETE || type == CommandType.READ
+						|| type == CommandType.IS_FILE || type == CommandType.IS_AVAILABLE || type == CommandType.READ
 						|| type == CommandType.REPLACE || type == CommandType.SUBSTRING || type == CommandType.RANDOM
 						|| type == CommandType.SLEEP || type == CommandType.EXIT || type == CommandType.OVERWRITE
 						|| type == CommandType.CASE_SENSITIVE) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
-				} else if (i == 0
-						&& (type == CommandType.SUBSTRING || type == CommandType.LIST || type == CommandType.OUTPUT)) {
+				} else if (i == 0 && (type == CommandType.SUBSTRING || type == CommandType.LIST
+						|| type == CommandType.OUTPUT || type == CommandType.DELETE || type == CommandType.COPY
+						|| type == CommandType.MOVE)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
 			}
@@ -301,12 +307,27 @@ public class Command implements ResultantNode {
 	}
 
 	private Variable deleteCommand() {
+		if (vars[0] instanceof SpecialVariable) {
+			vars[0] = new FolderVariable(Main.tempDir);
+		}
+
 		return new NumberVariable(FileUtils.deleteQuietly(((FolderVariable) vars[0]).getVar()) ? 1 : 0);
 	}
 
-	private Variable copyCommand() throws UnsupportedCommandTypeException, CommandErrorException {
+	private Variable copyCommand() throws UnsupportedCommandTypeException, CommandErrorException,
+			UnsupportedArithmeticTypeException, UndefinedArithmeticException, ArithmeticErrorException {
 		try {
 			if (!Main.overwrite) {
+				if (vars[1] instanceof SpecialVariable) {
+					if (vars[0] instanceof FileVariable) {
+						vars[1] = FileArithmeticHandler.calculate((FileVariable) vars[0], ArithmeticType.ADDITION,
+								SpecialVariable.getInstance());
+					} else {
+						vars[1] = FolderArithmeticHandler.calculate((FolderVariable) vars[0], ArithmeticType.ADDITION,
+								SpecialVariable.getInstance());
+					}
+				}
+
 				if (vars[1] instanceof FileVariable) {
 					if (vars[0] instanceof FileVariable) {
 						if (((FileVariable) vars[1]).getVar().exists()) {
@@ -358,9 +379,20 @@ public class Command implements ResultantNode {
 		return new NumberVariable(1);
 	}
 
-	private Variable moveCommand() throws UnsupportedCommandTypeException, CommandErrorException {
+	private Variable moveCommand() throws UnsupportedCommandTypeException, CommandErrorException,
+			UnsupportedArithmeticTypeException, UndefinedArithmeticException, ArithmeticErrorException {
 		try {
 			if (!Main.overwrite) {
+				if (vars[1] instanceof SpecialVariable) {
+					if (vars[0] instanceof FileVariable) {
+						vars[1] = FileArithmeticHandler.calculate((FileVariable) vars[0], ArithmeticType.ADDITION,
+								SpecialVariable.getInstance());
+					} else {
+						vars[1] = FolderArithmeticHandler.calculate((FolderVariable) vars[0], ArithmeticType.ADDITION,
+								SpecialVariable.getInstance());
+					}
+				}
+
 				if (vars[1] instanceof FileVariable) {
 					if (vars[0] instanceof FileVariable) {
 						if (((FileVariable) vars[1]).getVar().exists()) {
