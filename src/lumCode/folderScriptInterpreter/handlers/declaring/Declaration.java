@@ -36,7 +36,7 @@ public class Declaration implements Node {
 		Variable var = value;
 		if (action instanceof ResultantNode) {
 			action.action();
-			var = Variable.fromString("" + ((ResultantNode) action).result());
+			var = ((ResultantNode) action).result();
 		}
 
 		if (type == DeclarationType.NEGATE) {
@@ -58,8 +58,10 @@ public class Declaration implements Node {
 
 	@Override
 	public String toString() {
-		String res = value.toString();
-		if (action != null) {
+		String res;
+		if (value != null) {
+			res = value.toString();
+		} else {
 			res = action.toString();
 		}
 		return name + type.getChar() + res;
