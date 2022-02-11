@@ -29,6 +29,11 @@ public class Main {
 	public static final List<Node> nodes = new ArrayList<>();
 
 	public static void main(String[] args) throws InterpreterException {
+		if (args.length == 0) {
+			System.out.println("No script. Exiting program.");
+			System.exit(1);
+		}
+
 		script = args[0];
 		for (int i = 1; i < args.length; i++) {
 			a.put(i - 1, Variable.fromString(args[i]));
