@@ -20,7 +20,7 @@ public class Declaration implements Node {
 		this.action = action;
 		this.type = type;
 		value = null;
-		Main.setVariable(name, "0");
+		Main.setVariable(name, new NumberVariable(0));
 	}
 
 	public Declaration(String name, DeclarationType type, Variable value) throws NotArrayException {
@@ -28,7 +28,7 @@ public class Declaration implements Node {
 		this.value = value;
 		this.type = type;
 		action = null;
-		Main.setVariable(name, "0");
+		Main.setVariable(name, new NumberVariable(0));
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class Declaration implements Node {
 				throw new UndefinedDeclaringException(type, value);
 			}
 		}
-		Main.setVariable(name, var.toString());
+		Main.setVariable(name, var);
 	}
 
 	@Override

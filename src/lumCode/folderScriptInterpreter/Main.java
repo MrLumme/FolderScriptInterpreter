@@ -81,7 +81,7 @@ public class Main {
 		throw new IteratorNameNotFoundException(n);
 	}
 
-	public static void setVariable(String name, String value) throws NotArrayException {
+	public static void setVariable(String name, Variable value) throws NotArrayException {
 		if (name.contains("[")) {
 			int number = Integer.parseInt(name.substring(name.indexOf('[') + 1, name.indexOf(']')));
 			name = name.substring(0, name.indexOf('['));
@@ -93,9 +93,9 @@ public class Main {
 				arr = new ArrayVariable();
 				v.put(name, arr);
 			}
-			((ArrayVariable) arr).setVar(number, Variable.fromString(value));
+			((ArrayVariable) arr).setVar(number, value);
 		} else {
-			v.put(name, Variable.fromString(value));
+			v.put(name, value);
 		}
 	}
 }
