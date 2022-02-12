@@ -76,8 +76,7 @@ public class ScriptBuilder {
 			right = right.substring(0, right.length() - 1);
 
 			return breakDownLogic(logic.get(0), type, right);
-		}
-		if (Utilities.isArithmeticExpression(script)) {
+		} else if (Utilities.isArithmeticExpression(script)) {
 			// Arithmetic logic
 			List<String> arith = Utilities.splitArithmetically(script);
 
