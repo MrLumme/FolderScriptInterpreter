@@ -40,7 +40,10 @@ public class ScriptBuilder {
 		ArrayList<Node> out = new ArrayList<Node>();
 
 		for (String s : sec) {
-			out.add(breakDownScript(s));
+			Node n = breakDownScript(s);
+			if (n != null) {
+				out.add(n);
+			}
 		}
 
 		return out;
@@ -156,6 +159,7 @@ public class ScriptBuilder {
 		} else if (c == 'h') {
 			// Help logic
 			Main.helpMode = true;
+			return null;
 		} else if (c == 't') {
 			// Test logic
 			if (script.charAt(1) != '{') {
@@ -173,8 +177,6 @@ public class ScriptBuilder {
 			throw new ScriptErrorException(script,
 					"Could not break down script. Perhaps it has a syntax error or missing parenthesis?");
 		}
-
-		return null;
 	}
 
 	private static Node breakDownConditional(String query, List<String> script)
