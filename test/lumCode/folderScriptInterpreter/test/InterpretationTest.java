@@ -12,16 +12,16 @@ import lumCode.folderScriptInterpreter.Main;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 
 public class InterpretationTest {
-	private static final File tf1 = new File("resources/interpretationTest/test2");
+	private static final File tf2 = new File("resources/interpretationTest/test2");
 
 	@BeforeEach
 	void preTest() throws InterpreterException {
 		// Pre-test
-		assertTrue(new File(tf1.getAbsolutePath() + "/dok1.rtf").exists());
-		assertTrue(new File(tf1.getAbsolutePath() + "/dok2.txt").exists());
-		assertTrue(new File(tf1.getAbsolutePath() + "/dok3.xml").exists());
+		assertTrue(new File(tf2.getAbsolutePath() + "/dok1.rtf").exists());
+		assertTrue(new File(tf2.getAbsolutePath() + "/dok2.txt").exists());
+		assertTrue(new File(tf2.getAbsolutePath() + "/dok3.xml").exists());
 
-		File list = new File(tf1.getAbsolutePath() + "/list.txt");
+		File list = new File(tf2.getAbsolutePath() + "/list.txt");
 		list.delete();
 		assertFalse(list.exists());
 
@@ -48,9 +48,9 @@ public class InterpretationTest {
 	void test2() throws InterpreterException {
 		// Test2 - List filenames into a new text file
 		System.out.println("Test2");
-		File list = new File(tf1.getAbsolutePath() + "/list.txt");
+		File list = new File(tf2.getAbsolutePath() + "/list.txt");
 		Main.main(
-				new String[] { "i0(a[0]){o(n(i0)+e(i0)+\"\n\",a[1])}", tf1.getAbsolutePath(), list.getAbsolutePath() });
+				new String[] { "i0(a[0]){o(n(i0)+e(i0)+\"\n\",a[1])}", tf2.getAbsolutePath(), list.getAbsolutePath() });
 		assertTrue(list.exists());
 	}
 
