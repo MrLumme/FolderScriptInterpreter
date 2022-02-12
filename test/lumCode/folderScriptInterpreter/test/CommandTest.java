@@ -543,7 +543,7 @@ public class CommandTest {
 			r5.action();
 			rr5 = true;
 		} catch (InterpreterException e) {
-			e.printStackTrace();
+			// Do nothing
 		}
 		assertFalse(rr5);
 
@@ -555,7 +555,7 @@ public class CommandTest {
 			r6.action();
 			rr6 = true;
 		} catch (InterpreterException e) {
-			e.printStackTrace();
+			// Do nothing
 		}
 		assertFalse(rr6);
 

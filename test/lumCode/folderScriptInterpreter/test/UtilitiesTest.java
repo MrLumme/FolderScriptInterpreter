@@ -22,7 +22,7 @@ class UtilitiesTest {
 			Utilities.cleanAndValidateScript("this \" command should not");
 			done = true;
 		} catch (ScriptErrorException e) {
-			e.printStackTrace();
+			// Do nothing
 		}
 		assertFalse(done);
 
@@ -31,7 +31,7 @@ class UtilitiesTest {
 			Utilities.cleanAndValidateScript("this ^ command should not");
 			done = true;
 		} catch (ScriptErrorException e) {
-			e.printStackTrace();
+			// Do nothing
 		}
 		assertFalse(done);
 
@@ -40,7 +40,7 @@ class UtilitiesTest {
 			Utilities.cleanAndValidateScript("this ( command should not");
 			done = true;
 		} catch (ScriptErrorException e) {
-			e.printStackTrace();
+			// Do nothing
 		}
 		assertFalse(done);
 
@@ -49,7 +49,7 @@ class UtilitiesTest {
 			Utilities.cleanAndValidateScript("this } command should not");
 			done = true;
 		} catch (ScriptErrorException e) {
-			e.printStackTrace();
+			// Do nothing
 		}
 		assertFalse(done);
 
@@ -58,7 +58,7 @@ class UtilitiesTest {
 			Utilities.cleanAndValidateScript("this [ command should not");
 			done = true;
 		} catch (ScriptErrorException e) {
-			e.printStackTrace();
+			// Do nothing
 		}
 		assertFalse(done);
 	}
@@ -74,7 +74,7 @@ class UtilitiesTest {
 			Utilities.charSplitter("this, should, error,", ',');
 			done = true;
 		} catch (ScriptErrorException e) {
-			e.printStackTrace();
+			// Do nothing
 		}
 		assertFalse(done);
 
