@@ -162,12 +162,16 @@ public class ScriptBuilder {
 				throw new ScriptErrorException(script, "Test command 't' requires a command segment ('{' and '}').");
 			}
 			return breakDownTest(Utilities.charSplitter(Utilities.extractBracket(script, script.charAt(1)), ','));
-		} else if (script.startsWith("\"") || script.startsWith("$") || script.matches("^-{0,1}[0-9]{1,}$")) {
-			// Data logic
-			if (script.startsWith("\"") && script.endsWith("\"")) {
-				script = script.substring(1, script.length() - 1);
-			}
+		} else if (c == '\"' && script.endsWith("\"")) {
+			// Text data logic
+			script = script.substring(1, script.length() - 1);
 			return Variable.fromString(script);
+		} else if (script.startsWith("$") || script.matches("^-{0,1}[0-9]{1,}$")) {
+			// Other data logic
+			return Variable.fromString(script);
+		} else {
+			throw new ScriptErrorException(script,
+					"Could not break down script. Perhaps it has a syntax error or missing parenthesis?");
 		}
 
 		return null;
