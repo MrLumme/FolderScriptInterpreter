@@ -13,6 +13,7 @@ import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 
 public class InterpretationTest {
 	private static final File tf2 = new File("resources/interpretationTest/test2");
+	private static final File tf8 = new File("resources/interpretationTest/test8");
 
 	@BeforeEach
 	void preTest() throws InterpreterException {
@@ -24,6 +25,8 @@ public class InterpretationTest {
 		File list = new File(tf2.getAbsolutePath() + "/list.txt");
 		list.delete();
 		assertFalse(list.exists());
+
+		assertTrue(new File(tf8.getAbsolutePath() + "/script.fs").exists());
 
 		clear();
 		System.out.println();
@@ -88,6 +91,13 @@ public class InterpretationTest {
 		// Test7 - Output the result of 3 + 2 * 5 (Should output 13, not 25)
 		System.out.println("Test7");
 		Main.main(new String[] { "o(3+2*5,$)" });
+	}
+
+	@Test
+	void test8() throws InterpreterException {
+		// Test8 - Load a script file and execute it
+		System.out.println("Test8");
+		Main.main(new String[] { tf8.getAbsolutePath() + "/script.fs" });
 	}
 
 }

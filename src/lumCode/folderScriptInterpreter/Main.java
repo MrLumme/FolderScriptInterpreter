@@ -1,6 +1,10 @@
 package lumCode.folderScriptInterpreter;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,9 +48,19 @@ public class Main {
 			}
 		}
 
-		script = args[0];
 		for (int i = 1; i < args.length; i++) {
 			a.put(i - 1, Variable.fromString(args[i]));
+		}
+
+		if (new File(args[0]).exists()) {
+			try {
+				script = new String(Files.readAllBytes(Paths.get(args[0])), StandardCharsets.UTF_8);
+			} catch (IOException e) {
+				System.out.println("Could not load script file.");
+				System.exit(2);
+			}
+		} else {
+			script = args[0];
 		}
 		script = Utilities.cleanAndValidateScript(script);
 
