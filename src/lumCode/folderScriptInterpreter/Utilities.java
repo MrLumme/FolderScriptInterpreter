@@ -176,7 +176,8 @@ public class Utilities {
 			if (rem.charAt(i) == '\"') {
 				inString = !inString;
 			} else if (!inString) {
-				if (rem.charAt(i) == ' ' || rem.charAt(i) == '\n' || rem.charAt(i) == '\t' || rem.charAt(i) == '\r') {
+				if (rem.charAt(i) == ' ' || rem.charAt(i) == '\n' || rem.charAt(i) == '\t' || rem.charAt(i) == '\r'
+						|| rem.charAt(i) == '\f') {
 					rem = rem.substring(0, i) + rem.substring(i + 1);
 					i--;
 				} else if (rem.charAt(i) == BracketType.INPUT.begin) {
