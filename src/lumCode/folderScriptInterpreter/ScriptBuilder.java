@@ -155,7 +155,7 @@ public class ScriptBuilder {
 			return new Break();
 		} else if (c == 'h') {
 			// Help logic
-			// TODO
+			Main.helpMode = true;
 		} else if (c == 't') {
 			// Test logic
 			if (script.charAt(1) != '{') {

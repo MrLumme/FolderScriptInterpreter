@@ -15,12 +15,16 @@ import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.Argumen
 import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.IteratorNameNotFoundException;
 import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.VariableNameNotFoundException;
 import lumCode.folderScriptInterpreter.handlers.Node;
+import lumCode.folderScriptInterpreter.handlers.arithmetic.ArithmeticType;
+import lumCode.folderScriptInterpreter.handlers.command.CommandType;
+import lumCode.folderScriptInterpreter.handlers.logic.LogicType;
 import lumCode.folderScriptInterpreter.variables.ArrayVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 
 public class Main {
 	public static boolean overwrite = false;
 	public static boolean caseSensitive = false;
+	public static boolean helpMode = false;
 	public static File tempDir = new File(System.getProperty("java.io.tmpdir") + "FolderScript-" + UUID.randomUUID());
 	public static String script = "";
 	public static final HashMap<Integer, Variable> a = new HashMap<Integer, Variable>();
@@ -32,6 +36,12 @@ public class Main {
 		if (args.length == 0) {
 			System.out.println("No script. Exiting program.");
 			System.exit(1);
+		} else if (args[0].toLowerCase().startsWith("h")) {
+			// Detailed help
+			String help = args[0].replaceAll("[\\r\\n\\t\\f\\v ]", "").toLowerCase();
+			if (help.length() == 2) {
+				detailedHelp(help.charAt(1));
+			}
 		}
 
 		script = args[0];
@@ -50,6 +60,57 @@ public class Main {
 
 		// Delete temp folder
 		FileUtils.deleteQuietly(tempDir);
+	}
+
+	private static void detailedHelp(char c) {
+		if (c == 'a') {
+			// Argument
+			System.out.println("~ Arguments ~");
+			System.out.println("Syntax:\tfx:");
+			System.out.println("a[num]\ta[0]");
+			System.out.println();
+			System.out.println("Read-only array given to the script upon execution start.");
+			System.out.println(
+					"For example if you run the script \"o(a[0],$)\" and it would print the first argument given to the script.");
+		} else if (c == '#') {
+			// Variables
+			System.out.println("~ Variables ~");
+			System.out.println("Syntax:\tfx:");
+			System.out.println("#var\t#name, #saved_number");
+			System.out.println("#var[num]\t#array[0], #list[54]");
+			System.out.println();
+			System.out.println("Used to store and read values while a script is executing.");
+			System.out.println(
+					"Note that only alphanumeric characters and underscore ('_') can be used in variable names.");
+			System.out.println("Declaring a value to variable is done like any of the following:");
+			System.out.println();
+			System.out.println("#var = 54");
+			System.out.println("#var[0] = \"Hallo World!\"");
+			System.out.println("#var = C:\folder\file1.txt");
+			System.out.println("#var = l(a[0],$)");
+			System.out.println("#var ! f(a[0])");
+			System.out.println();
+			System.out.println(
+					"When declaring a variable you can either set it equal to a given value, or negate it using '!' instead of '='.");
+			System.out.println(
+					"This can only be done in cases where the value is true ('1') or false ('0'), in which case it will store the opposate of the value.");
+		} else if (c == '?') {
+			// Conditional
+		} else if (c == 'i') {
+			// Iteration
+		} else if (c == 'b') {
+			// Break
+		} else if (c == 'h') {
+			// Help
+		} else if (c == 't') {
+			// Test
+		} else if (CommandType.valid(c)) {
+			// Command
+		} else if (LogicType.valid(c)) {
+			// Logic
+		} else if (ArithmeticType.valid(c)) {
+			// Arithmetic
+		}
 	}
 
 	public static Variable lookUpVariable(String name)
