@@ -2,7 +2,7 @@ a[]		argument	a[0]
 #var	variable	#tal = 50 ^names can only contain alphanumeric characters and '_'^
 #var[]	array		#file[#numb] = "path"
 
-?(){}	conditional	?(a[1] = ""){^do stuff^,^do other stuff^}
+?(){:}	conditional	?(a[1] = ""){^do stuff^,^do other stuff^}
 i0(){}	iterate		i2(a[0]){^do stuff^}
 b		break loop
 t{}		test		#bool = t{c(a[0], #file)}
@@ -58,7 +58,7 @@ k()		ignore case	k(0)
 Available letters:
 j
 Available symbols:
-':;.@
+';.@
 Available ideas:
 Zipping and unzipping, execute external program with arguments,
 

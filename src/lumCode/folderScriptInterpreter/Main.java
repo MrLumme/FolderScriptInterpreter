@@ -116,6 +116,13 @@ public class Main {
 			// Break
 		} else if (c == 'h') {
 			// Help
+			System.out.println("~ Help ~");
+			System.out.println("Syntax:\tfx:");
+			System.out.println("h com\th a");
+			System.out.println("h prg\th i0(50){o(i0,$)}");
+			System.out.println();
+			System.out.println("If given a single other character");
+			System.out.println("d print the first argument given to the script.");
 		} else if (c == 't') {
 			// Test
 		} else if (CommandType.valid(c)) {
