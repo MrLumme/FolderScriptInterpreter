@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -164,13 +165,7 @@ public class Utilities {
 			}
 		}
 
-		int inputB = 0;
-		int inputE = 0;
-		int comB = 0;
-		int comE = 0;
-		int arrayB = 0;
-		int arrayE = 0;
-
+		String noText = "";
 		boolean inString = false;
 		for (int i = 0; i < rem.length(); i++) {
 			if (rem.charAt(i) == '\"') {
@@ -180,23 +175,36 @@ public class Utilities {
 						|| rem.charAt(i) == '\f') {
 					rem = rem.substring(0, i) + rem.substring(i + 1);
 					i--;
-				} else if (rem.charAt(i) == BracketType.INPUT.begin) {
-					inputB++;
-				} else if (rem.charAt(i) == BracketType.INPUT.end) {
-					inputE++;
-				} else if (rem.charAt(i) == BracketType.ARRAY.begin) {
-					arrayB++;
-				} else if (rem.charAt(i) == BracketType.ARRAY.end) {
-					arrayE++;
-				} else if (rem.charAt(i) == BracketType.COMMAND.begin) {
-					comB++;
-				} else if (rem.charAt(i) == BracketType.COMMAND.end) {
-					comE++;
+				} else {
+					noText += rem.charAt(i);
 				}
 			}
 		}
 		if (inString == true) {
 			throw new ScriptErrorException(script, "The script contains uneven amount of quotes ('\"').");
+		}
+
+		int inputB = 0;
+		int inputE = 0;
+		int comB = 0;
+		int comE = 0;
+		int arrayB = 0;
+		int arrayE = 0;
+
+		for (int i = 0; i < noText.length(); i++) {
+			if (noText.charAt(i) == BracketType.INPUT.begin) {
+				inputB++;
+			} else if (noText.charAt(i) == BracketType.INPUT.end) {
+				inputE++;
+			} else if (noText.charAt(i) == BracketType.ARRAY.begin) {
+				arrayB++;
+			} else if (noText.charAt(i) == BracketType.ARRAY.end) {
+				arrayE++;
+			} else if (noText.charAt(i) == BracketType.COMMAND.begin) {
+				comB++;
+			} else if (noText.charAt(i) == BracketType.COMMAND.end) {
+				comE++;
+			}
 		}
 
 		if (inputB != inputE) {
@@ -205,6 +213,11 @@ public class Utilities {
 			throw new ScriptErrorException(script, "The script contains unfinished of command backets ('{', '}').");
 		} else if (arrayB != arrayE) {
 			throw new ScriptErrorException(script, "The script contains unfinished of array backets ('[', ']').");
+		}
+
+		if (Pattern.compile("}(?!([,})\\]])|($))").matcher(noText).find()) {
+			throw new ScriptErrorException(script,
+					"The script is missing separators (',') after an ending command bracket ('}').");
 		}
 
 		return rem;
