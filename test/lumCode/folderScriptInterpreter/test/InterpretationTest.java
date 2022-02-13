@@ -100,4 +100,12 @@ public class InterpretationTest {
 		Main.main(new String[] { tf8.getAbsolutePath() + "/script.fs" });
 	}
 
+	@Test
+	void test9() throws InterpreterException {
+		// Test9 - Conditional if-else
+		System.out.println("Test9");
+		Main.main(new String[] {
+				"i0(10){?(i0%3=0){o(i0+\" is divisible with 3.\",$):o(i0+\" is not divisible with 3.\",$)}}" });
+	}
+
 }

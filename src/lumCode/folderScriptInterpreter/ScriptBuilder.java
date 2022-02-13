@@ -49,14 +49,6 @@ public class ScriptBuilder {
 		return out;
 	}
 
-//	public static List<Node> buildNodeTree(ScriptSection script)
-//			throws ScriptErrorException, BreakDownException, VariableNameNotFoundException {
-//		validateScriptSection(script);
-//
-//		List<Node> out = breakDownScript(script);
-//		return out;
-//	}
-
 	private static Node breakDownScript(String script)
 			throws ScriptErrorException, BreakDownException, VariableNameNotFoundException, UnsupportedTypeException,
 			IncorrentParameterAmountException, CommandErrorException, NotArrayException {
@@ -133,8 +125,7 @@ public class ScriptBuilder {
 		} else if (c == '?') {
 			// Conditional logic
 			String query = Utilities.extractBracket(script, script.indexOf('('));
-			return breakDownConditional(query,
-					Utilities.charSplitter(Utilities.extractBracket(script, script.lastIndexOf('}')), ','));
+			return breakDownConditional(query, Utilities.extractBracket(script, script.lastIndexOf('}')));
 		} else if (c == 'i') {
 			// Iteration logic
 			int n;
@@ -178,21 +169,37 @@ public class ScriptBuilder {
 		}
 	}
 
-	private static Node breakDownConditional(String query, List<String> script)
+	private static Node breakDownConditional(String query, String script)
 			throws ScriptErrorException, VariableNameNotFoundException, BreakDownException, UnsupportedTypeException,
 			IncorrentParameterAmountException, CommandErrorException, NotArrayException {
 		Node node = breakDownScript(query);
 		if (!(node instanceof Logic)) {
-			throw new ScriptErrorException(script.toString(),
+			throw new ScriptErrorException(script,
 					"Syntax error; conditional ('?') must have an input capable of giving a boolean result (true / false).");
 		}
-		Logic var = (Logic) node;
 
-		List<Node> com = new ArrayList<Node>();
-		for (String s : script) {
-			com.add(breakDownScript(s));
+		List<String> spl = Utilities.charSplitter(script, ':');
+
+		if (spl.size() > 2) {
+			throw new BreakDownException(script, '?', "Conditional contains more than one else separator (':').");
 		}
-		return new Conditional(var, com);
+
+		List<String> splT = Utilities.charSplitter(spl.get(0), ',');
+		List<Node> sct = new ArrayList<Node>();
+		for (String s : splT) {
+			sct.add(breakDownScript(s));
+		}
+
+		if (spl.size() > 1) {
+			List<String> splF = Utilities.charSplitter(spl.get(1), ',');
+			List<Node> scf = new ArrayList<Node>();
+			for (String s : splF) {
+				scf.add(breakDownScript(s));
+			}
+			return new Conditional((Logic) node, sct, scf);
+		} else {
+			return new Conditional((Logic) node, sct);
+		}
 	}
 
 	private static Arithmetic breakDownArithmetic(String left, ArithmeticType type, String right)
