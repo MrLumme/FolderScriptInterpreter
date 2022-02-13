@@ -551,11 +551,6 @@ public class Command implements ResultantNode {
 	}
 
 	@Override
-	public void explain() {
-		// TODO
-	}
-
-	@Override
 	public Variable result() {
 		return output;
 	}

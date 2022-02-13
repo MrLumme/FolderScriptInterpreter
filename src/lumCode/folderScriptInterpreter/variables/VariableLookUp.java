@@ -17,11 +17,6 @@ public class VariableLookUp implements ResultantNode {
 	}
 
 	@Override
-	public void explain() {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
 	public Variable result() {
 		return res;
 	}

@@ -26,10 +26,6 @@ public class Conditional implements Node {
 		}
 	}
 
-	@Override
-	public void explain() {
-	}
-
 	public Logic getCondition() {
 		return condition;
 	}

@@ -52,11 +52,6 @@ public class Declaration implements Node {
 	}
 
 	@Override
-	public void explain() {
-
-	}
-
-	@Override
 	public String toString() {
 		String res;
 		if (value != null) {

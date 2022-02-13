@@ -75,11 +75,6 @@ public abstract class Variable implements ResultantNode {
 	}
 
 	@Override
-	public void explain() {
-		// TODO return toString();
-	}
-
-	@Override
 	public Variable result() {
 		return this;
 	}

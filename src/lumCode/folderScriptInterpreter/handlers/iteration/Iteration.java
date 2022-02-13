@@ -123,19 +123,6 @@ public class Iteration implements Node {
 		}
 	}
 
-	@Override
-	public void explain() {
-		if (type == IterationType.INTEGER_ITERATION) {
-			// explain
-		} else if (type == IterationType.FOLDER_ITERATION) {
-			// explain
-		} else if (type == IterationType.STRING_ITERATION) {
-			// explain
-		} else if (type == IterationType.LIST_ITERATION) {
-			// explain
-		}
-	}
-
 	public IterationType getType() {
 		return type;
 	}
