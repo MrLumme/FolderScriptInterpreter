@@ -20,12 +20,12 @@ import lumCode.folderScriptInterpreter.variables.SpecialVariable;
 import lumCode.folderScriptInterpreter.variables.TextVariable;
 
 public class ArithmeticTest {
-	FileVariable fil, fil2;
-	FolderVariable fol, fol2;
-	TextVariable txt, txt2, txt3, txt4;
-	NumberVariable num, num2;
-	SpecialVariable spe;
-	ArrayVariable arr, arr2;
+	private static FileVariable fil, fil2;
+	private static FolderVariable fol, fol2;
+	private static TextVariable txt, txt2, txt3, txt4;
+	private static NumberVariable num, num2;
+	private static SpecialVariable spe;
+	private static ArrayVariable arr, arr2;
 
 	@BeforeEach
 	void preTest() throws InterpreterException {
