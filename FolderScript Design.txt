@@ -60,7 +60,7 @@ j
 Available symbols:
 ';.@
 Available ideas:
-Zipping and unzipping, execute external program with arguments,
+Zipping and unzipping, execute external program with arguments (fx with @), custom methods (fx with .0, .1, .2 system)
 
 Example:
 i0(l(a[0],$)){?(n(i0)=a[1]){d(i0)}}
