@@ -37,8 +37,17 @@ public class ArrayArithmeticHandler {
 					}
 				}
 				return left;
-//			default:
-//				throw new UnsupportedArithmeticTypeException(type);
+			case DIVISION:
+				// Not defined
+				break;
+			case MODULO:
+				// Not defined
+				break;
+			case MULTIPLICATION:
+				// Not defined
+				break;
+			default:
+				throw new UnsupportedArithmeticTypeException(type);
 			}
 		} else {
 			switch (type) {
@@ -54,8 +63,17 @@ public class ArrayArithmeticHandler {
 					}
 				}
 				return left;
-//			default:
-//				throw new UnsupportedArithmeticTypeException(type);
+			case DIVISION:
+				// Not defined
+				break;
+			case MODULO:
+				// Not defined
+				break;
+			case MULTIPLICATION:
+				// Not defined
+				break;
+			default:
+				throw new UnsupportedArithmeticTypeException(type);
 			}
 		}
 		throw new UndefinedArithmeticException(left.toString(), type, right.toString());
