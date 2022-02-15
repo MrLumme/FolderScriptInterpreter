@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
+import java.util.Random;
 
 import org.apache.commons.io.FileUtils;
 
@@ -525,18 +526,19 @@ public class Command implements ResultantNode {
 	}
 
 	private Variable randomCommand() throws CommandErrorException, ArrayPositionEmptyException {
+		Random r = new Random();
 		if (vars[0].type == VariableType.NUMBER) {
-			return new NumberVariable((int) Math.floor(Math.random() * ((NumberVariable) vars[0]).getVar()));
+			return new NumberVariable(r.nextInt((int) ((NumberVariable) vars[0]).getVar()));
 		} else if (vars[0].type == VariableType.ARRAY) {
-			ArrayVariable a = ((ArrayVariable) vars[0]);
-			return a.getVar((int) Math.floor(Math.random() * a.getAll().size()));
+			Variable[] a = ((ArrayVariable) vars[0]).getAll().values().toArray(new Variable[0]);
+			return a[r.nextInt(a.length)];
 		} else if (vars[0].type == VariableType.FOLDER) {
 			File[] fl = ((FolderVariable) vars[0]).getVar().listFiles();
-			File f = fl[(int) Math.floor(Math.random() * fl.length)];
+			File f = fl[r.nextInt(fl.length)];
 			return f.isFile() ? new FileVariable(f) : new FolderVariable(f);
 		} else if (vars[0].type == VariableType.TEXT) {
 			String s = ((TextVariable) vars[0]).getVar();
-			return new TextVariable("" + s.charAt((int) Math.floor(Math.random() * s.length())));
+			return new TextVariable("" + s.charAt(r.nextInt(s.length())));
 		}
 		throw new CommandErrorException(
 				"Command 'q' does not support input of type '" + vars[0].type.name().toLowerCase() + "'.");
