@@ -46,7 +46,7 @@ public class Iteration implements Node {
 			type = IterationType.FOLDER_ITERATION;
 		} else if (var instanceof TextVariable) {
 			Main.i.put(number, new TextVariable(""));
-			type = IterationType.STRING_ITERATION;
+			type = IterationType.TEXT_ITERATION;
 		} else if (var instanceof ArrayVariable) {
 			Main.i.put(number, new ArrayVariable());
 			type = IterationType.LIST_ITERATION;
@@ -87,7 +87,7 @@ public class Iteration implements Node {
 					break;
 				}
 			}
-		} else if (type == IterationType.STRING_ITERATION) {
+		} else if (type == IterationType.TEXT_ITERATION) {
 			char[] seq = ((TextVariable) var).getVar().toCharArray();
 			for (char c : seq) {
 				((TextVariable) Main.i.get(number)).setVar("" + c);
