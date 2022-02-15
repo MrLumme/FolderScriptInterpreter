@@ -110,6 +110,15 @@ public class Main {
 					"This can only be done in cases where the value is true ('1') or false ('0'), in which case it will store the opposate of the value.");
 		} else if (c == '?') {
 			// Conditional
+			System.out.println("~ Conditional ~");
+			System.out.println("Syntax:\tfx:");
+			System.out.println("?(res){prg}\t?(n(a[0])=\"filename\"){o(\"It matches!\",$)}");
+			System.out.println(
+					"?(res){prg:prg}\t?(n(a[0])=\"filename\"){o(\"It matches!\",$):o(\"It does not match!\",$)}");
+			System.out.println();
+			System.out.println("Used to run specific program code depending on whether a given result is true or not.");
+			System.out.println(
+					"If the conditional separator (':') is present, the code before it is run if the result is true, otherwise the code after it is run.");
 		} else if (c == 'i') {
 			// Iteration
 		} else if (c == 'b') {
