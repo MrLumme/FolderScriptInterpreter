@@ -14,6 +14,7 @@ import lumCode.folderScriptInterpreter.variables.ArrayVariable;
 import lumCode.folderScriptInterpreter.variables.FileVariable;
 import lumCode.folderScriptInterpreter.variables.FolderVariable;
 import lumCode.folderScriptInterpreter.variables.NumberVariable;
+import lumCode.folderScriptInterpreter.variables.SpecialVariable;
 import lumCode.folderScriptInterpreter.variables.TextVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 
@@ -50,6 +51,9 @@ public class Iteration implements Node {
 		} else if (var instanceof ArrayVariable) {
 			Main.i.put(number, new ArrayVariable());
 			type = IterationType.LIST_ITERATION;
+		} else if (var instanceof SpecialVariable) {
+			Main.i.put(number, new NumberVariable(0));
+			type = IterationType.SPECIAL_ITERATION;
 		} else {
 			throw new IteratorTypeException(var);
 		}
@@ -108,6 +112,23 @@ public class Iteration implements Node {
 			list.putAll(((ArrayVariable) var).getAll());
 			for (Variable v : list.values()) {
 				Main.i.put(number, v);
+				for (Node n : script) {
+					if (!breakCalled) {
+						n.action();
+					} else {
+						break;
+					}
+				}
+				if (breakCalled) {
+					breakCalled = false;
+					break;
+				}
+			}
+		} else if (type == IterationType.SPECIAL_ITERATION) {
+			int v = 0;
+			while (true) {
+				Main.i.put(number, new NumberVariable(v));
+				v++;
 				for (Node n : script) {
 					if (!breakCalled) {
 						n.action();
