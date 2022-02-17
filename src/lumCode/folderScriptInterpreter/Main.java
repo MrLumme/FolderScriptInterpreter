@@ -27,7 +27,6 @@ import lumCode.folderScriptInterpreter.variables.Variable;
 
 public class Main {
 	public static boolean overwrite = false;
-	private static boolean caseSensitive = false;
 	public static boolean helpMode = false;
 	public static String script = "";
 	public static final File tempDir = new File(
@@ -39,7 +38,6 @@ public class Main {
 
 	public static void main(String[] args) throws InterpreterException {
 		overwrite = false;
-		caseSensitive = false;
 		helpMode = false;
 
 		script = "";

@@ -76,7 +76,7 @@ public class Command implements ResultantNode {
 			if (vars[i].type == VariableType.FILE) {
 				if (type == CommandType.REPLACE || type == CommandType.SUBSTRING || type == CommandType.RANDOM
 						|| type == CommandType.SLEEP || type == CommandType.EXIT || type == CommandType.OVERWRITE
-						|| type == CommandType.CASE_SENSITIVE || type == CommandType.HELP) {
+						|| type == CommandType.HELP) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 1 && type == CommandType.LIST) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
@@ -84,8 +84,7 @@ public class Command implements ResultantNode {
 			} else if (vars[i].type == VariableType.FOLDER) {
 				if (type == CommandType.REPLACE || type == CommandType.EXTENSION || type == CommandType.SUBSTRING
 						|| type == CommandType.SLEEP || type == CommandType.EXIT || type == CommandType.OVERWRITE
-						|| type == CommandType.GEN_MD5 || type == CommandType.CASE_SENSITIVE
-						|| type == CommandType.HELP) {
+						|| type == CommandType.GEN_MD5 || type == CommandType.HELP) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 1 && (type == CommandType.LIST || type == CommandType.WRITE)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
@@ -95,7 +94,7 @@ public class Command implements ResultantNode {
 						|| type == CommandType.IS_FILE || type == CommandType.IS_AVAILABLE || type == CommandType.COPY
 						|| type == CommandType.MOVE || type == CommandType.DELETE || type == CommandType.READ
 						|| type == CommandType.SLEEP || type == CommandType.EXIT || type == CommandType.OVERWRITE
-						|| type == CommandType.CASE_SENSITIVE || type == CommandType.HELP) {
+						|| type == CommandType.HELP) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 2 && type == CommandType.SUBSTRING) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
@@ -113,8 +112,8 @@ public class Command implements ResultantNode {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 1 && (type == CommandType.WRITE)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
-				} else if (!((NumberVariable) vars[i]).isBoolean() && (type == CommandType.OVERWRITE
-						|| type == CommandType.CASE_SENSITIVE || type == CommandType.HELP)) {
+				} else if (!((NumberVariable) vars[i]).isBoolean()
+						&& (type == CommandType.OVERWRITE || type == CommandType.HELP)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
 			} else if (vars[i].type == VariableType.ARRAY) {
@@ -123,7 +122,7 @@ public class Command implements ResultantNode {
 						|| type == CommandType.MOVE || type == CommandType.DELETE || type == CommandType.READ
 						|| type == CommandType.GEN_MD5 || type == CommandType.REPLACE || type == CommandType.SUBSTRING
 						|| type == CommandType.SLEEP || type == CommandType.EXIT || type == CommandType.OVERWRITE
-						|| type == CommandType.CASE_SENSITIVE || type == CommandType.HELP) {
+						|| type == CommandType.HELP) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 1 && (type == CommandType.LIST || type == CommandType.WRITE)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
@@ -133,7 +132,7 @@ public class Command implements ResultantNode {
 						|| type == CommandType.IS_FILE || type == CommandType.IS_AVAILABLE || type == CommandType.READ
 						|| type == CommandType.REPLACE || type == CommandType.SUBSTRING || type == CommandType.RANDOM
 						|| type == CommandType.SLEEP || type == CommandType.EXIT || type == CommandType.OVERWRITE
-						|| type == CommandType.CASE_SENSITIVE || type == CommandType.HELP) {
+						|| type == CommandType.HELP) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 0 && (type == CommandType.SUBSTRING || type == CommandType.LIST
 						|| type == CommandType.WRITE || type == CommandType.DELETE || type == CommandType.COPY
@@ -145,8 +144,6 @@ public class Command implements ResultantNode {
 
 		if (type == CommandType.OVERWRITE) {
 			overwriteCommand();
-		} else if (type == CommandType.CASE_SENSITIVE) {
-			caseSensitiveCommand();
 		} else if (type == CommandType.RANDOM) {
 			output = randomCommand();
 		} else if (type == CommandType.IS_FILE) {
@@ -603,10 +600,6 @@ public class Command implements ResultantNode {
 
 	private void overwriteCommand() throws LogicConversionException {
 		Main.overwrite = ((NumberVariable) vars[0]).asBoolean();
-	}
-
-	private void caseSensitiveCommand() throws LogicConversionException {
-		Main.caseSensitive = ((NumberVariable) vars[0]).asBoolean();
 	}
 
 	@Override

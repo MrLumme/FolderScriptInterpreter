@@ -625,19 +625,6 @@ public class CommandTest {
 		u.action();
 		assertTrue(((TextVariable) u.result()).getVar().equals("text"));
 
-		// Casing
-		ArrayList<Node> ak = new ArrayList<Node>();
-		ak.add(new NumberVariable(1));
-		Command k = new Command(CommandType.CASE_SENSITIVE, ak);
-		k.action();
-		assertTrue(Main.caseSensitive);
-
-		ArrayList<Node> ak2 = new ArrayList<Node>();
-		ak2.add(new NumberVariable(0));
-		Command k2 = new Command(CommandType.CASE_SENSITIVE, ak2);
-		k2.action();
-		assertFalse(Main.caseSensitive);
-
 		// Overwrite
 		ArrayList<Node> aw = new ArrayList<Node>();
 		aw.add(new NumberVariable(1));
