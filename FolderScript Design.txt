@@ -40,7 +40,7 @@ c(,)	copy		c(a[0], #path)
 m(,)	move		^Doubles as a rename funtion^
 d()		delete
 l(,)	list		l(a[0], 3) ^Functions as sorting for array variables. Second input is how to sort the array; 0: by variable type and size (utilizing s() function), 1: by alpha-numeric value^
-o(,)	output		o("Text to add", a[0])
+w(,)	output		w("Text to add", a[0])
 r()		read		#text = r(a[0])
 g()		gen MD5		g(a[0])
 
@@ -52,7 +52,7 @@ q()		random		q(5) ^Gives either a random whole number between 0 and the input nu
 z()		sleep		z(1000) ^sleeps for 1 second^
 x()		exit		x(0)
 
-w()		overwrite	w(1)
+o()		overwrite	o(1)
 k()		ignore case	k(0)
 
 Available letters:
@@ -70,7 +70,7 @@ subdirectories and if the file's name is equal to the
 second argument, the file is deleted
 
 
-i0(l(a[0],0)){o(i0+"\r",a[1]),o(i0+"\r",$)};
+i0(l(a[0],0)){w(i0+"\r",a[1]),w(i0+"\r",$)};
 
 lists all files in a folder given by the first argument
 and writes it to a file given by the second argument and

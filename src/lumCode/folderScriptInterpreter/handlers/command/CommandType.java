@@ -4,9 +4,9 @@ import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedType
 
 public enum CommandType {
 	NAME('n', 1), EXTENSION('e', 1), PARENT('p', 1), IS_FILE('f', 1), IS_AVAILABLE('v', 1), COPY('c', 2), MOVE('m', 2),
-	DELETE('d', 1), LIST('l', 2), OUTPUT('o', 2, false), SIZE('s', 1), REPLACE('y', 3), SUBSTRING('u', 3),
-	RANDOM('q', 1), READ('r', 1), OVERWRITE('w', 1, false), CASE_SENSITIVE('k', 1, false), SLEEP('z', 1, false),
 	EXIT('x', 1, false), GEN_MD5('g', 1);
+	DELETE('d', 1), LIST('l', 2), WRITE('w', 2, false), SIZE('s', 1), REPLACE('y', 3), SUBSTRING('u', 3),
+	RANDOM('q', 1), READ('r', 1), OVERWRITE('o', 1, false), CASE_SENSITIVE('k', 1, false), SLEEP('z', 1, false),
 
 	private char symbol;
 	private int input;

@@ -78,7 +78,7 @@ class UtilitiesTest {
 		}
 		assertFalse(done);
 
-		assertNotNull(Utilities.charSplitter("i0(l(a[0],0)){o(i0+\"\\r\",a[1]),o(i0+\"\\r\",$)}", ','));
+		assertNotNull(Utilities.charSplitter("i0(l(a[0],0)){w(i0+\"\\r\",a[1]),w(i0+\"\\r\",$)}", ','));
 	}
 
 	@Test

@@ -44,7 +44,7 @@ public class InterpretationTest {
 	void test1() throws InterpreterException {
 		// Test1 - Declare and print variable to screen
 		System.out.println("Test1");
-		Main.main(new String[] { "#var=45,o(#var,$)" });
+		Main.main(new String[] { "#var=45,w(#var,$)" });
 	}
 
 	@Test
@@ -53,7 +53,7 @@ public class InterpretationTest {
 		System.out.println("Test2");
 		File list = new File(tf2.getAbsolutePath() + "/list.txt");
 		Main.main(
-				new String[] { "i0(a[0]){o(n(i0)+e(i0)+\"\n\",a[1])}", tf2.getAbsolutePath(), list.getAbsolutePath() });
+				new String[] { "i0(a[0]){w(n(i0)+e(i0)+\"\n\",a[1])}", tf2.getAbsolutePath(), list.getAbsolutePath() });
 		assertTrue(list.exists());
 	}
 
@@ -61,21 +61,21 @@ public class InterpretationTest {
 	void test3() throws InterpreterException {
 		// Test3 - List an array of different variables
 		System.out.println("Test3");
-		Main.main(new String[] { "#var[0]=45,#var[1]=\"eeeeE\",#var[2]!1,i0(#var){o(i0+\"\n\",$)}" });
+		Main.main(new String[] { "#var[0]=45,#var[1]=\"eeeeE\",#var[2]!1,i0(#var){w(i0+\"\n\",$)}" });
 	}
 
 	@Test
 	void test4() throws InterpreterException {
 		// Test4 - Output numbers from 0 to 100 but break the loop after 5th output
 		System.out.println("Test4");
-		Main.main(new String[] { "i0(100){?(i0=5){b},o(i0+\", \",$)}" });
+		Main.main(new String[] { "i0(100){?(i0=5){b},w(i0+\", \",$)}" });
 	}
 
 	@Test
 	void test5() throws InterpreterException {
 		// Test5 - Output numbers from 0 to 100 that are divisible with both 5 and 3
 		System.out.println("Test5");
-		Main.main(new String[] { "i0(100){?(i0%5=0 & i0%3=0){o(i0+\": ding! \",$)}}" });
+		Main.main(new String[] { "i0(100){?(i0%5=0 & i0%3=0){w(i0+\": ding! \",$)}}" });
 		System.out.println();
 	}
 
@@ -83,14 +83,14 @@ public class InterpretationTest {
 	void test6() throws InterpreterException {
 		// Test6 - Output numbers from 0 to 100 but also output ding just before 50
 		System.out.println("Test6");
-		Main.main(new String[] { "i0(100){?(i0=5=2+3){o(\"Ding! \",$)},o(i0+\", \",$)}" });
+		Main.main(new String[] { "i0(100){?(i0=5=2+3){w(\"Ding! \",$)},w(i0+\", \",$)}" });
 	}
 
 	@Test
 	void test7() throws InterpreterException {
 		// Test7 - Output the result of 3 + 2 * 5 (Should output 13, not 25)
 		System.out.println("Test7");
-		Main.main(new String[] { "o(3+2*5,$)" });
+		Main.main(new String[] { "w(3+2*5,$)" });
 	}
 
 	@Test
@@ -105,7 +105,7 @@ public class InterpretationTest {
 		// Test9 - Conditional if-else
 		System.out.println("Test9");
 		Main.main(new String[] {
-				"i0(10){?(i0%3=0){o(i0+\" is divisible with 3.\",$):o(i0+\" is not divisible with 3.\",$)}}" });
+				"i0(10){?(i0%3=0){w(i0+\" is divisible with 3.\",$):w(i0+\" is not divisible with 3.\",$)}}" });
 	}
 
 }

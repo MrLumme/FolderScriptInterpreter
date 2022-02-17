@@ -85,7 +85,7 @@ public class Main {
 			System.out.println();
 			System.out.println("Read-only array given to the script upon execution start.");
 			System.out.println(
-					"For example if you run the script \"o(a[0],$)\" and it would print the first argument given to the script.");
+					"For example if you run the script \"w(a[0],$)\" and it would print the first argument given to the script.");
 		} else if (c == '#') {
 			// Variables
 			System.out.println("~ Variables ~");
@@ -112,9 +112,9 @@ public class Main {
 			// Conditional
 			System.out.println("~ Conditional ~");
 			System.out.println("Syntax:\tfx:");
-			System.out.println("?(res){prg}\t?(n(a[0])=\"filename\"){o(\"It matches!\",$)}");
+			System.out.println("?(res){prg}\t?(n(a[0])=\"filename\"){w(\"It matches!\",$)}");
 			System.out.println(
-					"?(res){prg:prg}\t?(n(a[0])=\"filename\"){o(\"It matches!\",$):o(\"It does not match!\",$)}");
+					"?(res){prg:prg}\t?(n(a[0])=\"filename\"){w(\"It matches!\",$):w(\"It does not match!\",$)}");
 			System.out.println();
 			System.out.println("Used to run specific program code depending on whether a given result is true or not.");
 			System.out.println(
@@ -128,7 +128,7 @@ public class Main {
 			System.out.println("~ Help ~");
 			System.out.println("Syntax:\tfx:");
 			System.out.println("h com\th a");
-			System.out.println("h prg\th i0(50){o(i0,$)}");
+			System.out.println("h(boo)\th(1),i0(50){w(i0,a[0])}");
 			System.out.println();
 			System.out.println("If given a single other character");
 			System.out.println("d print the first argument given to the script.");

@@ -342,14 +342,14 @@ public class CommandTest {
 		ArrayList<Node> lo = new ArrayList<Node>();
 		lo.add(txt);
 		lo.add(doc1);
-		Command o = new Command(CommandType.OUTPUT, lo);
+		Command o = new Command(CommandType.WRITE, lo);
 		o.action();
 		assertTrue(doc1.getVar().exists());
 
 		ArrayList<Node> lo2 = new ArrayList<Node>();
 		lo2.add(txt);
 		lo2.add(SpecialVariable.getInstance());
-		Command o2 = new Command(CommandType.OUTPUT, lo2);
+		Command o2 = new Command(CommandType.WRITE, lo2);
 		boolean or = false;
 		try {
 			o2.action();

@@ -86,7 +86,7 @@ public class Command implements ResultantNode {
 						|| type == CommandType.SLEEP || type == CommandType.EXIT || type == CommandType.OVERWRITE
 						|| type == CommandType.GEN_MD5 || type == CommandType.CASE_SENSITIVE) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
-				} else if (i == 1 && (type == CommandType.LIST || type == CommandType.OUTPUT)) {
+				} else if (i == 1 && (type == CommandType.LIST || type == CommandType.WRITE)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
 			} else if (vars[i].type == VariableType.TEXT) {
@@ -99,7 +99,7 @@ public class Command implements ResultantNode {
 				} else if (i == 2 && type == CommandType.SUBSTRING) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 1
-						&& (type == CommandType.OUTPUT || type == CommandType.LIST || type == CommandType.SUBSTRING)) {
+						&& (type == CommandType.WRITE || type == CommandType.LIST || type == CommandType.SUBSTRING)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
 			} else if (vars[i].type == VariableType.NUMBER) {
@@ -110,7 +110,7 @@ public class Command implements ResultantNode {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 0 && (type == CommandType.SUBSTRING)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
-				} else if (i == 1 && (type == CommandType.OUTPUT)) {
+				} else if (i == 1 && (type == CommandType.WRITE)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (!((NumberVariable) vars[i]).isBoolean()
 						&& (type == CommandType.OVERWRITE || type == CommandType.CASE_SENSITIVE)) {
@@ -124,7 +124,7 @@ public class Command implements ResultantNode {
 						|| type == CommandType.SLEEP || type == CommandType.EXIT || type == CommandType.OVERWRITE
 						|| type == CommandType.CASE_SENSITIVE) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
-				} else if (i == 1 && (type == CommandType.LIST || type == CommandType.OUTPUT)) {
+				} else if (i == 1 && (type == CommandType.LIST || type == CommandType.WRITE)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
 			} else if (vars[i].type == VariableType.SPECIAL) {
@@ -135,7 +135,7 @@ public class Command implements ResultantNode {
 						|| type == CommandType.CASE_SENSITIVE) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 0 && (type == CommandType.SUBSTRING || type == CommandType.LIST
-						|| type == CommandType.OUTPUT || type == CommandType.DELETE || type == CommandType.COPY
+						|| type == CommandType.WRITE || type == CommandType.DELETE || type == CommandType.COPY
 						|| type == CommandType.MOVE)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
@@ -162,8 +162,8 @@ public class Command implements ResultantNode {
 			output = replaceCommand();
 		} else if (type == CommandType.SUBSTRING) {
 			output = substringCommand();
-		} else if (type == CommandType.OUTPUT) {
-			outputCommand();
+		} else if (type == CommandType.WRITE) {
+			writeCommand();
 		} else if (type == CommandType.MOVE) {
 			output = moveCommand();
 		} else if (type == CommandType.COPY) {
@@ -445,7 +445,7 @@ public class Command implements ResultantNode {
 		return new NumberVariable(1);
 	}
 
-	private void outputCommand() throws UnsupportedCommandTypeException, CommandErrorException {
+	private void writeCommand() throws UnsupportedCommandTypeException, CommandErrorException {
 		if (vars[1] instanceof SpecialVariable) {
 			System.out.println(vars[0].toString());
 		} else if (vars[1] instanceof FileVariable) {
