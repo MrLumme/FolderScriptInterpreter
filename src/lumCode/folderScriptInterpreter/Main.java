@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
@@ -26,20 +27,18 @@ import lumCode.folderScriptInterpreter.variables.ArrayVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 
 public class Main {
-	public static boolean overwrite = false;
-	public static boolean helpMode = false;
-	public static String script = "";
+	public static final Map<Integer, Boolean> options = Options.constructMap();
 	public static final File tempDir = new File(
 			System.getProperty("java.io.tmpdir") + "FolderScript-" + UUID.randomUUID());
+
+	public static String script = "";
+
 	public static final HashMap<Integer, Variable> a = new HashMap<Integer, Variable>();
 	public static final HashMap<Integer, Variable> i = new HashMap<Integer, Variable>();
 	public static final HashMap<String, Variable> v = new HashMap<String, Variable>();
 	public static final List<Node> nodes = new ArrayList<>();
 
 	public static void main(String[] args) throws InterpreterException {
-		overwrite = false;
-		helpMode = false;
-
 		script = "";
 
 		a.clear();
@@ -153,12 +152,9 @@ public class Main {
 			System.out.println("~ Help ~");
 			System.out.println("Syntax:\tfx:");
 			System.out.println("h com\th a");
-			System.out.println("h(boo)\th(1),i0(50){w(i0,a[0])}");
 			System.out.println();
 			System.out.println(
 					"If put in the start with only one other character, it will return detailed information about the give character command.");
-			System.out.println(
-					"If put as part of a script it will toggle help mode on ('1') and off ('0'). Help mode prevents the script from moving, copying, deleting or outputting files or folders.");
 		} else if (c == 't') {
 			// Test
 			System.out.println("~ Test ~");
@@ -226,5 +222,9 @@ public class Main {
 		} else {
 			v.put(name, value);
 		}
+	}
+
+	public static boolean getOption(Options option) {
+		return options.get(option.getId());
 	}
 }

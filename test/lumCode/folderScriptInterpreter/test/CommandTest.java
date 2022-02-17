@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.jupiter.api.Test;
 
 import lumCode.folderScriptInterpreter.Main;
+import lumCode.folderScriptInterpreter.Options;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.handlers.Node;
 import lumCode.folderScriptInterpreter.handlers.command.Command;
@@ -641,15 +642,17 @@ public class CommandTest {
 		// Overwrite
 		ArrayList<Node> aw = new ArrayList<Node>();
 		aw.add(new NumberVariable(1));
-		Command w = new Command(CommandType.OVERWRITE, aw);
+		aw.add(new NumberVariable(1));
+		Command w = new Command(CommandType.OPTIONS, aw);
 		w.action();
-		assertTrue(Main.overwrite);
+		assertTrue(Main.getOption(Options.OVERWRITE));
 
 		ArrayList<Node> aw2 = new ArrayList<Node>();
+		aw2.add(new NumberVariable(1));
 		aw2.add(new NumberVariable(0));
-		Command w2 = new Command(CommandType.OVERWRITE, aw2);
+		Command w2 = new Command(CommandType.OPTIONS, aw2);
 		w2.action();
-		assertFalse(Main.overwrite);
+		assertFalse(Main.getOption(Options.OVERWRITE));
 
 		// Exit
 //		ArrayList<Node> ax = new ArrayList<Node>();

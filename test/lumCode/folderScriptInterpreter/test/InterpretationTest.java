@@ -110,7 +110,7 @@ public class InterpretationTest {
 		// Test10 - Help mode
 		System.out.println("Test10");
 		File file = new File(tf10.getAbsolutePath() + "/file.txt");
-		Main.main(new String[] { "w(\"This file is close to useless.\",a[0]),h(1),d(a[0])", file.getAbsolutePath() });
+		Main.main(new String[] { "w(\"This file is close to useless.\",a[0]),o(0,1),d(a[0])", file.getAbsolutePath() });
 		assertTrue(file.exists());
 	}
 

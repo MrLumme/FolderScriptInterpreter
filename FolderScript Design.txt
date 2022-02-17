@@ -40,7 +40,7 @@ c(,)	copy		c(a[0], #path)
 m(,)	move		^Doubles as a rename funtion^
 d()		delete
 l(,)	list		l(a[0], 3) ^Functions as sorting for array variables. Second input is how to sort the array; 0: by variable type and size (utilizing s() function), 1: by alpha-numeric value^
-w(,)	output		w("Text to add", a[0])
+w(,)	write		w("Text to add", a[0])
 r()		read		#text = r(a[0])
 g()		gen MD5		g(a[0])
 
@@ -51,12 +51,10 @@ q()		random		q(5) ^Gives either a random whole number between 0 and the input nu
 
 z()		sleep		z(1000) ^sleeps for 1 second^
 x()		exit		x(0)
-
-o()		overwrite	o(1)
-k()		ignore case	k(0)
+o(,)	options		o(0,1) ^Changes an option in the options table. 0 is debug mode, 1 is overwrite allowed^
 
 Available letters:
-j
+jk
 Available symbols:
 ';.@
 Available ideas:
