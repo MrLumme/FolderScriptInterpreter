@@ -97,12 +97,11 @@ public class Main {
 			System.out.println(
 					"Note that only alphanumeric characters and underscore ('_') can be used in variable names.");
 			System.out.println("Declaring a value to variable is done like any of the following:");
-			System.out.println();
-			System.out.println("#var = 54");
-			System.out.println("#var[0] = \"Hallo World!\"");
-			System.out.println("#var = C:\folder\file1.txt");
-			System.out.println("#var = l(a[0],$)");
-			System.out.println("#var ! f(a[0])");
+			System.out.println("\t#var = 54");
+			System.out.println("\t#var[0] = \"Hallo World!\"");
+			System.out.println("\t#var = C:\folder\file1.txt");
+			System.out.println("\t#var = l(a[0],$)");
+			System.out.println("\t#var ! f(a[0])");
 			System.out.println();
 			System.out.println(
 					"When declaring a variable you can either set it equal to a given value, or negate it using '!' instead of '='.");
@@ -121,6 +120,21 @@ public class Main {
 					"If the conditional separator (':') is present, the code before it is run if the result is true, otherwise the code after it is run.");
 		} else if (c == 'i') {
 			// Iteration
+			System.out.println("~ Iteration ~");
+			System.out.println("Syntax:\tfx:");
+			System.out.println("inum(res){prg}\ti0(50){w(\"Number is: \"+i0,$)}");
+			System.out.println();
+			System.out.println(
+					"Runs a loop of the given program code using a result giving code as the iterant. The iteration name (fx: i0) can be called in the program code to get the current iteration value.");
+			System.out.println("All data types except files can be used as iterants. Fx:");
+			System.out.println("\ti0(13) would start at 0 and iterate up to 13.");
+			System.out.println(
+					"\ti0(\"This is text\") would start at the first charater 'T' and iterate though each, ending with the character 't'.");
+			System.out.println(
+					"\ti0(C:/documents) would list the files in the folder 'C:/documents' and iterate though them.");
+			System.out.println("\ti0(#array) would iterate through all the variables in the array.");
+			System.out.println(
+					"\ti0($) would start at 0 and iterate until stopped by a break ('b') command in the program code ");
 		} else if (c == 'b') {
 			// Break
 		} else if (c == 'h') {
@@ -136,6 +150,12 @@ public class Main {
 					"If put as part of a script it will toggle help mode on ('1') and off ('0'). Help mode prevents the script from moving, copying, deleting or outputting files or folders.");
 		} else if (c == 't') {
 			// Test
+			System.out.println("~ Test ~");
+			System.out.println("Syntax:\tfx:");
+			System.out.println("t{prg}\t#clean=t{c(#from[0],#to[0])}");
+			System.out.println();
+			System.out.println(
+					"Attempts to execute a piece of program code and returns if it was completed ('1') or errored ('0')");
 		} else if (CommandType.valid(c)) {
 			// Command
 		} else if (LogicType.valid(c)) {
