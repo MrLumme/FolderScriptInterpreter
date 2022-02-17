@@ -27,16 +27,29 @@ import lumCode.folderScriptInterpreter.variables.Variable;
 
 public class Main {
 	public static boolean overwrite = false;
-	public static boolean caseSensitive = false;
+	private static boolean caseSensitive = false;
 	public static boolean helpMode = false;
-	public static File tempDir = new File(System.getProperty("java.io.tmpdir") + "FolderScript-" + UUID.randomUUID());
 	public static String script = "";
+	public static final File tempDir = new File(
+			System.getProperty("java.io.tmpdir") + "FolderScript-" + UUID.randomUUID());
 	public static final HashMap<Integer, Variable> a = new HashMap<Integer, Variable>();
 	public static final HashMap<Integer, Variable> i = new HashMap<Integer, Variable>();
 	public static final HashMap<String, Variable> v = new HashMap<String, Variable>();
 	public static final List<Node> nodes = new ArrayList<>();
 
 	public static void main(String[] args) throws InterpreterException {
+		overwrite = false;
+		caseSensitive = false;
+		helpMode = false;
+
+		script = "";
+
+		a.clear();
+		i.clear();
+		v.clear();
+
+		nodes.clear();
+
 		if (args.length == 0) {
 			System.out.println("No script. Exiting program.");
 			System.exit(1);

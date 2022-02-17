@@ -29,20 +29,12 @@ public class InterpretationTest {
 
 		assertTrue(new File(tf8.getAbsolutePath() + "/script.fs").exists());
 
-		clear();
 		File file = new File(tf10.getAbsolutePath() + "/file.txt");
 		file.delete();
 		assertFalse(file.exists());
 
 		System.out.println();
 		System.out.println();
-	}
-
-	private void clear() {
-		Main.a.clear();
-		Main.i.clear();
-		Main.v.clear();
-		Main.nodes.clear();
 	}
 
 	@Test
