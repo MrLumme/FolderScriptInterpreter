@@ -494,6 +494,7 @@ public class CommandTest {
 		FolderVariable fol = new FolderVariable(new File(fs3.getAbsolutePath() + "/folder"));
 		TextVariable txt = new TextVariable("This is a piece of text which will be used for size command.");
 		NumberVariable num = new NumberVariable(-2345);
+		NumberVariable num2 = new NumberVariable(2345);
 		ArrayVariable arr = new ArrayVariable();
 		arr.setNextVar(new NumberVariable(13));
 		arr.setNextVar(new NumberVariable(38));
@@ -530,10 +531,10 @@ public class CommandTest {
 		assertTrue(txt.getVar().contains(((TextVariable) r3.result()).getVar()));
 
 		ArrayList<Node> ar4 = new ArrayList<Node>();
-		ar4.add(num);
+		ar4.add(num2);
 		Command r4 = new Command(CommandType.RANDOM, ar4);
 		r4.action();
-		assertTrue(((NumberVariable) r4.result()).getVar() > num.getVar());
+		assertTrue(((NumberVariable) r4.result()).getVar() < num2.getVar());
 
 		ArrayList<Node> ar5 = new ArrayList<Node>();
 		ar5.add(SpecialVariable.getInstance());
