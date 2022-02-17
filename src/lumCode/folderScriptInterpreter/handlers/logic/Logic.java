@@ -26,11 +26,12 @@ public class Logic implements ResultantNode {
 
 	@Override
 	public void action() throws InterpreterException {
-		boolean found = false;
 		left.action();
 		right.action();
 		Variable l = left.result();
 		Variable r = right.result();
+
+		boolean found = false;
 		if (l.type == VariableType.NUMBER) {
 			if (r.type == VariableType.NUMBER) {
 				result = NumberLogicHandler.Interpret(((NumberVariable) l).getVar(), type,
