@@ -584,7 +584,8 @@ public class Command implements ResultantNode {
 	private Variable randomCommand() throws CommandErrorException, ArrayPositionEmptyException {
 		Random r = new Random();
 		if (vars[0].type == VariableType.NUMBER) {
-			return new NumberVariable(r.nextInt((int) ((NumberVariable) vars[0]).getVar()));
+			int val = (int) ((NumberVariable) vars[0]).getVar();
+			return new NumberVariable((val / Math.abs(val)) * r.nextInt(Math.abs(val)));
 		} else if (vars[0].type == VariableType.ARRAY) {
 			Variable[] a = ((ArrayVariable) vars[0]).getAll().values().toArray(new Variable[0]);
 			return a[r.nextInt(a.length)];
