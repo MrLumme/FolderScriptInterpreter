@@ -495,6 +495,7 @@ public class CommandTest {
 		TextVariable txt = new TextVariable("This is a piece of text which will be used for size command.");
 		NumberVariable num = new NumberVariable(-2345);
 		NumberVariable num2 = new NumberVariable(2345);
+		NumberVariable num3 = new NumberVariable(0);
 		ArrayVariable arr = new ArrayVariable();
 		arr.setNextVar(new NumberVariable(13));
 		arr.setNextVar(new NumberVariable(38));
@@ -530,11 +531,23 @@ public class CommandTest {
 		r3.action();
 		assertTrue(txt.getVar().contains(((TextVariable) r3.result()).getVar()));
 
-		ArrayList<Node> ar4 = new ArrayList<Node>();
-		ar4.add(num2);
-		Command r4 = new Command(CommandType.RANDOM, ar4);
-		r4.action();
-		assertTrue(((NumberVariable) r4.result()).getVar() < num2.getVar());
+		ArrayList<Node> ar4a = new ArrayList<Node>();
+		ar4a.add(num);
+		Command r4a = new Command(CommandType.RANDOM, ar4a);
+		r4a.action();
+		assertTrue(((NumberVariable) r4a.result()).getVar() > num.getVar());
+
+		ArrayList<Node> ar4b = new ArrayList<Node>();
+		ar4b.add(num2);
+		Command r4b = new Command(CommandType.RANDOM, ar4b);
+		r4b.action();
+		assertTrue(((NumberVariable) r4b.result()).getVar() < num2.getVar());
+
+		ArrayList<Node> ar4c = new ArrayList<Node>();
+		ar4c.add(num3);
+		Command r4c = new Command(CommandType.RANDOM, ar4c);
+		r4c.action();
+		assertTrue(((NumberVariable) r4c.result()).getVar() == 0);
 
 		ArrayList<Node> ar5 = new ArrayList<Node>();
 		ar5.add(SpecialVariable.getInstance());
