@@ -284,7 +284,7 @@ public class Utilities {
 				i += br.length() + 1;
 			}
 
-			if (!inString && (string.charAt(i) == '+' || string.charAt(i) == '-' || string.charAt(i) == '/'
+			if (!inString && i > 0 && (string.charAt(i) == '+' || string.charAt(i) == '-' || string.charAt(i) == '/'
 					|| string.charAt(i) == '*' || string.charAt(i) == '%')) {
 				return true;
 			}
