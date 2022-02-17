@@ -15,9 +15,9 @@ import org.apache.commons.io.FileUtils;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.ArrayPositionEmptyException;
 import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.NotArrayException;
-import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.ArgumentNameNotFoundException;
-import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.IteratorNameNotFoundException;
-import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.VariableNameNotFoundException;
+import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.ArgumentNotFoundException;
+import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.IteratorNotFoundException;
+import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.VariableNotFoundException;
 import lumCode.folderScriptInterpreter.handlers.Node;
 import lumCode.folderScriptInterpreter.handlers.arithmetic.ArithmeticType;
 import lumCode.folderScriptInterpreter.handlers.command.CommandType;
@@ -176,8 +176,7 @@ public class Main {
 		}
 	}
 
-	public static Variable lookUpVariable(String name)
-			throws VariableNameNotFoundException, ArrayPositionEmptyException {
+	public static Variable lookUpVariable(String name) throws VariableNotFoundException, ArrayPositionEmptyException {
 		if (name.contains("[")) {
 			int numb = Integer.parseInt(name.substring(name.indexOf('[') + 1, name.indexOf(']')));
 			Variable var = v.get(name.substring(0, name.indexOf('[')));
@@ -190,25 +189,25 @@ public class Main {
 				return var;
 			}
 		}
-		throw new VariableNameNotFoundException(name);
+		throw new VariableNotFoundException(name);
 	}
 
-	public static Variable lookUpArgument(String name) throws ArgumentNameNotFoundException {
+	public static Variable lookUpArgument(String name) throws ArgumentNotFoundException {
 		int n = Integer.parseInt(name.split("\\[|\\]")[1]);
 		Variable var = a.get(n);
 		if (var != null) {
 			return var;
 		}
-		throw new ArgumentNameNotFoundException(n);
+		throw new ArgumentNotFoundException(n);
 	}
 
-	public static Variable lookUpIterator(String name) throws IteratorNameNotFoundException {
+	public static Variable lookUpIterator(String name) throws IteratorNotFoundException {
 		int n = Integer.parseInt(name.substring(1));
 		Variable var = i.get(n);
 		if (var != null) {
 			return var;
 		}
-		throw new IteratorNameNotFoundException(n);
+		throw new IteratorNotFoundException(n);
 	}
 
 	public static void setVariable(String name, Variable value) throws NotArrayException {

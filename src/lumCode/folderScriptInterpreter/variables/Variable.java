@@ -4,9 +4,9 @@ import java.io.File;
 
 import lumCode.folderScriptInterpreter.Main;
 import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.ArrayPositionEmptyException;
-import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.ArgumentNameNotFoundException;
-import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.IteratorNameNotFoundException;
-import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.VariableNameNotFoundException;
+import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.ArgumentNotFoundException;
+import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.IteratorNotFoundException;
+import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.VariableNotFoundException;
 import lumCode.folderScriptInterpreter.handlers.ResultantNode;
 
 public abstract class Variable implements ResultantNode {
@@ -36,8 +36,8 @@ public abstract class Variable implements ResultantNode {
 		}
 	}
 
-	public static Variable fetch(String in) throws VariableNameNotFoundException, ArgumentNameNotFoundException,
-			IteratorNameNotFoundException, ArrayPositionEmptyException {
+	public static Variable fetch(String in) throws VariableNotFoundException, ArgumentNotFoundException,
+			IteratorNotFoundException, ArrayPositionEmptyException {
 		if (in.startsWith("#")) {
 			return Main.lookUpVariable(in);
 		} else if (in.startsWith("a")) {
@@ -60,7 +60,7 @@ public abstract class Variable implements ResultantNode {
 				Main.lookUpIterator(in);
 				return true;
 			}
-		} catch (VariableNameNotFoundException | ArgumentNameNotFoundException | IteratorNameNotFoundException
+		} catch (VariableNotFoundException | ArgumentNotFoundException | IteratorNotFoundException
 				| ArrayPositionEmptyException e) {
 			return false;
 		}
