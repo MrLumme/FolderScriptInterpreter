@@ -76,7 +76,7 @@ public class Command implements ResultantNode {
 			if (vars[i].type == VariableType.FILE) {
 				if (type == CommandType.REPLACE || type == CommandType.SUBSTRING || type == CommandType.RANDOM
 						|| type == CommandType.SLEEP || type == CommandType.EXIT || type == CommandType.OVERWRITE
-						|| type == CommandType.CASE_SENSITIVE) {
+						|| type == CommandType.CASE_SENSITIVE || type == CommandType.HELP) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 1 && type == CommandType.LIST) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
@@ -84,7 +84,8 @@ public class Command implements ResultantNode {
 			} else if (vars[i].type == VariableType.FOLDER) {
 				if (type == CommandType.REPLACE || type == CommandType.EXTENSION || type == CommandType.SUBSTRING
 						|| type == CommandType.SLEEP || type == CommandType.EXIT || type == CommandType.OVERWRITE
-						|| type == CommandType.GEN_MD5 || type == CommandType.CASE_SENSITIVE) {
+						|| type == CommandType.GEN_MD5 || type == CommandType.CASE_SENSITIVE
+						|| type == CommandType.HELP) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 1 && (type == CommandType.LIST || type == CommandType.WRITE)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
@@ -94,7 +95,7 @@ public class Command implements ResultantNode {
 						|| type == CommandType.IS_FILE || type == CommandType.IS_AVAILABLE || type == CommandType.COPY
 						|| type == CommandType.MOVE || type == CommandType.DELETE || type == CommandType.READ
 						|| type == CommandType.SLEEP || type == CommandType.EXIT || type == CommandType.OVERWRITE
-						|| type == CommandType.CASE_SENSITIVE) {
+						|| type == CommandType.CASE_SENSITIVE || type == CommandType.HELP) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 2 && type == CommandType.SUBSTRING) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
@@ -112,8 +113,8 @@ public class Command implements ResultantNode {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 1 && (type == CommandType.WRITE)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
-				} else if (!((NumberVariable) vars[i]).isBoolean()
-						&& (type == CommandType.OVERWRITE || type == CommandType.CASE_SENSITIVE)) {
+				} else if (!((NumberVariable) vars[i]).isBoolean() && (type == CommandType.OVERWRITE
+						|| type == CommandType.CASE_SENSITIVE || type == CommandType.HELP)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
 			} else if (vars[i].type == VariableType.ARRAY) {
@@ -122,7 +123,7 @@ public class Command implements ResultantNode {
 						|| type == CommandType.MOVE || type == CommandType.DELETE || type == CommandType.READ
 						|| type == CommandType.GEN_MD5 || type == CommandType.REPLACE || type == CommandType.SUBSTRING
 						|| type == CommandType.SLEEP || type == CommandType.EXIT || type == CommandType.OVERWRITE
-						|| type == CommandType.CASE_SENSITIVE) {
+						|| type == CommandType.CASE_SENSITIVE || type == CommandType.HELP) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 1 && (type == CommandType.LIST || type == CommandType.WRITE)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
@@ -132,7 +133,7 @@ public class Command implements ResultantNode {
 						|| type == CommandType.IS_FILE || type == CommandType.IS_AVAILABLE || type == CommandType.READ
 						|| type == CommandType.REPLACE || type == CommandType.SUBSTRING || type == CommandType.RANDOM
 						|| type == CommandType.SLEEP || type == CommandType.EXIT || type == CommandType.OVERWRITE
-						|| type == CommandType.CASE_SENSITIVE) {
+						|| type == CommandType.CASE_SENSITIVE || type == CommandType.HELP) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 0 && (type == CommandType.SUBSTRING || type == CommandType.LIST
 						|| type == CommandType.WRITE || type == CommandType.DELETE || type == CommandType.COPY
@@ -182,9 +183,15 @@ public class Command implements ResultantNode {
 			output = readCommand();
 		} else if (type == CommandType.GEN_MD5) {
 			output = genMD5Command();
+		} else if (type == CommandType.HELP) {
+			helpCommand();
 		} else {
 			throw new UndefinedCommandException(type, vars);
 		}
+	}
+
+	private void helpCommand() throws LogicConversionException {
+		Main.helpMode = ((NumberVariable) vars[0]).asBoolean();
 	}
 
 	private Variable genMD5Command() throws CommandErrorException {
@@ -312,6 +319,12 @@ public class Command implements ResultantNode {
 			vars[0] = new FolderVariable(Main.tempDir);
 		}
 
+		if (Main.helpMode) {
+			System.out.println("Delete " + (vars[0] instanceof FileVariable ? "file" : "folder") + " '"
+					+ ((FolderVariable) vars[0]).getVar().getAbsolutePath() + "'");
+			return new NumberVariable(1);
+		}
+
 		return new NumberVariable(FileUtils.deleteQuietly(((FolderVariable) vars[0]).getVar()) ? 1 : 0);
 	}
 
@@ -360,17 +373,36 @@ public class Command implements ResultantNode {
 
 			if (vars[0] instanceof FileVariable) {
 				if (vars[1] instanceof FileVariable) {
-					FileUtils.copyFile(((FileVariable) vars[0]).getVar(), ((FileVariable) vars[1]).getVar(), true);
+					if (!Main.helpMode) {
+						FileUtils.copyFile(((FileVariable) vars[0]).getVar(), ((FileVariable) vars[1]).getVar(), true);
+					} else {
+						System.out.println("Copy file '" + ((FileVariable) vars[0]).getVar().getAbsolutePath() + "'");
+						System.out.println("\tto file '" + ((FileVariable) vars[1]).getVar().getAbsolutePath() + "'");
+					}
 				} else {
-					FileUtils.copyFileToDirectory(((FileVariable) vars[0]).getVar(),
-							((FolderVariable) vars[1]).getVar(), true);
+					if (!Main.helpMode) {
+						FileUtils.copyFileToDirectory(((FileVariable) vars[0]).getVar(),
+								((FolderVariable) vars[1]).getVar(), true);
+					} else {
+						System.out.println("Copy file '" + ((FileVariable) vars[0]).getVar().getAbsolutePath() + "'");
+						System.out
+								.println("\tto folder '" + ((FolderVariable) vars[1]).getVar().getAbsolutePath() + "'");
+					}
 				}
 			} else {
 				if (vars[1] instanceof FileVariable) {
 					throw new CommandErrorException("Can not copy the folder \"" + vars[0].toString()
 							+ "\" to the file \"" + vars[0].toString() + "\".");
 				} else {
-					FileUtils.copyDirectory(((FolderVariable) vars[0]).getVar(), ((FolderVariable) vars[1]).getVar());
+					if (!Main.helpMode) {
+						FileUtils.copyDirectory(((FolderVariable) vars[0]).getVar(),
+								((FolderVariable) vars[1]).getVar());
+					} else {
+						System.out
+								.println("Copy folder '" + ((FolderVariable) vars[0]).getVar().getAbsolutePath() + "'");
+						System.out
+								.println("\tto folder '" + ((FolderVariable) vars[1]).getVar().getAbsolutePath() + "'");
+					}
 				}
 			}
 		} catch (IOException e) {
@@ -425,17 +457,36 @@ public class Command implements ResultantNode {
 
 			if (vars[0] instanceof FileVariable) {
 				if (vars[1] instanceof FileVariable) {
-					FileUtils.moveFile(((FileVariable) vars[0]).getVar(), ((FileVariable) vars[1]).getVar());
+					if (!Main.helpMode) {
+						FileUtils.moveFile(((FileVariable) vars[0]).getVar(), ((FileVariable) vars[1]).getVar());
+					} else {
+						System.out.println("Move file '" + ((FileVariable) vars[0]).getVar().getAbsolutePath() + "'");
+						System.out.println("\tto file '" + ((FileVariable) vars[1]).getVar().getAbsolutePath() + "'");
+					}
 				} else {
-					FileUtils.moveFileToDirectory(((FileVariable) vars[0]).getVar(),
-							((FolderVariable) vars[1]).getVar(), true);
+					if (!Main.helpMode) {
+						FileUtils.moveFileToDirectory(((FileVariable) vars[0]).getVar(),
+								((FolderVariable) vars[1]).getVar(), true);
+					} else {
+						System.out.println("Move file '" + ((FileVariable) vars[0]).getVar().getAbsolutePath() + "'");
+						System.out
+								.println("\tto folder '" + ((FolderVariable) vars[1]).getVar().getAbsolutePath() + "'");
+					}
 				}
 			} else {
 				if (vars[1] instanceof FileVariable) {
 					throw new CommandErrorException("Can not move the folder \"" + vars[0].toString()
 							+ "\" to the file \"" + vars[0].toString() + "\".");
 				} else {
-					FileUtils.moveDirectory(((FolderVariable) vars[0]).getVar(), ((FolderVariable) vars[1]).getVar());
+					if (!Main.helpMode) {
+						FileUtils.moveDirectory(((FolderVariable) vars[0]).getVar(),
+								((FolderVariable) vars[1]).getVar());
+					} else {
+						System.out
+								.println("Move folder '" + ((FolderVariable) vars[0]).getVar().getAbsolutePath() + "'");
+						System.out
+								.println("\tto folder '" + ((FolderVariable) vars[1]).getVar().getAbsolutePath() + "'");
+					}
 				}
 			}
 		} catch (IOException e) {
@@ -451,13 +502,18 @@ public class Command implements ResultantNode {
 		} else if (vars[1] instanceof FileVariable) {
 			File f = ((FileVariable) vars[1]).getVar();
 			try {
-				if (f.exists()) {
-					Files.write(Paths.get(f.getAbsolutePath()), vars[0].toString().getBytes(),
-							StandardOpenOption.APPEND);
+				if (!Main.helpMode) {
+					if (f.exists()) {
+						Files.write(Paths.get(f.getAbsolutePath()), vars[0].toString().getBytes(),
+								StandardOpenOption.APPEND);
+					} else {
+						f.getParentFile().mkdirs();
+						Files.write(Paths.get(f.getAbsolutePath()), vars[0].toString().getBytes(),
+								StandardOpenOption.CREATE);
+					}
 				} else {
-					f.getParentFile().mkdirs();
-					Files.write(Paths.get(f.getAbsolutePath()), vars[0].toString().getBytes(),
-							StandardOpenOption.CREATE);
+					System.out.println("Write '" + vars[0].toString() + "'");
+					System.out.println("\tto file '" + f.getAbsolutePath() + "'");
 				}
 			} catch (IOException e) {
 				throw new CommandErrorException(

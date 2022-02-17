@@ -146,10 +146,6 @@ public class ScriptBuilder {
 		} else if (c == 'b') {
 			// Break logic
 			return new Break();
-		} else if (c == 'h') {
-			// Help logic
-			Main.helpMode = true;
-			return null;
 		} else if (c == 't') {
 			// Test logic
 			if (script.charAt(1) != '{') {

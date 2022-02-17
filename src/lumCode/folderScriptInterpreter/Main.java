@@ -130,8 +130,10 @@ public class Main {
 			System.out.println("h com\th a");
 			System.out.println("h(boo)\th(1),i0(50){w(i0,a[0])}");
 			System.out.println();
-			System.out.println("If given a single other character");
-			System.out.println("d print the first argument given to the script.");
+			System.out.println(
+					"If put in the start with only one other character, it will return detailed information about the give character command.");
+			System.out.println(
+					"If put as part of a script it will toggle help mode on ('1') and off ('0'). Help mode prevents the script from moving, copying, deleting or outputting files or folders.");
 		} else if (c == 't') {
 			// Test
 		} else if (CommandType.valid(c)) {
