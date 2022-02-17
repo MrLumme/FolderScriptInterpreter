@@ -165,6 +165,13 @@ public class Main {
 					"Attempts to execute a piece of program code and returns if it was completed ('1') or errored ('0')");
 		} else if (CommandType.valid(c)) {
 			// Command
+			System.out.println("[PLACEHOLDER]");
+			System.out.println("~ Command ~");
+			System.out.println("Syntax:\tfx:");
+			System.out.println("h com\th a");
+			System.out.println();
+			System.out.println(
+					"If put as part of a script it will toggle debug mode on ('1') and off ('0'). Debug mode prevents the script from moving, copying, deleting or outputting files or folders, but instead writes these file operations to the console.");
 		} else if (LogicType.valid(c)) {
 			// Logic
 		} else if (ArithmeticType.valid(c)) {
