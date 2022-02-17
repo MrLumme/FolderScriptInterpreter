@@ -72,8 +72,13 @@ public class Iteration implements Node {
 					breakCalled = false;
 					break;
 				}
-				((NumberVariable) Main.i.get(number))
-						.setVar((int) (((NumberVariable) Main.i.get(number)).getVar() + 1));
+				if (till > 0) {
+					((NumberVariable) Main.i.get(number))
+							.setVar((int) (((NumberVariable) Main.i.get(number)).getVar() + 1));
+				} else {
+					((NumberVariable) Main.i.get(number))
+							.setVar((int) (((NumberVariable) Main.i.get(number)).getVar() - 1));
+				}
 			}
 		} else if (type == IterationType.FOLDER_ITERATION) {
 			File[] list = ((FolderVariable) var).getVar().listFiles();
