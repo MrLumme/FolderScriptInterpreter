@@ -8,6 +8,7 @@ b		break loop
 t{}		test		#bool = t{c(a[0], #file)}
 h		help		h c
 ,		separator	^funtions as an input and command separator^
+:		separator	^funtions as a true / false separator in conditionals^
 
 ^	^	comment		c(a[0], a[1]) ^m(a[0], a[1])^
 
@@ -28,7 +29,7 @@ h		help		h c
 1		1 or true
 $		special
 "	"	mark as text
-"{ }"	mark as regex command
+"{ }"	mark as regex
 
 n()		name
 e()		extension	e(a[0])
