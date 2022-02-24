@@ -44,13 +44,16 @@ public class Utilities {
 		return DigestUtils.md5Hex(txt);
 	}
 
-	public static List<File> listFolder(File fol, int depth, boolean incDir) {
+	public static List<File> listFolder(File fol, int depth, boolean dirs) {
 		ArrayList<File> out = new ArrayList<File>();
 		for (File f : fol.listFiles()) {
 			if (f.isDirectory() && depth > 0) {
-				out.addAll(listFolder(f, depth - 1, incDir));
+				out.addAll(listFolder(f, depth - 1, dirs));
 			}
-			if (f.isFile() || incDir) {
+
+			if (f.isFile() && !dirs) {
+				out.add(f);
+			} else if (f.isDirectory() && dirs) {
 				out.add(f);
 			}
 		}

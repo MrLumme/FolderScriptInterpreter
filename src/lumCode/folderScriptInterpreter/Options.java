@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum Options {
-	DEBUG(0, false), OVERWRITE(1, false);
+	DEBUG(0, false), OVERWRITE(1, false), RETURN_FOLDERS(2, false);
 
 	private int id;
 	private boolean def;

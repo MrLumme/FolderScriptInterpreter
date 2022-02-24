@@ -247,7 +247,7 @@ public class Command implements ResultantNode {
 		} else if (vars[0].type == VariableType.FOLDER) {
 			List<File> list = Utilities.listFolder(((FolderVariable) vars[0]).getVar(),
 					vars[1] instanceof SpecialVariable ? Integer.MAX_VALUE : (int) ((NumberVariable) vars[1]).getVar(),
-					true);
+					Main.getOption(Options.RETURN_FOLDERS));
 			for (File f : list) {
 				out.setNextVar(f.isFile() ? new FileVariable(f) : new FolderVariable(f));
 			}

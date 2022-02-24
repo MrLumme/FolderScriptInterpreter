@@ -52,7 +52,7 @@ q()		random		q(5) ^Gives either a random whole number between 0 and the input nu
 
 z()		sleep		z(1000) ^sleeps for 1 second^
 x()		exit		x(0)
-o(,)	options		o(0,1) ^Changes an option in the options table. 0 is debug mode, 1 is overwrite allowed^
+o(,)	options		o(0,1) ^Changes an option in the options table. 0 is debug mode, 1 is overwrite allowed, 2 list on folders return sub-folders instead of files^
 
 Available letters:
 jk
