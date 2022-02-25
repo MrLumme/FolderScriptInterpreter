@@ -31,7 +31,25 @@ public enum Options {
 		return false;
 	}
 
+	public static Options getOption(int id) {
+		for (Options o : values()) {
+			if (o.id == id) {
+				return o;
+			}
+		}
+		return null;
+	}
+
 	public int getId() {
 		return id;
+	}
+
+	public boolean getDefaultValue() {
+		return def;
+	}
+
+	@Override
+	public String toString() {
+		return name().toLowerCase().replace("_", " ");
 	}
 }
