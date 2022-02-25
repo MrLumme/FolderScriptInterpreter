@@ -382,14 +382,23 @@ public class CommandTest {
 		ll.add(new NumberVariable(0));
 		Command l = new Command(CommandType.LIST, ll);
 		l.action();
-		assertTrue(((ArrayVariable) l.result()).getAll().size() == 2);
+		assertTrue(((ArrayVariable) l.result()).getAll().size() == 1);
 
 		ArrayList<Node> ll2 = new ArrayList<Node>();
 		ll2.add(new FolderVariable(fs2));
 		ll2.add(SpecialVariable.getInstance());
 		Command l2 = new Command(CommandType.LIST, ll2);
 		l2.action();
-		assertTrue(((ArrayVariable) l2.result()).getAll().size() == 3);
+		assertTrue(((ArrayVariable) l2.result()).getAll().size() == 2);
+
+		Main.options.put(Options.RETURN_FOLDERS.getId(), true);
+		ArrayList<Node> ll2a = new ArrayList<Node>();
+		ll2a.add(new FolderVariable(fs2));
+		ll2a.add(SpecialVariable.getInstance());
+		Command l2a = new Command(CommandType.LIST, ll2a);
+		l2a.action();
+		assertTrue(((ArrayVariable) l2a.result()).getAll().size() == 1);
+		Main.options.put(Options.RETURN_FOLDERS.getId(), false);
 
 		ArrayList<Node> ll3 = new ArrayList<Node>();
 		ll3.add(new NumberVariable(12));
@@ -447,6 +456,21 @@ public class CommandTest {
 		assertTrue(((ArrayVariable) l5a.result()).getAll().size() == 8);
 		assertTrue(((NumberVariable) ((ArrayVariable) l5a.result()).getVar(0)).getVar() == 13);
 		assertTrue(((TextVariable) ((ArrayVariable) l5a.result()).getVar(7)).getVar().equals("Yes, it is."));
+
+		ArrayList<Node> ll5b = new ArrayList<Node>();
+		Main.options.put(Options.STRICT_ARRAY_DATA.getId(), true);
+		ll5b.add(a);
+		ll5b.add(new NumberVariable(1));
+		Command l5b = new Command(CommandType.LIST, ll5b);
+		boolean lr5 = false;
+		try {
+			l5b.action();
+			lr5 = true;
+		} catch (InterpreterException e) {
+			// Do nothing
+		}
+		assertFalse(lr5);
+		Main.options.put(Options.STRICT_ARRAY_DATA.getId(), false);
 
 		// Read
 		ArrayList<Node> lr = new ArrayList<Node>();
