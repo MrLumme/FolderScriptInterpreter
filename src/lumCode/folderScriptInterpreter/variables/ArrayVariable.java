@@ -39,6 +39,9 @@ public class ArrayVariable extends Variable {
 	}
 
 	public void setVar(int numb, Variable var) throws DisallowedDataInArrayException {
+		if (data == null) {
+			data = var.type;
+		}
 		if (!Main.getOption(Options.STRICT_ARRAY_DATA) || var.type == data) {
 			vars.put(numb, var);
 			if (numb >= next) {
@@ -50,6 +53,9 @@ public class ArrayVariable extends Variable {
 	}
 
 	public void setNextVar(Variable var) throws DisallowedDataInArrayException {
+		if (data == null) {
+			data = var.type;
+		}
 		if (!Main.getOption(Options.STRICT_ARRAY_DATA) || var.type == data) {
 			vars.put(next, var);
 			next++;
