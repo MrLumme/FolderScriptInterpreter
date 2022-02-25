@@ -100,8 +100,8 @@ public class Main {
 		} else if (c == '#') {
 			// Variables
 			System.out.println("~ Variables ~");
-			System.out.println("Syntax:\tfx:");
-			System.out.println("#var\t#name, #saved_number");
+			System.out.println("Syntax:\t\tfx:");
+			System.out.println("#var\t\t#name, #saved_number");
 			System.out.println("#var[num]\t#array[0], #list[54]");
 			System.out.println();
 			System.out.println("Used to store and read values while a script is executing.");
@@ -121,7 +121,7 @@ public class Main {
 		} else if (c == '?') {
 			// Conditional
 			System.out.println("~ Conditional ~");
-			System.out.println("Syntax:\tfx:");
+			System.out.println("Syntax:\t\tfx:");
 			System.out.println("?(res){prg}\t?(n(a[0])=\"filename\"){w(\"It matches!\",$)}");
 			System.out.println(
 					"?(res){prg:prg}\t?(n(a[0])=\"filename\"){w(\"It matches!\",$):w(\"It does not match!\",$)}");
@@ -132,7 +132,7 @@ public class Main {
 		} else if (c == 'i') {
 			// Iteration
 			System.out.println("~ Iteration ~");
-			System.out.println("Syntax:\tfx:");
+			System.out.println("Syntax:\t\tfx:");
 			System.out.println("inum(res){prg}\ti0(50){w(\"Number is: \"+i0,$)}");
 			System.out.println();
 			System.out.println(
