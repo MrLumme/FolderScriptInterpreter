@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import lumCode.folderScriptInterpreter.exceptions.ScriptErrorException;
+import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.DisallowedDataInArrayException;
 import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedVariableTypeException;
 import lumCode.folderScriptInterpreter.variables.ArrayVariable;
 import lumCode.folderScriptInterpreter.variables.FileVariable;
@@ -60,7 +61,7 @@ public class Utilities {
 		return out;
 	}
 
-	public static ArrayVariable sortArray(ArrayVariable array, int mode) {
+	public static ArrayVariable sortArray(ArrayVariable array, int mode) throws DisallowedDataInArrayException {
 		ArrayVariable out = new ArrayVariable();
 		ArrayList<Variable> l = new ArrayList<Variable>(array.getAll().values());
 		if (mode == 0) {

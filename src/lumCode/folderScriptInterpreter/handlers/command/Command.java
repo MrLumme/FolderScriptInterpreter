@@ -22,6 +22,7 @@ import lumCode.folderScriptInterpreter.exceptions.IncorrentParameterAmountExcept
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.exceptions.LogicConversionException;
 import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.ArrayPositionEmptyException;
+import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.DisallowedDataInArrayException;
 import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.OptionNotFoundException;
 import lumCode.folderScriptInterpreter.exceptions.typeExceptions.IncorrectParameterTypeException;
 import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedArithmeticTypeException;
@@ -214,7 +215,7 @@ public class Command implements ResultantNode {
 		}
 	}
 
-	private ArrayVariable listCommand() throws CommandErrorException {
+	private ArrayVariable listCommand() throws CommandErrorException, DisallowedDataInArrayException {
 		ArrayVariable out = new ArrayVariable();
 		if (vars[0].type == VariableType.NUMBER) {
 			if (((NumberVariable) vars[0]).getVar() < 0) {

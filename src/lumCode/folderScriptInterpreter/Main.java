@@ -15,6 +15,7 @@ import org.apache.commons.io.FileUtils;
 
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.ArrayPositionEmptyException;
+import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.DisallowedDataInArrayException;
 import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.NotArrayException;
 import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.ArgumentNotFoundException;
 import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.IteratorNotFoundException;
@@ -213,7 +214,8 @@ public class Main {
 		throw new IteratorNotFoundException(n);
 	}
 
-	public static void setVariable(String name, Variable value) throws NotArrayException {
+	public static void setVariable(String name, Variable value)
+			throws NotArrayException, DisallowedDataInArrayException {
 		if (name.contains("[")) {
 			int number = Integer.parseInt(name.substring(name.indexOf('[') + 1, name.indexOf(']')));
 			name = name.substring(0, name.indexOf('['));
