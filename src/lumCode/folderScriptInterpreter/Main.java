@@ -20,6 +20,7 @@ import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.NotArrayExcept
 import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.ArgumentNotFoundException;
 import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.IteratorNotFoundException;
 import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.VariableNotFoundException;
+import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedTypeException;
 import lumCode.folderScriptInterpreter.handlers.Node;
 import lumCode.folderScriptInterpreter.handlers.arithmetic.ArithmeticType;
 import lumCode.folderScriptInterpreter.handlers.command.CommandType;
@@ -87,7 +88,7 @@ public class Main {
 		}
 	}
 
-	private static void detailedHelp(char c) {
+	private static void detailedHelp(char c) throws UnsupportedTypeException {
 		if (c == 'a') {
 			// Argument
 			System.out.println("~ Arguments ~");
@@ -148,6 +149,11 @@ public class Main {
 					"\ti0($) would start at 0 and iterate until stopped by a break ('b') command in the program code ");
 		} else if (c == 'b') {
 			// Break
+			System.out.println("~ Break ~");
+			System.out.println("Syntax:\tfx:");
+			System.out.println("b\ti0(50){?(i0=20){b}}");
+			System.out.println();
+			System.out.println("Used to manuelly break out of an iteration.");
 		} else if (c == 'h') {
 			// Help
 			System.out.println("~ Help ~");
@@ -166,13 +172,100 @@ public class Main {
 					"Attempts to execute a piece of program code and returns if it was completed ('1') or errored ('0')");
 		} else if (CommandType.valid(c)) {
 			// Command
-			System.out.println("[PLACEHOLDER]");
-			System.out.println("~ Command ~");
-			System.out.println("Syntax:\tfx:");
-			System.out.println("h com\th a");
-			System.out.println();
-			System.out.println(
-					"If put as part of a script it will toggle debug mode on ('1') and off ('0'). Debug mode prevents the script from moving, copying, deleting or outputting files or folders, but instead writes these file operations to the console.");
+			switch (CommandType.fromChar(c)) {
+			case COPY:
+				System.out.println("~ Copy ~");
+				System.out.println("Syntax:\t\tfx:");
+				System.out.println("c(fil/fol, fil/fol)\tc(#from, #to)");
+				System.out.println();
+				System.out.println("Copies one file or folder to another file or folder.");
+				System.out.println("Is affected by the options '" + Options.OVERWRITE.toString() + "' ("
+						+ Options.OVERWRITE.getId() + ") and '" + Options.DEBUG.toString() + "' ("
+						+ Options.DEBUG.getId() + ").");
+				break;
+			case EXTENSION:
+				System.out.println("~ Extension ~");
+				System.out.println("Syntax:\tfx:");
+				System.out.println("e(fil)\t#ext=e(#file)");
+				System.out.println();
+				System.out.println("Returns the extension of the given file.");
+				System.out.println(
+						"Also returns the initial '.' such that a code piece like 'p(#file) + n(#file) + e(#file)' gives the full path.");
+				break;
+			case MOVE:
+				System.out.println("~ Move ~");
+				System.out.println("Syntax:\t\tfx:");
+				System.out.println("m(fil/fol, fil/fol)\tm(#from, #to)");
+				System.out.println();
+				System.out.println("Moves one file or folder to another file or folder.");
+				System.out.println("Is affected by the options '" + Options.OVERWRITE.toString() + "' ("
+						+ Options.OVERWRITE.getId() + ") and '" + Options.DEBUG.toString() + "' ("
+						+ Options.DEBUG.getId() + ").");
+				break;
+			case NAME:
+				System.out.println("~ Name ~");
+				System.out.println("Syntax:\tfx:");
+				System.out.println("n(fil/fol)\t#name=n(#file)");
+				System.out.println();
+				System.out.println("Returns the name of the given file without its extension.");
+				break;
+			case PARENT:
+				System.out.println("~ Parent ~");
+				System.out.println("Syntax:\tfx:");
+				System.out.println("p(fil/fol)\t#top=p(#file)");
+				System.out.println();
+				System.out.println("Returns the containing folder of the given file or folder.");
+				break;
+			case RANDOM:
+				System.out.println("~ Random ~");
+				System.out.println("Syntax:\t\tfx:");
+				System.out.println("q(txt/fol/num/arr)\tq(20), q(\"Text\")");
+				System.out.println();
+				System.out.println("Returns a random value determined by the given variable.");
+				System.out.println("For numbers, it returns a random value between the given number and zero.");
+				System.out.println("For arrays, it returns a random entry contained in the array.");
+				System.out.println("For text, it returns a random character in the text.");
+				System.out.println("For folders, it returns a random object inside it.");
+				break;
+			case READ:
+				System.out.println("~ Read ~");
+				System.out.println("Syntax:\tfx:");
+				System.out.println("r(fil)\t#contents=r(file.txt)");
+				System.out.println();
+				System.out.println("Returns the content of a given file.");
+				break;
+			case SIZE:
+				System.out.println("~ Size ~");
+				System.out.println("Syntax:\tfx:");
+				System.out.println("s(var)\ts(#array), s(-10), s(\"Text\"), s(file.txt)");
+				System.out.println();
+				System.out.println("Returns the size of a given variable.");
+				System.out.println("For numbers, it returns the absolute value.");
+				System.out.println("For arrays, it returns the amount of entries in the array.");
+				System.out.println("For text, it returns the length of the text.");
+				System.out.println("For folders, it returns the amount of objects inside it.");
+				System.out.println("For files, it returns the file size.");
+				System.out.println("For special, it returns the character count of the executing script.");
+				break;
+			case SLEEP:
+				System.out.println("~ Sleep ~");
+				System.out.println("Syntax:\tfx:");
+				System.out.println("s(num)\ts(1000)");
+				System.out.println();
+				System.out.println("Puts the program to sleep for a given amount of milliseconds.");
+				break;
+			case WRITE:
+				System.out.println("~ Write ~");
+				System.out.println("Syntax:\tfx:");
+				System.out.println("w(txt, fil/spe)\tw(\"Text\", file.txt)");
+				System.out.println();
+				System.out.println("Writes a piece of text into a file or to the console if '$' is given.");
+				System.out.println("If the output file already existed, the text will be appended to it.");
+				System.out.println("Is affected by the option '" + Options.DEBUG.toString() + "' ("
+						+ Options.DEBUG.getId() + ") which forces it to write to the console.");
+				break;
+
+			}
 		} else if (LogicType.valid(c)) {
 			// Logic
 		} else if (ArithmeticType.valid(c)) {
