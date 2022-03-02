@@ -179,9 +179,28 @@ public class Main {
 				System.out.println("c(fil/fol, fil/fol)\tc(#from, #to)");
 				System.out.println();
 				System.out.println("Copies one file or folder to another file or folder.");
+				System.out.println("Returns '1' if successful, '0' otherwise.");
 				System.out.println("Is affected by the options '" + Options.OVERWRITE.toString() + "' ("
 						+ Options.OVERWRITE.getId() + ") and '" + Options.DEBUG.toString() + "' ("
 						+ Options.DEBUG.getId() + ").");
+				break;
+			case DELETE:
+				System.out.println("~ Delete ~");
+				System.out.println("Syntax:\tfx:");
+				System.out.println("d(fil/fol)\td(C:/ny mappe)");
+				System.out.println();
+				System.out.println("Deletes a given file or folder.");
+				System.out.println("Returns '1' if successful, '0' otherwise.");
+				System.out.println("Is affected by the option '" + Options.DEBUG.toString() + "' ("
+						+ Options.DEBUG.getId() + ").");
+				break;
+			case EXIT:
+				System.out.println("~ Exit ~");
+				System.out.println("Syntax:\tfx:");
+				System.out.println("x(num)\tx(0)");
+				System.out.println();
+				System.out.println("Ends the script prematurely, using the given number as the exit code.");
+				System.out.println("'0' should be used as the exit code for all normal exit call.");
 				break;
 			case EXTENSION:
 				System.out.println("~ Extension ~");
@@ -192,12 +211,35 @@ public class Main {
 				System.out.println(
 						"Also returns the initial '.' such that a code piece like 'p(#file) + n(#file) + e(#file)' gives the full path.");
 				break;
+			case GEN_MD5:
+				System.out.println("~ Generate MD5 ~");
+				System.out.println("Syntax:\tfx:");
+				System.out.println("g(num/txt/fil/spe)\t#md5=g(#file)");
+				System.out.println();
+				System.out.println(
+						"Generates and returns a text format version of an MD5 checksum from the given variable.");
+				break;
+			case IS_AVAILABLE:
+				System.out.println("~ Is Available ~");
+				System.out.println("Syntax:\tfx:");
+				System.out.println("v(fil/fol)\tv(#folder)");
+				System.out.println();
+				System.out.println("Returns '1' if the given file or folder exists, '0' otherwise.");
+				break;
+			case IS_FILE:
+				System.out.println("~ Is File ~");
+				System.out.println("Syntax:\tfx:");
+				System.out.println("f(fil/fol)\tf(#item)");
+				System.out.println();
+				System.out.println("Returns '1' if the given variable is a file, '0' otherwise.");
+				break;
 			case MOVE:
 				System.out.println("~ Move ~");
 				System.out.println("Syntax:\t\tfx:");
 				System.out.println("m(fil/fol, fil/fol)\tm(#from, #to)");
 				System.out.println();
 				System.out.println("Moves one file or folder to another file or folder.");
+				System.out.println("Returns '1' if successful, '0' otherwise.");
 				System.out.println("Is affected by the options '" + Options.OVERWRITE.toString() + "' ("
 						+ Options.OVERWRITE.getId() + ") and '" + Options.DEBUG.toString() + "' ("
 						+ Options.DEBUG.getId() + ").");
