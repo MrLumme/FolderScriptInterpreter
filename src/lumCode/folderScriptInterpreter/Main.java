@@ -233,6 +233,23 @@ public class Main {
 				System.out.println();
 				System.out.println("Returns '1' if the given variable is a file, '0' otherwise.");
 				break;
+			case LIST:
+				System.out.println("~ List ~");
+				System.out.println("Syntax:\tfx:");
+				System.out.println("l(fol/txt/num/arr,num/spe)\t#list=l(\"C:/folder\",0)");
+				System.out.println();
+				System.out.println("Returns a list from a given variable.");
+				System.out.println(
+						"For folders, it returns a list of contained files. Lists through the given amount of subdirectories down or all if '$' is given.");
+				System.out.println(
+						"For text, it returns a list of characters in a text. The second argument sets where to start (if the number is positive) or where to end (if the number is negative).");
+				System.out.println(
+						"For numbers, it returns a list of numbers between the two given values. If '$' is given, it acts as a '0'.");
+				System.out.println(
+						"For arrays, it returns a sorted list of items in the array. The second argument defines how to sort the list with '0' as size and type of item, '1' as alphanumeric on the value, and '-1' reverses the current sorting.");
+				System.out.println("Is affected by the options '" + Options.RETURN_FOLDERS.toString() + "' ("
+						+ Options.RETURN_FOLDERS.getId() + ").");
+				break;
 			case MOVE:
 				System.out.println("~ Move ~");
 				System.out.println("Syntax:\t\tfx:");
@@ -250,6 +267,17 @@ public class Main {
 				System.out.println("n(fil/fol)\t#name=n(#file)");
 				System.out.println();
 				System.out.println("Returns the name of the given file without its extension.");
+				break;
+			case OPTIONS:
+				System.out.println("~ Options ~");
+				System.out.println("Syntax:\tfx:");
+				System.out.println("o(num, boo)\to(0,1)");
+				System.out.println();
+				System.out.println("Set a given option by its id to either true ('1') or false ('0').");
+				System.out.println("Options:");
+				for (Options o : Options.values()) {
+					System.out.println(o.getId() + ": " + o.toString());
+				}
 				break;
 			case PARENT:
 				System.out.println("~ Parent ~");
@@ -276,6 +304,14 @@ public class Main {
 				System.out.println();
 				System.out.println("Returns the content of a given file.");
 				break;
+			case REPLACE:
+				System.out.println("~ Replace ~");
+				System.out.println("Syntax:\tfx:");
+				System.out.println("y(txt,txt,txt)\t#result=y(\"Hallo World!\",\"World\",\"User\")");
+				System.out.println();
+				System.out.println(
+						"Returns a copy of a given text where a given part is replace with another given part.");
+				break;
 			case SIZE:
 				System.out.println("~ Size ~");
 				System.out.println("Syntax:\tfx:");
@@ -296,6 +332,16 @@ public class Main {
 				System.out.println();
 				System.out.println("Puts the program to sleep for a given amount of milliseconds.");
 				break;
+			case SUBSTRING:
+				System.out.println("~ Substring ~");
+				System.out.println("Syntax:\tfx:");
+				System.out.println("u(txt,num,num)\t#sub=u(\"Text\",1,4)");
+				System.out.println();
+				System.out.println(
+						"Returns a substring of a given text from a given start (inclusive) to a given end (exclusive).");
+				System.out.println(
+						"Note that text starts at position '0' so the 'text' would be indexed as so: t = 0, e = 1, x = 2, t = 3");
+				break;
 			case WRITE:
 				System.out.println("~ Write ~");
 				System.out.println("Syntax:\tfx:");
@@ -310,8 +356,93 @@ public class Main {
 			}
 		} else if (LogicType.valid(c)) {
 			// Logic
+			switch (LogicType.fromChar(c)) {
+			case AND:
+				System.out.println("~ And ~");
+				System.out.println("Syntax:\tfx:");
+				System.out.println("&\t?(#count=30&#val=1){w(\"Ding!\",$)}");
+				System.out.println();
+				System.out.println("Returns true ('1') if both sides are true ('1'), otherwise returns false ('0').");
+				break;
+			case EQUAL:
+				System.out.println("~ Equal ~");
+				System.out.println("Syntax:\tfx:");
+				System.out.println("=\t?(#count=30){w(\"Ding!\",$)}");
+				System.out.println();
+				System.out.println(
+						"Returns true ('1') if the value of both sides are the same, otherwise returns false ('0').");
+				break;
+			case GREATER:
+				System.out.println("~ Greater Than ~");
+				System.out.println("Syntax:\tfx:");
+				System.out.println(">\t?(#count>30){w(\"Ding!\",$)}");
+				System.out.println();
+				System.out.println(
+						"Returns true ('1') if the value of the left side is greater than the right side, otherwise returns false ('0').");
+				break;
+			case LESS:
+				System.out.println("~ Less Than ~");
+				System.out.println("Syntax:\tfx:");
+				System.out.println("<\t?(#count<30){w(\"Ding!\",$)}");
+				System.out.println();
+				System.out.println(
+						"Returns true ('1') if the value of the left side is less than the right side, otherwise returns false ('0').");
+				break;
+			case NOT:
+				System.out.println("~ Not ~");
+				System.out.println("Syntax:\tfx:");
+				System.out.println("!\t?(#count!30){w(\"Ding!\",$)}");
+				System.out.println();
+				System.out.println(
+						"Returns true ('1') if the value of both sides are not the same, otherwise returns false ('0').");
+				break;
+			case OR:
+				System.out.println("~ Or ~");
+				System.out.println("Syntax:\tfx:");
+				System.out.println("|\t?(#count=30|#val=1){w(\"Ding!\",$)}");
+				System.out.println();
+				System.out.println("Returns true ('1') if either side are true ('1'), otherwise returns false ('0').");
+				break;
+			}
 		} else if (ArithmeticType.valid(c)) {
 			// Arithmetic
+			switch (ArithmeticType.fromChar(c)) {
+			case ADDITION:
+				System.out.println("~ Addition ~");
+				System.out.println("Syntax:\tfx:");
+				System.out.println("+\t#count=30+50");
+				System.out.println();
+				System.out.println("Returns the value of both sides added together.");
+				break;
+			case DIVISION:
+				System.out.println("~ Divison ~");
+				System.out.println("Syntax:\tfx:");
+				System.out.println("/\t#count=30/50");
+				System.out.println();
+				System.out.println("Returns the value of the left side divided by the right side.");
+				break;
+			case MODULO:
+				System.out.println("~ Modulo ~");
+				System.out.println("Syntax:\tfx:");
+				System.out.println("%\t#count=30%50");
+				System.out.println();
+				System.out.println("Returns the remainder of the left side divided by the right side.");
+				break;
+			case MULTIPLICATION:
+				System.out.println("~ Multiplication ~");
+				System.out.println("Syntax:\tfx:");
+				System.out.println("*\t#count=30*50");
+				System.out.println();
+				System.out.println("Returns the value of both sides multiplied together.");
+				break;
+			case SUBTRACTION:
+				System.out.println("~ Subtraction ~");
+				System.out.println("Syntax:\tfx:");
+				System.out.println("-\t#count=30-50");
+				System.out.println();
+				System.out.println("Returns the value of the right side subtracted from the left side.");
+				break;
+			}
 		}
 	}
 
