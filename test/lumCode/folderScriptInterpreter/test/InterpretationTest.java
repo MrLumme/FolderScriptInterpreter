@@ -28,10 +28,7 @@ public class InterpretationTest {
 		assertFalse(list.exists());
 
 		assertTrue(new File(tf8.getAbsolutePath() + "/script.fs").exists());
-
-		File file = new File(tf10.getAbsolutePath() + "/file.txt");
-		file.delete();
-		assertFalse(file.exists());
+		assertTrue(new File(tf10.getAbsolutePath() + "/script.fs").exists());
 
 		System.out.println();
 		System.out.println();
@@ -41,7 +38,7 @@ public class InterpretationTest {
 	void test01() throws InterpreterException {
 		// Test1 - Declare and print variable to screen
 		System.out.println("Test1");
-		Main.main(new String[] { "#var=45,w(#var,$)" });
+		Main.main(new String[] { "#var=45 w(#var,$)" });
 	}
 
 	@Test
@@ -58,14 +55,14 @@ public class InterpretationTest {
 	void test03() throws InterpreterException {
 		// Test3 - List an array of different variables
 		System.out.println("Test3");
-		Main.main(new String[] { "#var[0]=45,#var[1]=\"eeeeE\",#var[2]!1,i0(#var){w(i0+\"\n\",$)}" });
+		Main.main(new String[] { "#var[0]=45 #var[1]=\"eeeeE\" #var[2]!1 i0(#var){w(i0+\"\n\",$)}" });
 	}
 
 	@Test
 	void test04() throws InterpreterException {
 		// Test4 - Output numbers from 0 to 100 but break the loop after 5th output
 		System.out.println("Test4");
-		Main.main(new String[] { "i0(100){?(i0=5){b},w(i0+\", \",$)}" });
+		Main.main(new String[] { "i0(100){?(i0=5){b} w(i0+\", \",$)}" });
 	}
 
 	@Test
@@ -80,7 +77,7 @@ public class InterpretationTest {
 	void test06() throws InterpreterException {
 		// Test6 - Output numbers from 0 to 100 but also output ding just before 50
 		System.out.println("Test6");
-		Main.main(new String[] { "i0(100){?(i0=5=2+3){w(\"Ding! \",$)},w(i0+\", \",$)}" });
+		Main.main(new String[] { "i0(100){?(i0=5=2+3){w(\"Ding! \",$)} w(i0+\", \",$)}" });
 	}
 
 	@Test
@@ -107,11 +104,11 @@ public class InterpretationTest {
 
 	@Test
 	void test10() throws InterpreterException {
-		// Test10 - Help mode
+		// Test10 - None Comma Separation
 		System.out.println("Test10");
-		File file = new File(tf10.getAbsolutePath() + "/file.txt");
-		Main.main(new String[] { "w(\"This file is close to useless.\",a[0]),o(0,1),d(a[0])", file.getAbsolutePath() });
-		assertTrue(file.exists());
+		Main.main(new String[] { tf10.getAbsolutePath() + "/script.fs" });
+	}
+
 	}
 
 }

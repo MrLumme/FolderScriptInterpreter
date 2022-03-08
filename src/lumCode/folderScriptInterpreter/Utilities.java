@@ -9,13 +9,15 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
 import lumCode.folderScriptInterpreter.exceptions.ScriptErrorException;
 import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.DisallowedDataInArrayException;
 import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedVariableTypeException;
+import lumCode.folderScriptInterpreter.handlers.arithmetic.ArithmeticType;
+import lumCode.folderScriptInterpreter.handlers.command.CommandType;
+import lumCode.folderScriptInterpreter.handlers.logic.LogicType;
 import lumCode.folderScriptInterpreter.variables.ArrayVariable;
 import lumCode.folderScriptInterpreter.variables.FileVariable;
 import lumCode.folderScriptInterpreter.variables.FolderVariable;
@@ -219,11 +221,6 @@ public class Utilities {
 			throw new ScriptErrorException(script, "The script contains unfinished of array backets ('[', ']').");
 		}
 
-		if (Pattern.compile("}(?!([,})\\]])|($))").matcher(noText).find()) {
-			throw new ScriptErrorException(script,
-					"The script is missing separators (',') after an ending command bracket ('}').");
-		}
-
 		return rem;
 	}
 
@@ -257,6 +254,63 @@ public class Utilities {
 		out.add(cur);
 
 		return out;
+	}
+
+	public static List<String> commandSplitter(String script) throws ScriptErrorException {
+		ArrayList<String> out = new ArrayList<String>();
+
+		String cur = "";
+		boolean inText = false;
+		for (int i = 0; i < script.length(); i++) {
+			if (!inText && !cur.isEmpty()) {
+				if (i + 1 < script.length() && isCharFolderScriptOperator(script.charAt(i))
+						&& (script.charAt(i + 1) == BracketType.INPUT.begin
+								|| script.charAt(i + 1) == BracketType.COMMAND.begin)) {
+					out.add(cur);
+					cur = "";
+				} else if (script.charAt(i) == 'i') {
+					for (int j = i + 1; j < script.length(); j++) {
+						if (script.charAt(j) < 48 || script.charAt(j) > 57) {
+							if (script.charAt(j) == BracketType.INPUT.begin) {
+								out.add(cur);
+								cur = "";
+							}
+							break;
+						}
+					}
+				} else if (i > 0 && script.charAt(i) == '#' && !LogicType.valid(script.charAt(i - 1))
+						&& !ArithmeticType.valid(script.charAt(i - 1))) {
+					out.add(cur);
+					cur = "";
+				}
+			}
+			cur += script.charAt(i);
+
+			if (script.charAt(i) == '\"') {
+				inText = !inText;
+				if (!inText) {
+					out.add(cur);
+					cur = "";
+				}
+			} else if (!inText
+					&& (script.charAt(i) == BracketType.INPUT.begin || script.charAt(i) == BracketType.COMMAND.begin)) {
+				String br = extractBracket(script, i);
+				cur += br;
+				i += br.length();
+			}
+		}
+		out.add(cur);
+
+		return out;
+
+	}
+
+	public static boolean isCharFolderScriptOperator(char c) {
+		if (CommandType.valid(c) || ArithmeticType.valid(c) || LogicType.valid(c) || c == '?' || c == 'i' || c == 't'
+				|| c == 'b' || c == '#' || c == 'a') {
+			return true;
+		}
+		return false;
 	}
 
 	public static boolean charOutsideBrackets(String string, char c) {

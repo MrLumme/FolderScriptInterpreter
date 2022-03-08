@@ -30,7 +30,7 @@ import lumCode.folderScriptInterpreter.variables.VariableLookUp;
 public class ScriptBuilder {
 
 	public static List<Node> buildNodeTree(String script) throws InterpreterException {
-		List<String> sec = Utilities.charSplitter(script, ',');
+		List<String> sec = Utilities.commandSplitter(script);
 
 		ArrayList<Node> out = new ArrayList<Node>();
 
@@ -89,7 +89,6 @@ public class ScriptBuilder {
 			if (sub.contains("{") || sub.contains("}")) {
 				throw new ScriptErrorException(script, "Commands can not have action type brackets ('{', '}').");
 			}
-
 			return breakDownCommand(CommandType.fromChar(c), Utilities.charSplitter(inputs, ','));
 		} else if (c == '#') {
 			// Variable and Declaration logic
@@ -132,7 +131,7 @@ public class ScriptBuilder {
 				}
 				String iterant = Utilities.extractBracket(script, ip);
 				return breakDownIteration(n, iterant,
-						Utilities.charSplitter(Utilities.extractBracket(script, script.lastIndexOf('}')), ','));
+						Utilities.commandSplitter(Utilities.extractBracket(script, script.lastIndexOf('}'))));
 			} else {
 				return breakDownVariable(script);
 			}
@@ -144,7 +143,7 @@ public class ScriptBuilder {
 			if (script.charAt(1) != '{') {
 				throw new ScriptErrorException(script, "Test command 't' requires a command segment ('{' and '}').");
 			}
-			return breakDownTest(Utilities.charSplitter(Utilities.extractBracket(script, script.charAt(1)), ','));
+			return breakDownTest(Utilities.commandSplitter(Utilities.extractBracket(script, 1)));
 		} else if (c == '\"' && script.endsWith("\"")) {
 			// Text data logic
 			script = script.substring(1, script.length() - 1);
@@ -171,14 +170,14 @@ public class ScriptBuilder {
 			throw new BreakDownException(script, '?', "Conditional contains more than one else separator (':').");
 		}
 
-		List<String> splT = Utilities.charSplitter(spl.get(0), ',');
+		List<String> splT = Utilities.commandSplitter(spl.get(0));
 		List<Node> sct = new ArrayList<Node>();
 		for (String s : splT) {
 			sct.add(breakDownScript(s));
 		}
 
 		if (spl.size() > 1) {
-			List<String> splF = Utilities.charSplitter(spl.get(1), ',');
+			List<String> splF = Utilities.commandSplitter(spl.get(1));
 			List<Node> scf = new ArrayList<Node>();
 			for (String s : splF) {
 				scf.add(breakDownScript(s));
