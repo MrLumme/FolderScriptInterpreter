@@ -2,12 +2,12 @@ a[]		argument	a[0]
 #var	variable	#tal = 50 ^names can only contain alphanumeric characters and '_'^
 #var[]	array		#file[#numb] = "path"
 
-?(){:}	conditional	?(a[1] = ""){^do stuff^,^do other stuff^}
+?(){:}	conditional	?(a[1] = ""){^do stuff^:^do other stuff^}
 i0(){}	iterate		i2(a[0]){^do stuff^}
 b		break loop
-t{}		test		#bool = t{c(a[0], #file)}
+t{}		test		#bool = t{c(a[0], #file)} ^Returns '0' if an error occured, '1' otherwise^
 h		help		h c
-,		separator	^funtions as an input and command separator^
+,		separator	^funtions as an input separator^
 :		separator	^funtions as a true / false separator in conditionals^
 
 ^	^	comment		c(a[0], a[1]) ^m(a[0], a[1])^
@@ -52,7 +52,7 @@ q()		random		q(5) ^Gives either a random whole number between 0 and the input nu
 
 z()		sleep		z(1000) ^sleeps for 1 second^
 x()		exit		x(0)
-o(,)	options		o(0,1) ^Changes an option in the options table. 0 is debug mode, 1 is overwrite allowed, 2 list on folders return sub-folders instead of files, 3 restrict arrays to only one type of data^
+o(,)	options		o(0,1) ^Changes an option in the options table. 0 is debug mode, 1 is overwrite allowed, 2 list on folders return sub-folders instead of files, 3 restrict arrays to only one type of data, 4 routes all console writing to the log file^
 
 Available letters:
 jk
