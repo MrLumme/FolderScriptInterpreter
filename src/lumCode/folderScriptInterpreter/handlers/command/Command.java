@@ -486,7 +486,23 @@ public class Command implements ResultantNode {
 
 	private void writeCommand() throws UnsupportedCommandTypeException, CommandErrorException {
 		if (vars[1] instanceof SpecialVariable) {
-			System.out.println(vars[0].toString());
+			if (Main.getOption(Options.WRITE_TO_LOG)) {
+				try {
+					if (Main.logFile.exists()) {
+						Files.write(Paths.get(Main.logFile.getAbsolutePath()), vars[0].toString().getBytes(),
+								StandardOpenOption.APPEND);
+					} else {
+						Main.logFile.getParentFile().mkdirs();
+						Files.write(Paths.get(Main.logFile.getAbsolutePath()), vars[0].toString().getBytes(),
+								StandardOpenOption.CREATE);
+					}
+				} catch (IOException e) {
+					throw new CommandErrorException(
+							"Can not print to log \"" + ((FileVariable) vars[1]).getVar().getAbsolutePath() + "\".");
+				}
+			} else {
+				System.out.println(vars[0].toString());
+			}
 		} else if (vars[1] instanceof FileVariable) {
 			File f = ((FileVariable) vars[1]).getVar();
 			try {

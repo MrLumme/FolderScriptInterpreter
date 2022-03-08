@@ -32,6 +32,8 @@ public class Main {
 	public static final Map<Integer, Boolean> options = Options.constructMap();
 	public static final File tempDir = new File(
 			System.getProperty("java.io.tmpdir") + "FolderScript-" + UUID.randomUUID());
+	public static final File logFile = new File(
+			System.getProperty("java.io.tmpdir") + "FolderScript-" + System.currentTimeMillis() + ".log");
 
 	public static String script = "";
 
