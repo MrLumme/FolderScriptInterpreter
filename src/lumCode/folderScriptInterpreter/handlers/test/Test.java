@@ -3,12 +3,11 @@ package lumCode.folderScriptInterpreter.handlers.test;
 import java.util.List;
 
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
+import lumCode.folderScriptInterpreter.handlers.BooleanNode;
 import lumCode.folderScriptInterpreter.handlers.Node;
-import lumCode.folderScriptInterpreter.handlers.ResultantNode;
 import lumCode.folderScriptInterpreter.variables.NumberVariable;
-import lumCode.folderScriptInterpreter.variables.Variable;
 
-public class Test implements ResultantNode {
+public class Test implements BooleanNode {
 	private final List<Node> script;
 	private boolean result = false;
 
@@ -29,7 +28,7 @@ public class Test implements ResultantNode {
 	}
 
 	@Override
-	public Variable result() {
+	public NumberVariable result() {
 		return new NumberVariable(result ? 1 : 0);
 	}
 

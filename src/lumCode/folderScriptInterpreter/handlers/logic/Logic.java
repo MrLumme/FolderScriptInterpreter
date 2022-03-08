@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.exceptions.undefinedExceptions.UndefinedLogicException;
+import lumCode.folderScriptInterpreter.handlers.BooleanNode;
 import lumCode.folderScriptInterpreter.handlers.ResultantNode;
 import lumCode.folderScriptInterpreter.variables.FileVariable;
 import lumCode.folderScriptInterpreter.variables.FolderVariable;
@@ -12,7 +13,7 @@ import lumCode.folderScriptInterpreter.variables.TextVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 import lumCode.folderScriptInterpreter.variables.VariableType;
 
-public class Logic implements ResultantNode {
+public class Logic implements BooleanNode {
 	private final ResultantNode left, right;
 	private final LogicType type;
 
@@ -70,7 +71,7 @@ public class Logic implements ResultantNode {
 	}
 
 	@Override
-	public Variable result() {
+	public NumberVariable result() {
 		return new NumberVariable(result ? 1 : 0);
 	}
 

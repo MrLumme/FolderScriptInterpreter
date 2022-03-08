@@ -9,10 +9,12 @@ import lumCode.folderScriptInterpreter.exceptions.BreakDownException;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.exceptions.ScriptErrorException;
 import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.VariableNotFoundException;
+import lumCode.folderScriptInterpreter.handlers.BooleanNode;
 import lumCode.folderScriptInterpreter.handlers.Node;
 import lumCode.folderScriptInterpreter.handlers.ResultantNode;
 import lumCode.folderScriptInterpreter.handlers.arithmetic.Arithmetic;
 import lumCode.folderScriptInterpreter.handlers.arithmetic.ArithmeticType;
+import lumCode.folderScriptInterpreter.handlers.command.BooleanCommand;
 import lumCode.folderScriptInterpreter.handlers.command.Command;
 import lumCode.folderScriptInterpreter.handlers.command.CommandType;
 import lumCode.folderScriptInterpreter.handlers.conditional.Conditional;
@@ -159,7 +161,7 @@ public class ScriptBuilder {
 
 	private static Node breakDownConditional(String query, String script) throws InterpreterException {
 		Node node = breakDownScript(query);
-		if (!(node instanceof Logic)) {
+		if (!(node instanceof BooleanNode)) {
 			throw new ScriptErrorException(script,
 					"Syntax error; conditional ('?') must have an input capable of giving a boolean result (true / false).");
 		}
@@ -270,6 +272,9 @@ public class ScriptBuilder {
 		List<Node> ins = new ArrayList<Node>();
 		for (String input : inputs) {
 			ins.add(breakDownScript(input));
+		}
+		if (c.isBooleanOutput()) {
+			return new BooleanCommand(c, ins);
 		}
 		return new Command(c, ins);
 	}

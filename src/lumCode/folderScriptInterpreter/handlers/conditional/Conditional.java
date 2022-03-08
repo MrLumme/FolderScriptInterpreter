@@ -3,22 +3,21 @@ package lumCode.folderScriptInterpreter.handlers.conditional;
 import java.util.List;
 
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
+import lumCode.folderScriptInterpreter.handlers.BooleanNode;
 import lumCode.folderScriptInterpreter.handlers.Node;
-import lumCode.folderScriptInterpreter.handlers.logic.Logic;
-import lumCode.folderScriptInterpreter.variables.NumberVariable;
 
 public class Conditional implements Node {
-	private final Logic condition;
+	private final BooleanNode condition;
 	private final List<Node> scriptT;
 	private final List<Node> scriptF;
 
-	public Conditional(Logic condition, List<Node> script) {
+	public Conditional(BooleanNode condition, List<Node> script) {
 		this.condition = condition;
 		this.scriptT = script;
 		this.scriptF = null;
 	}
 
-	public Conditional(Logic condition, List<Node> scriptT, List<Node> scriptF) {
+	public Conditional(BooleanNode condition, List<Node> scriptT, List<Node> scriptF) {
 		this.condition = condition;
 		this.scriptT = scriptT;
 		this.scriptF = scriptF;
@@ -27,7 +26,7 @@ public class Conditional implements Node {
 	@Override
 	public void action() throws InterpreterException {
 		condition.action();
-		if (((NumberVariable) condition.result()).asBoolean()) {
+		if (condition.result().asBoolean()) {
 			for (Node n : scriptT) {
 				n.action();
 			}
@@ -38,7 +37,7 @@ public class Conditional implements Node {
 		}
 	}
 
-	public Logic getCondition() {
+	public BooleanNode getCondition() {
 		return condition;
 	}
 
