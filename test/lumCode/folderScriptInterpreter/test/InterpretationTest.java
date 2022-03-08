@@ -109,6 +109,11 @@ public class InterpretationTest {
 		Main.main(new String[] { tf10.getAbsolutePath() + "/script.fs" });
 	}
 
+	@Test
+	void test11() throws InterpreterException {
+		// Test11 - Test command result as conditional query
+		System.out.println("Test11");
+		Main.main(new String[] { "?(){w(\"OK\",$}" });
 	}
 
 }
