@@ -244,8 +244,8 @@ public class Utilities {
 
 			if (string.charAt(i) == '\"') {
 				inString = !inString;
-			} else if (!inString && (string.charAt(i) == BracketType.INPUT.begin
-					|| string.charAt(i) == BracketType.COMMAND.begin || string.charAt(i) == BracketType.ARRAY.begin)) {
+			} else if (!inString
+					&& (string.charAt(i) == BracketType.INPUT.begin || string.charAt(i) == BracketType.COMMAND.begin)) {
 				String br = extractBracket(string, i);
 				cur += br;
 				i += br.length();
