@@ -1,11 +1,10 @@
-package lumCode.folderScriptInterpreter.variables;
+package lumCode.folderScriptInterpreter.variables.lookUps;
 
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
-import lumCode.folderScriptInterpreter.handlers.ResultantNode;
+import lumCode.folderScriptInterpreter.variables.Variable;
 
-public class VariableLookUp implements ResultantNode {
+public class VariableLookUp extends LookUp {
 	private final String name;
-	private Variable res;
 
 	public VariableLookUp(String name) {
 		this.name = name;
@@ -13,12 +12,7 @@ public class VariableLookUp implements ResultantNode {
 
 	@Override
 	public void action() throws InterpreterException {
-		res = Variable.fetch(name);
-	}
-
-	@Override
-	public Variable result() {
-		return res;
+		setResult(Variable.fetch(name));
 	}
 
 	@Override

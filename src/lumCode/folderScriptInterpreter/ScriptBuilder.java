@@ -27,7 +27,7 @@ import lumCode.folderScriptInterpreter.handlers.logic.LogicType;
 import lumCode.folderScriptInterpreter.handlers.test.Test;
 import lumCode.folderScriptInterpreter.variables.NumberVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
-import lumCode.folderScriptInterpreter.variables.VariableLookUp;
+import lumCode.folderScriptInterpreter.variables.lookUps.VariableLookUp;
 
 public class ScriptBuilder {
 

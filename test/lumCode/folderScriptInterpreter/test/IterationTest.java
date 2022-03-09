@@ -23,7 +23,7 @@ import lumCode.folderScriptInterpreter.variables.FolderVariable;
 import lumCode.folderScriptInterpreter.variables.NumberVariable;
 import lumCode.folderScriptInterpreter.variables.SpecialVariable;
 import lumCode.folderScriptInterpreter.variables.TextVariable;
-import lumCode.folderScriptInterpreter.variables.VariableLookUp;
+import lumCode.folderScriptInterpreter.variables.lookUps.VariableLookUp;
 
 public class IterationTest {
 	private static final File fs = new File("resources/iterationTest/");
