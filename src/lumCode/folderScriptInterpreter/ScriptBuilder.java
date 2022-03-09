@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 import lumCode.folderScriptInterpreter.exceptions.BreakDownException;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.exceptions.ScriptErrorException;
-import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.VariableNotFoundException;
+import lumCode.folderScriptInterpreter.exceptions.notFoundExceptions.VariableNotFoundException;
 import lumCode.folderScriptInterpreter.handlers.BooleanNode;
 import lumCode.folderScriptInterpreter.handlers.Node;
 import lumCode.folderScriptInterpreter.handlers.ResultantNode;

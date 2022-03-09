@@ -4,9 +4,9 @@ import java.io.File;
 
 import lumCode.folderScriptInterpreter.Main;
 import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.ArrayPositionEmptyException;
-import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.ArgumentNotFoundException;
-import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.IteratorNotFoundException;
-import lumCode.folderScriptInterpreter.exceptions.nameNotFoundExceptions.VariableNotFoundException;
+import lumCode.folderScriptInterpreter.exceptions.notFoundExceptions.ArgumentNotFoundException;
+import lumCode.folderScriptInterpreter.exceptions.notFoundExceptions.IteratorNotFoundException;
+import lumCode.folderScriptInterpreter.exceptions.notFoundExceptions.VariableNotFoundException;
 import lumCode.folderScriptInterpreter.handlers.ResultantNode;
 
 public abstract class Variable implements ResultantNode {
