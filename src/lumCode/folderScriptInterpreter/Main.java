@@ -27,6 +27,7 @@ import lumCode.folderScriptInterpreter.handlers.command.CommandType;
 import lumCode.folderScriptInterpreter.handlers.logic.LogicType;
 import lumCode.folderScriptInterpreter.variables.ArrayVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
+import lumCode.folderScriptInterpreter.variables.lookUps.EnvironmentType;
 
 public class Main {
 	public static final Map<Integer, Boolean> options = Options.constructMap();
@@ -156,6 +157,16 @@ public class Main {
 			System.out.println("b\ti0(50){?(i0=20){b}}");
 			System.out.println();
 			System.out.println("Used to manuelly break out of an iteration.");
+		} else if (c == '.') {
+			// Break
+			System.out.println("~ Environment Variable ~");
+			System.out.println("Syntax:\tfx:");
+			System.out.println(".num\t#dir=.0 w(.4,$)");
+			System.out.println();
+			System.out.println("Returns an environment variable depending on the given id number, which are:");
+			for (EnvironmentType t : EnvironmentType.values()) {
+				System.out.println(t.getId() + ": " + t.toString());
+			}
 		} else if (c == 'h') {
 			// Help
 			System.out.println("~ Help ~");
