@@ -27,6 +27,8 @@ import lumCode.folderScriptInterpreter.handlers.logic.LogicType;
 import lumCode.folderScriptInterpreter.handlers.test.Test;
 import lumCode.folderScriptInterpreter.variables.NumberVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
+import lumCode.folderScriptInterpreter.variables.lookUps.EnvironmentLookUp;
+import lumCode.folderScriptInterpreter.variables.lookUps.EnvironmentType;
 import lumCode.folderScriptInterpreter.variables.lookUps.VariableLookUp;
 
 public class ScriptBuilder {
@@ -146,6 +148,13 @@ public class ScriptBuilder {
 				throw new ScriptErrorException(script, "Test command 't' requires a command segment ('{' and '}').");
 			}
 			return breakDownTest(Utilities.commandSplitter(Utilities.extractBracket(script, 1)));
+		} else if (c == '.') {
+			// environment logic
+			if (script.substring(1).matches("[0-9]{1,}")) {
+				return new EnvironmentLookUp(EnvironmentType.get(Integer.parseInt(script.substring(1))));
+			} else {
+				throw new ScriptErrorException(script, "Environment variable missing id.");
+			}
 		} else if (c == '\"' && script.endsWith("\"")) {
 			// Text data logic
 			script = script.substring(1, script.length() - 1);

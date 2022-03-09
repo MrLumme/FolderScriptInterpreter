@@ -2,7 +2,6 @@ package lumCode.folderScriptInterpreter.handlers.arithmetic;
 
 import java.io.File;
 
-import lumCode.folderScriptInterpreter.Main;
 import lumCode.folderScriptInterpreter.exceptions.ArithmeticErrorException;
 import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedArithmeticTypeException;
 import lumCode.folderScriptInterpreter.exceptions.undefinedExceptions.UndefinedArithmeticException;
@@ -101,25 +100,6 @@ public class FolderArithmeticHandler {
 				break;
 			case SUBTRACTION:
 				return new FolderVariable(new File(l.getAbsolutePath().replace(r.getName() + "\\", "")));
-			default:
-				throw new UnsupportedArithmeticTypeException(type);
-			}
-		} else if (right.type == VariableType.SPECIAL) {
-			switch (type) {
-			case ADDITION:
-				return new FolderVariable(new File(Main.tempDir.getAbsolutePath() + "\\" + l.getName()));
-			case DIVISION:
-				// Not defined
-				break;
-			case MODULO:
-				// Not defined
-				break;
-			case MULTIPLICATION:
-				// Not defined
-				break;
-			case SUBTRACTION:
-				// Not defined
-				break;
 			default:
 				throw new UnsupportedArithmeticTypeException(type);
 			}
