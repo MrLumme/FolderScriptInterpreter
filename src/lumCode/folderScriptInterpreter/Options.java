@@ -3,6 +3,8 @@ package lumCode.folderScriptInterpreter;
 import java.util.HashMap;
 import java.util.Map;
 
+import lumCode.folderScriptInterpreter.exceptions.notFoundExceptions.OptionNotFoundException;
+
 public enum Options {
 	DEBUG(0, false), OVERWRITE(1, false), RETURN_FOLDERS(2, false), STRICT_ARRAY_DATA(3, false), WRITE_TO_LOG(4, false);
 
@@ -31,13 +33,13 @@ public enum Options {
 		return false;
 	}
 
-	public static Options getOption(int id) {
+	public static Options get(int id) throws OptionNotFoundException {
 		for (Options o : values()) {
 			if (o.id == id) {
 				return o;
 			}
 		}
-		return null;
+		throw new OptionNotFoundException(id);
 	}
 
 	public int getId() {
