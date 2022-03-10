@@ -49,7 +49,7 @@ public class FolderArithmeticHandler {
 			String r = ((TextVariable) right).getVar();
 			switch (type) {
 			case ADDITION:
-				return new FolderVariable(new File(l.getParent() + "\\" + l.getName() + r));
+				return Variable.fromString(l.getParent() + "\\" + l.getName() + r);
 			case DIVISION:
 				// Not defined
 				break;

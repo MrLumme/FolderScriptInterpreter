@@ -8,7 +8,6 @@ import java.io.File;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import lumCode.folderScriptInterpreter.Main;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.handlers.arithmetic.Arithmetic;
 import lumCode.folderScriptInterpreter.handlers.arithmetic.ArithmeticType;
@@ -74,9 +73,6 @@ public class ArithmeticTest {
 		assertTrue(((FileVariable) f3.result()).getVar().getAbsolutePath().equals("C:\\temp\\docs\\dok1test TEXT.rtf"));
 		f4.action();
 		assertTrue(((FileVariable) f4.result()).getVar().getAbsolutePath().equals("C:\\temp\\docs\\dok114.rtf"));
-		f6.action();
-		assertTrue(((FileVariable) f6.result()).getVar().getAbsolutePath()
-				.equals(Main.tempDir.getAbsolutePath() + "\\dok1.rtf"));
 
 		boolean fr5 = false;
 		try {
@@ -86,6 +82,15 @@ public class ArithmeticTest {
 			// Do nothing
 		}
 		assertFalse(fr5);
+
+		boolean fr6 = false;
+		try {
+			f6.action();
+			fr6 = true;
+		} catch (InterpreterException e) {
+			// Do nothing
+		}
+		assertFalse(fr6);
 
 		// Folder
 		Arithmetic d1 = new Arithmetic(fol, ArithmeticType.ADDITION, fil);
@@ -103,9 +108,6 @@ public class ArithmeticTest {
 		assertTrue(((FolderVariable) d3.result()).getVar().getAbsolutePath().equals("C:\\temp\\codetest TEXT"));
 		d4.action();
 		assertTrue(((FolderVariable) d4.result()).getVar().getAbsolutePath().equals("C:\\temp\\code14"));
-		d6.action();
-		assertTrue(((FolderVariable) d6.result()).getVar().getAbsolutePath()
-				.equals(Main.tempDir.getAbsolutePath() + "\\code"));
 
 		boolean dr5 = false;
 		try {
@@ -115,6 +117,15 @@ public class ArithmeticTest {
 			// Do nothing
 		}
 		assertFalse(dr5);
+
+		boolean dr6 = false;
+		try {
+			d6.action();
+			dr6 = true;
+		} catch (InterpreterException e) {
+			// Do nothing
+		}
+		assertFalse(dr6);
 
 		// Text
 		Arithmetic t1 = new Arithmetic(txt, ArithmeticType.ADDITION, fil);
@@ -205,14 +216,26 @@ public class ArithmeticTest {
 		Arithmetic s5 = new Arithmetic(spe, ArithmeticType.ADDITION, arr);
 		Arithmetic s6 = new Arithmetic(spe, ArithmeticType.ADDITION, spe);
 
-		s1.action();
-		assertTrue(((FileVariable) s1.result()).getVar().getAbsolutePath()
-				.equals(Main.tempDir.getAbsolutePath() + "\\dok1.rtf"));
-		s2.action();
-		assertTrue(((FolderVariable) s2.result()).getVar().getAbsolutePath()
-				.equals(Main.tempDir.getAbsolutePath() + "\\code"));
 		s3.action();
 		assertTrue(((TextVariable) s3.result()).getVar().equals("$test TEXT"));
+
+		boolean sr1 = false;
+		try {
+			s1.action();
+			sr1 = true;
+		} catch (InterpreterException e) {
+			// Do nothing
+		}
+		assertFalse(sr1);
+
+		boolean sr2 = false;
+		try {
+			s2.action();
+			sr2 = true;
+		} catch (InterpreterException e) {
+			// Do nothing
+		}
+		assertFalse(sr2);
 
 		boolean sr4 = false;
 		try {
