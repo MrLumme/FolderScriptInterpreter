@@ -41,4 +41,9 @@ public class EnvironmentLookUp extends LookUp {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "." + type.getId();
+	}
+
 }
