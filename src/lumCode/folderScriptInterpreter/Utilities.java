@@ -17,6 +17,7 @@ import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.DisallowedData
 import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedVariableTypeException;
 import lumCode.folderScriptInterpreter.handlers.arithmetic.ArithmeticType;
 import lumCode.folderScriptInterpreter.handlers.command.CommandType;
+import lumCode.folderScriptInterpreter.handlers.declaring.DeclarationType;
 import lumCode.folderScriptInterpreter.handlers.logic.LogicType;
 import lumCode.folderScriptInterpreter.variables.ArrayVariable;
 import lumCode.folderScriptInterpreter.variables.FileVariable;
@@ -265,7 +266,9 @@ public class Utilities {
 			if (!inText && !cur.isEmpty()) {
 				if (i + 1 < script.length() && isCharFolderScriptOperator(script.charAt(i))
 						&& (script.charAt(i + 1) == BracketType.INPUT.begin
-								|| script.charAt(i + 1) == BracketType.COMMAND.begin)) {
+								|| script.charAt(i + 1) == BracketType.COMMAND.begin)
+						&& (i > 1 && (!LogicType.valid(script.charAt(i - 1))
+								&& !ArithmeticType.valid(script.charAt(i - 1))))) {
 					out.add(cur);
 					cur = "";
 				} else if (script.charAt(i) == 'i') {
@@ -341,9 +344,10 @@ public class Utilities {
 				String br = extractBracket(string, i);
 				i += br.length() + 1;
 			}
-
-			if (!inString && i > 0 && (string.charAt(i) == '+' || string.charAt(i) == '-' || string.charAt(i) == '/'
-					|| string.charAt(i) == '*' || string.charAt(i) == '%')) {
+			if (!inString && i > 0 && DeclarationType.valid(string.charAt(i))) {
+				return false;
+			} else if (!inString && i > 0 && (string.charAt(i) == '+' || string.charAt(i) == '-'
+					|| string.charAt(i) == '/' || string.charAt(i) == '*' || string.charAt(i) == '%')) {
 				return true;
 			}
 		}
