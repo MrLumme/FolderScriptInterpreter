@@ -46,7 +46,7 @@ w(,)	write		w("Text to add", a[0])
 r()		read		#text = r(a[0])
 g()		gen MD5		g(a[0])
 
-s()		size		s(l(a[0], $)) ^if you do of a number it will return the absolute value fx: size(-21) will return 21^
+s()		size		s(l(a[0], $)) ^if you do a number it will return the absolute value, fx: size(-21) will return 21^
 y(,,)	replace		#var = y(a[0], "name0", #newname)
 u(,,)	substring	u(#text, #from, #to)
 q()		random		q(5) ^Gives either a random whole number between 0 and the input number, a random item of a given array, a random file or folder in a given folder, or a random letter in a given piece of text^
@@ -58,9 +58,9 @@ o(,)	options		o(0,1) ^Changes an option in the options table. 0 is debug mode, 1
 Available letters:
 jk
 Available symbols:
-';.@
+';@
 Available ideas:
-Zipping and unzipping, execute external program with arguments (fx with @), custom methods (fx with .0, .1, .2 system)
+Zipping and unzipping, execute external program with arguments (fx with @), custom methods
 
 Example:
 i0(l(a[0],$)){?(n(i0)=a[1]){d(i0)}}
