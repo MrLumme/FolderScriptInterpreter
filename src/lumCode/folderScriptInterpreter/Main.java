@@ -249,9 +249,11 @@ public class Main {
 			case LIST:
 				System.out.println("~ List ~");
 				System.out.println("Syntax:\tfx:");
-				System.out.println("l(fol/txt/num/arr,num/spe)\t#list=l(\"C:/folder\",0)");
+				System.out.println("l(fil/fol/txt/num/arr,num/spe)\t#list=l(\"C:/folder\",0)");
 				System.out.println();
 				System.out.println("Returns a list from a given variable.");
+				System.out.println(
+						"For files, it returns a list of the full file path splitted. Lists through the given amount of subdirectories down or all if '$' is given.");
 				System.out.println(
 						"For folders, it returns a list of contained files. Lists through the given amount of subdirectories down or all if '$' is given.");
 				System.out.println(
