@@ -175,7 +175,7 @@ public class Utilities {
 		String noText = "";
 		boolean inString = false;
 		for (int i = 0; i < rem.length(); i++) {
-			if (rem.charAt(i) == '\"') {
+			if (rem.charAt(i) == '\"' && (i < 1 || rem.charAt(i - 1) != '\\')) {
 				inString = !inString;
 			} else if (!inString) {
 				if (rem.charAt(i) == ' ' || rem.charAt(i) == '\n' || rem.charAt(i) == '\t' || rem.charAt(i) == '\r'
@@ -243,7 +243,7 @@ public class Utilities {
 
 			cur += string.charAt(i);
 
-			if (string.charAt(i) == '\"') {
+			if (string.charAt(i) == '\"' && (i < 1 || string.charAt(i - 1) != '\\')) {
 				inString = !inString;
 			} else if (!inString
 					&& (string.charAt(i) == BracketType.INPUT.begin || string.charAt(i) == BracketType.COMMAND.begin)) {
@@ -255,6 +255,12 @@ public class Utilities {
 		out.add(cur);
 
 		return out;
+	}
+
+	public static String collapseEscapeCharacters(String var) {
+		var = var.replace("\\{", "{").replace("\\}", "}").replace("\\t", "\t").replace("\\r", "\r").replace("\\n", "\n")
+				.replace("\\f", "\f").replace("\\\"", "\"").replace("\\'", "'").replace("\\\\", "\\");
+		return var;
 	}
 
 	public static List<String> commandSplitter(String script) throws ScriptErrorException {
@@ -289,7 +295,7 @@ public class Utilities {
 			}
 			cur += script.charAt(i);
 
-			if (script.charAt(i) == '\"') {
+			if (script.charAt(i) == '\"' && (i < 1 || script.charAt(i - 1) != '\\')) {
 				inText = !inText;
 				if (!inText) {
 					out.add(cur);
@@ -308,7 +314,7 @@ public class Utilities {
 
 	}
 
-	public static boolean isCharFolderScriptOperator(char c) {
+	private static boolean isCharFolderScriptOperator(char c) {
 		if (CommandType.valid(c) || ArithmeticType.valid(c) || LogicType.valid(c) || c == '?' || c == 'i' || c == 't'
 				|| c == 'b' || c == '#' || c == 'a') {
 			return true;
@@ -319,7 +325,7 @@ public class Utilities {
 	public static boolean charOutsideBrackets(String string, char c) {
 		boolean inString = false;
 		for (int i = 0; i < string.length(); i++) {
-			if (string.charAt(i) == '\"') {
+			if (string.charAt(i) == '\"' && (i < 1 || string.charAt(i - 1) != '\\')) {
 				inString = !inString;
 			} else if (!inString && (string.charAt(i) == BracketType.INPUT.begin
 					|| string.charAt(i) == BracketType.COMMAND.begin || string.charAt(i) == BracketType.ARRAY.begin)) {
@@ -337,7 +343,7 @@ public class Utilities {
 	public static boolean isArithmeticExpression(String string) {
 		boolean inString = false;
 		for (int i = 0; i < string.length(); i++) {
-			if (string.charAt(i) == '\"') {
+			if (string.charAt(i) == '\"' && (i < 1 || string.charAt(i - 1) != '\\')) {
 				inString = !inString;
 			} else if (!inString && (string.charAt(i) == BracketType.INPUT.begin
 					|| string.charAt(i) == BracketType.COMMAND.begin || string.charAt(i) == BracketType.ARRAY.begin)) {
@@ -360,7 +366,7 @@ public class Utilities {
 			return false;
 		}
 		for (int i = 0; i < string.length(); i++) {
-			if (string.charAt(i) == '\"') {
+			if (string.charAt(i) == '\"' && (i < 1 || string.charAt(i - 1) != '\\')) {
 				inString = !inString;
 			} else if (!inString && (string.charAt(i) == BracketType.INPUT.begin
 					|| string.charAt(i) == BracketType.COMMAND.begin || string.charAt(i) == BracketType.ARRAY.begin)) {

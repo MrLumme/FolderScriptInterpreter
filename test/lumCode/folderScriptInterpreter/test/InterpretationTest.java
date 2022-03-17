@@ -111,9 +111,10 @@ public class InterpretationTest {
 
 	@Test
 	void test11() throws InterpreterException {
-		// Test11 - Test command result as conditional query
+		// Test11 - Escape Character Test
 		System.out.println("Test11");
-		Main.main(new String[] { "?(){w(\"OK\",$}" });
+		Main.main(new String[] {
+				"w(\"\\{This\\} \\'script\\'\\ncontains\\r\\\"all\\\" the\\tescape \\ characters!\",$)" });
 	}
 
 }

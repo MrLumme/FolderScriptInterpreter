@@ -3,6 +3,7 @@ package lumCode.folderScriptInterpreter.variables;
 import java.io.File;
 
 import lumCode.folderScriptInterpreter.Main;
+import lumCode.folderScriptInterpreter.Utilities;
 import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.ArrayPositionEmptyException;
 import lumCode.folderScriptInterpreter.exceptions.notFoundExceptions.ArgumentNotFoundException;
 import lumCode.folderScriptInterpreter.exceptions.notFoundExceptions.IteratorNotFoundException;
@@ -28,7 +29,7 @@ public abstract class Variable implements ResultantNode {
 		} else if (var.equals("$")) {
 			return SpecialVariable.getInstance();
 		} else {
-			TextVariable s = new TextVariable(var);
+			TextVariable s = new TextVariable(Utilities.collapseEscapeCharacters(var));
 			if (var.startsWith("{") && var.endsWith("}")) {
 				s.setRegex(true);
 			}

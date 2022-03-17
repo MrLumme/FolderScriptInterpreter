@@ -28,7 +28,7 @@ h		help		h c
 0		0 or false
 1		1 or true
 $		special
-"	"	mark as text
+"	"	mark as text	^Escape characters: tab (\t), return (\r, \n), command bracket (\{, \}), quotation mark (\"), apostrophe (\'), backslash (\\)^
 "{ }"	mark as regex
 .0		environment	#path=.0 ^Returns environment variables. 0: current execution directory, 1: temp folder location, 2: log file location, 3: system time, 4: date time^
 
