@@ -193,9 +193,9 @@ public class ScriptBuilder {
 			for (String s : splF) {
 				scf.add(breakDownScript(s));
 			}
-			return new Conditional((Logic) node, sct, scf);
+			return new Conditional((BooleanNode) node, sct, scf);
 		} else {
-			return new Conditional((Logic) node, sct);
+			return new Conditional((BooleanNode) node, sct);
 		}
 	}
 
