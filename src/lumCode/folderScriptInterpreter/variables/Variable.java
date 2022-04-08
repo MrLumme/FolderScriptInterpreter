@@ -20,7 +20,7 @@ public abstract class Variable implements ResultantNode {
 	public static Variable fromString(String var) {
 		if (var.matches("^-{0,1}[0-9]{1,}$")) {
 			return new NumberVariable(Long.parseLong(var));
-		} else if (var.matches("^[A-Za-z]{1}:(\\\\|\\/).{1,}")) {
+		} else if (var.matches("^[A-Za-z]{1}:(\\\\|\\/).{1,}") || var.matches("^\\\\.{1,}")) {
 			if (var.contains(".")) {
 				return new FileVariable(new File(var));
 			} else {
