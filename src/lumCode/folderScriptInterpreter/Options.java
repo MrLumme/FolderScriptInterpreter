@@ -6,14 +6,14 @@ import java.util.Map;
 import lumCode.folderScriptInterpreter.exceptions.notFoundExceptions.OptionNotFoundException;
 
 public enum Options {
-	DEBUG(0, false), OVERWRITE(1, false), RETURN_FOLDERS(2, false), STRICT_ARRAY_DATA(3, false), WRITE_TO_LOG(4, false);
+	DEBUG(0), OVERWRITE(1), RETURN_FOLDERS(2), STRICT_ARRAY_DATA(3), WRITE_TO_LOG(4), IMPORT_VARIABLES(5);
 
 	private int id;
 	private boolean def;
 
-	private Options(int id, boolean def) {
+	private Options(int id) {
 		this.id = id;
-		this.def = def;
+		this.def = false;
 	}
 
 	public static Map<Integer, Boolean> constructMap() {
