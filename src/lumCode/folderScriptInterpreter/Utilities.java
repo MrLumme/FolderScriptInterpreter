@@ -450,4 +450,41 @@ public class Utilities {
 		}
 		return null;
 	}
+
+	public static List<String> cleanArguments(Variable var) {
+		ArrayList<String> out = new ArrayList<String>();
+
+		switch (var.type) {
+		case ARRAY:
+			for (Variable v : ((ArrayVariable) var).getAll().values()) {
+				out.addAll(cleanArguments(v));
+			}
+			break;
+		case FILE:
+		case FOLDER:
+		case NUMBER:
+		case SPECIAL:
+			out.add(var.toString());
+			break;
+		default:
+		case TEXT:
+			String str = var.toString();
+			String cur = "";
+			boolean inString = false;
+			for (int i = 0; i < str.length(); i++) {
+				if (!inString && str.charAt(i) == ' ') {
+					out.add(cur);
+					cur = "";
+				}
+				cur += str.charAt(i);
+				if (str.charAt(i) == '\"' && (i < 1 || str.charAt(i - 1) != '\\')) {
+					inString = !inString;
+				}
+			}
+			out.add(cur);
+			break;
+		}
+
+		return out;
+	}
 }

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
@@ -36,6 +37,7 @@ public class Main {
 	public static final File logFile = new File(
 			System.getProperty("java.io.tmpdir") + "FolderScript-" + System.currentTimeMillis() + ".log");
 
+	public static UUID key = null;
 	public static String script = "";
 
 	public static final HashMap<Integer, Variable> a = new HashMap<Integer, Variable>();
@@ -63,7 +65,11 @@ public class Main {
 		} else {
 
 			for (int i = 1; i < args.length; i++) {
-				a.put(i - 1, Variable.fromString(args[i]));
+				if (args[i].equals("-key") && args.length > i && key == null) {
+					key = UUID.fromString(args[i + 1]);
+				} else {
+					a.put(i - (key == null ? 1 : 3), Variable.fromString(args[i]));
+				}
 			}
 
 			if (new File(args[0]).exists()) {
@@ -84,6 +90,14 @@ public class Main {
 			// Execute program
 			for (Node n : nodes) {
 				n.action();
+			}
+
+			if (key != null) {
+				System.out.println("KEY:" + key.toString());
+				for (Entry<String, Variable> var : v.entrySet()) {
+					System.out.println("NAME:" + var.getKey() + "\tTYPE:" + var.getValue().type.name() + "\tVALUE:"
+							+ var.getValue().toString());
+				}
 			}
 
 			// Delete temp folder

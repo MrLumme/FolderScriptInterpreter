@@ -5,11 +5,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 
@@ -614,6 +617,36 @@ public class Command implements ResultantNode {
 			Main.options.put((int) ((NumberVariable) vars[0]).getVar(), ((NumberVariable) vars[1]).asBoolean());
 		} else {
 			throw new OptionNotFoundException((int) ((NumberVariable) vars[0]).getVar());
+		}
+	}
+
+	private void externalCommand() throws CommandErrorException {
+		ArrayList<String> args = new ArrayList<String>();
+		args.add(((FileVariable) vars[0]).getVar().getAbsolutePath());
+
+		args.addAll(Utilities.cleanArguments(vars[1]));
+
+		if (Main.getOption(Options.IMPORT_VARIABLES)) {
+			args.add("-key");
+			args.add(UUID.randomUUID().toString());
+		}
+
+		ProcessBuilder pb = new ProcessBuilder(args);
+		pb.redirectOutput(Redirect.PIPE);
+		try {
+			Process p = pb.start();
+			while (p.isAlive()) {
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					// Do nothing
+				}
+			}
+//			while (p.getInputStream()) {
+//				
+//			}
+		} catch (IOException e) {
+			throw new CommandErrorException("Command 'k' failed with the following message: " + e.getMessage());
 		}
 	}
 
