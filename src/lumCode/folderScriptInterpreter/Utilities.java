@@ -287,6 +287,9 @@ public class Utilities {
 							break;
 						}
 					}
+				} else if (script.charAt(i) == 'b') {
+					out.add(cur);
+					cur = "";
 				} else if (i > 0 && script.charAt(i) == '#' && !LogicType.valid(script.charAt(i - 1))
 						&& !ArithmeticType.valid(script.charAt(i - 1))) {
 					out.add(cur);
