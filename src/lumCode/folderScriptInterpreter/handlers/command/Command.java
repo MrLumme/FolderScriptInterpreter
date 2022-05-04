@@ -199,18 +199,18 @@ public class Command implements ResultantNode {
 				+ vars[0].type.name().toLowerCase() + "'.");
 	}
 
-	private Variable readCommand() throws CommandErrorException {
+	private Variable readCommand() throws CommandErrorException, DisallowedDataInArrayException {
 		File f = ((FileVariable) vars[0]).getVar();
+		ArrayVariable o = new ArrayVariable();
 		try {
 			BufferedReader r = new BufferedReader(new FileReader(f));
-			String o = "";
 			String l = r.readLine();
 			while (l != null) {
-				o += l;
+				o.setNextVar(Variable.fromString(l));
 				l = r.readLine();
 			}
 			r.close();
-			return new TextVariable(o);
+			return o;
 		} catch (FileNotFoundException e) {
 			throw new CommandErrorException("File '" + f.getAbsolutePath() + "' could not be found.");
 		} catch (IOException e) {
