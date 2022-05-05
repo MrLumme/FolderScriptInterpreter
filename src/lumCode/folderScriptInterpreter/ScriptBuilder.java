@@ -97,7 +97,7 @@ public class ScriptBuilder {
 			return breakDownCommand(CommandType.fromChar(c), Utilities.charSplitter(inputs, ','));
 		} else if (c == '#') {
 			// Variable and Declaration logic
-			Pattern p = Pattern.compile("^#[A-Za-z0-9_]{1,}(?=(\\[[0-9]{1,}\\]){0,1})");
+			Pattern p = Pattern.compile("^#[A-Za-z0-9_]{1,}(?=(\\[([0-9]{1,}|#[A-Za-z0-9_]{1,})\\]){0,1})");
 			Matcher m = p.matcher(script);
 			String name;
 			if (m.find()) {

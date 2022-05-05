@@ -296,6 +296,7 @@ public class Utilities {
 					cur = "";
 				}
 			}
+
 			cur += script.charAt(i);
 
 			if (script.charAt(i) == '\"' && (i < 1 || script.charAt(i - 1) != '\\')) {
@@ -304,8 +305,8 @@ public class Utilities {
 					out.add(cur);
 					cur = "";
 				}
-			} else if (!inText
-					&& (script.charAt(i) == BracketType.INPUT.begin || script.charAt(i) == BracketType.COMMAND.begin)) {
+			} else if (!inText && (script.charAt(i) == BracketType.INPUT.begin
+					|| script.charAt(i) == BracketType.COMMAND.begin || script.charAt(i) == BracketType.ARRAY.begin)) {
 				String br = extractBracket(script, i);
 				cur += br;
 				i += br.length();
