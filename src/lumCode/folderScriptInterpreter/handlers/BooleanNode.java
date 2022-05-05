@@ -1,9 +1,9 @@
 package lumCode.folderScriptInterpreter.handlers;
 
-import lumCode.folderScriptInterpreter.variables.NumberVariable;
+import lumCode.folderScriptInterpreter.variables.BooleanVariable;
 
-public interface BooleanNode extends ResultantNode {
+public interface BooleanNode extends NumberNode {
 
 	@Override
-	public NumberVariable result();
+	public BooleanVariable result();
 }

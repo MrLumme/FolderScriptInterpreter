@@ -6,6 +6,7 @@ import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.exceptions.undefinedExceptions.UndefinedLogicException;
 import lumCode.folderScriptInterpreter.handlers.BooleanNode;
 import lumCode.folderScriptInterpreter.handlers.ResultantNode;
+import lumCode.folderScriptInterpreter.variables.BooleanVariable;
 import lumCode.folderScriptInterpreter.variables.FileVariable;
 import lumCode.folderScriptInterpreter.variables.FolderVariable;
 import lumCode.folderScriptInterpreter.variables.NumberVariable;
@@ -34,7 +35,17 @@ public class Logic implements BooleanNode {
 
 		boolean found = false;
 		if (l.type == VariableType.NUMBER) {
-			if (r.type == VariableType.NUMBER) {
+			if (r.type == VariableType.NUMBER || r.type == VariableType.BOOLEAN) {
+				result = NumberLogicHandler.Interpret(((NumberVariable) l).getVar(), type,
+						((NumberVariable) r).getVar());
+				found = true;
+			}
+		} else if (l.type == VariableType.BOOLEAN) {
+			if (r.type == VariableType.BOOLEAN) {
+				result = BooleanLogicHandler.Interpret(((BooleanVariable) l).asBoolean(), type,
+						((BooleanVariable) r).asBoolean());
+				found = true;
+			} else if (r.type == VariableType.NUMBER) {
 				result = NumberLogicHandler.Interpret(((NumberVariable) l).getVar(), type,
 						((NumberVariable) r).getVar());
 				found = true;
@@ -71,8 +82,8 @@ public class Logic implements BooleanNode {
 	}
 
 	@Override
-	public NumberVariable result() {
-		return new NumberVariable(result ? 1 : 0);
+	public BooleanVariable result() {
+		return new BooleanVariable(result);
 	}
 
 	@Override

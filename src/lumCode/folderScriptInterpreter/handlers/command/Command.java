@@ -39,6 +39,7 @@ import lumCode.folderScriptInterpreter.handlers.arithmetic.ArithmeticType;
 import lumCode.folderScriptInterpreter.handlers.arithmetic.FileArithmeticHandler;
 import lumCode.folderScriptInterpreter.handlers.arithmetic.FolderArithmeticHandler;
 import lumCode.folderScriptInterpreter.variables.ArrayVariable;
+import lumCode.folderScriptInterpreter.variables.BooleanVariable;
 import lumCode.folderScriptInterpreter.variables.FileVariable;
 import lumCode.folderScriptInterpreter.variables.FolderVariable;
 import lumCode.folderScriptInterpreter.variables.NumberVariable;
@@ -114,8 +115,16 @@ public class Command implements ResultantNode {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 0 && (type == CommandType.SUBSTRING)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
-				} else if (i == 1 && (type == CommandType.WRITE
-						|| (!((NumberVariable) vars[i]).isBoolean() && type == CommandType.OPTIONS))) {
+				} else if (i == 1 && (type == CommandType.WRITE)) {
+					throw new IncorrectParameterTypeException(type, vars[i]);
+				}
+			} else if (vars[i].type == VariableType.BOOLEAN) {
+				if (type == CommandType.NAME || type == CommandType.EXTENSION || type == CommandType.PARENT
+						|| type == CommandType.IS_FILE || type == CommandType.IS_AVAILABLE || type == CommandType.COPY
+						|| type == CommandType.MOVE || type == CommandType.DELETE || type == CommandType.READ
+						|| type == CommandType.REPLACE || type == CommandType.SUBSTRING) {
+					throw new IncorrectParameterTypeException(type, vars[i]);
+				} else if (i == 1 && (type == CommandType.WRITE)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
 			} else if (vars[i].type == VariableType.ARRAY) {
@@ -614,7 +623,7 @@ public class Command implements ResultantNode {
 
 	private void optionsCommand() throws LogicConversionException, OptionNotFoundException {
 		if (Options.isValid((int) ((NumberVariable) vars[0]).getVar())) {
-			Main.options.put((int) ((NumberVariable) vars[0]).getVar(), ((NumberVariable) vars[1]).asBoolean());
+			Main.options.put((int) ((NumberVariable) vars[0]).getVar(), ((BooleanVariable) vars[1]).asBoolean());
 		} else {
 			throw new OptionNotFoundException((int) ((NumberVariable) vars[0]).getVar());
 		}

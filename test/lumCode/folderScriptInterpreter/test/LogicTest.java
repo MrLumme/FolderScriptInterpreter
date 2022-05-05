@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.handlers.logic.Logic;
 import lumCode.folderScriptInterpreter.handlers.logic.LogicType;
+import lumCode.folderScriptInterpreter.variables.BooleanVariable;
 import lumCode.folderScriptInterpreter.variables.NumberVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 
@@ -17,13 +18,13 @@ class LogicTest {
 	void logicTest() throws InterpreterException {
 		Logic l = new Logic(Variable.fromString("15"), LogicType.GREATER, Variable.fromString("12"));
 		l.action();
-		assertTrue(((NumberVariable) l.result()).asBoolean());
+		assertTrue(((BooleanVariable) l.result()).asBoolean());
 		Logic l2 = new Logic(Variable.fromString("String"), LogicType.EQUAL, Variable.fromString("String"));
 		l2.action();
-		assertTrue(((NumberVariable) l2.result()).asBoolean());
+		assertTrue(((BooleanVariable) l2.result()).asBoolean());
 		Logic l3 = new Logic(Variable.fromString("String"), LogicType.EQUAL, Variable.fromString("Type"));
 		l3.action();
-		assertFalse(((NumberVariable) l3.result()).asBoolean());
+		assertFalse(((BooleanVariable) l3.result()).asBoolean());
 		Logic l4 = new Logic(Variable.fromString("1"), LogicType.AND, Variable.fromString("0"));
 		l4.action();
 		assertTrue(((NumberVariable) l4.result()).getVar() == 0);

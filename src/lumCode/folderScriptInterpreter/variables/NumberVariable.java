@@ -23,24 +23,6 @@ public class NumberVariable extends Variable implements NumberNode {
 		return "" + var;
 	}
 
-	public boolean asBoolean() throws LogicConversionException {
-		if (var == 0) {
-			return false;
-		} else if (var == 1) {
-			return true;
-		}
-		throw new LogicConversionException(var);
-	}
-
-	public boolean isBoolean() {
-		try {
-			asBoolean();
-			return true;
-		} catch (LogicConversionException e) {
-			return false;
-		}
-	}
-
 	@Override
 	public NumberVariable copy() {
 		return new NumberVariable(var);
