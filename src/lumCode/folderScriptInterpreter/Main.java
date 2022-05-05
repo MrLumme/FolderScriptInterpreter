@@ -27,6 +27,7 @@ import lumCode.folderScriptInterpreter.handlers.arithmetic.ArithmeticType;
 import lumCode.folderScriptInterpreter.handlers.command.CommandType;
 import lumCode.folderScriptInterpreter.handlers.logic.LogicType;
 import lumCode.folderScriptInterpreter.variables.ArrayVariable;
+import lumCode.folderScriptInterpreter.variables.NumberVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 import lumCode.folderScriptInterpreter.variables.lookUps.EnvironmentType;
 
@@ -509,23 +510,21 @@ public class Main {
 		throw new IteratorNotFoundException(n);
 	}
 
-	public static void setVariable(String name, Variable value)
+	public static void setVariable(String name, Variable value) {
+		v.put(name, value);
+	}
+
+	public static void setVariable(String name, NumberVariable number, Variable value)
 			throws NotArrayException, DisallowedDataInArrayException {
-		if (name.contains("[")) {
-			int number = Integer.parseInt(name.substring(name.indexOf('[') + 1, name.indexOf(']')));
-			name = name.substring(0, name.indexOf('['));
-			Variable arr = v.get(name);
-			if (arr != null && !(arr instanceof ArrayVariable)) {
-				throw new NotArrayException(name);
-			}
-			if (arr == null) {
-				arr = new ArrayVariable();
-				v.put(name, arr);
-			}
-			((ArrayVariable) arr).setVar(number, value);
-		} else {
-			v.put(name, value);
+		Variable arr = v.get(name);
+		if (arr != null && !(arr instanceof ArrayVariable)) {
+			throw new NotArrayException(name);
 		}
+		if (arr == null) {
+			arr = new ArrayVariable();
+			v.put(name, arr);
+		}
+		((ArrayVariable) arr).setVar((int) number.getVar(), value);
 	}
 
 	public static boolean getOption(Options option) {

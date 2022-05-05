@@ -11,6 +11,7 @@ import lumCode.folderScriptInterpreter.exceptions.ScriptErrorException;
 import lumCode.folderScriptInterpreter.exceptions.notFoundExceptions.VariableNotFoundException;
 import lumCode.folderScriptInterpreter.handlers.BooleanNode;
 import lumCode.folderScriptInterpreter.handlers.Node;
+import lumCode.folderScriptInterpreter.handlers.NumberNode;
 import lumCode.folderScriptInterpreter.handlers.ResultantNode;
 import lumCode.folderScriptInterpreter.handlers.arithmetic.Arithmetic;
 import lumCode.folderScriptInterpreter.handlers.arithmetic.ArithmeticType;
@@ -258,22 +259,21 @@ public class ScriptBuilder {
 
 	private static Declaration breakDownDeclaration(String name, DeclarationType d, String script)
 			throws InterpreterException {
-		String res = script;
-
-		Variable value = null;
-		if (res.matches("([0-9]{1,}|\\$|\".{0,}\")")) {
-			if (res.startsWith("\"")) {
-				res = res.substring(1, res.length() - 1);
-			}
-			value = Variable.fromString(res);
-			return new Declaration(name, d, value);
-		} else {
-			Node node = breakDownScript(res);
-			if (!(node instanceof ResultantNode)) {
+		Node node = breakDownScript(script);
+		if (!(node instanceof ResultantNode)) {
+			throw new ScriptErrorException(script.toString(),
+					"Syntax error; declaration does not receive a resultant value.");
+		}
+		if (name.contains("[")) {
+			Node num = breakDownScript(Utilities.extractBracket(name, name.indexOf("[")));
+			if (!(num instanceof NumberNode)) {
 				throw new ScriptErrorException(script.toString(),
-						"Syntax error; declaration does not receive a resultant value.");
+						"Syntax error; array does not receive a number value.");
 			}
-			return new Declaration(name, d, node);
+			name = name.substring(0, name.indexOf("["));
+			return new Declaration(name, (NumberNode) num, d, (ResultantNode) node);
+		} else {
+			return new Declaration(name, d, (ResultantNode) node);
 		}
 	}
 
