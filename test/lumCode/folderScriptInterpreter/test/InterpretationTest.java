@@ -38,7 +38,7 @@ public class InterpretationTest {
 	void test01() throws InterpreterException {
 		// Test1 - Declare and print variable to screen
 		System.out.println("Test1");
-		Main.main(new String[] { "#var=45 w(#var,$)" });
+		Main.main(new String[] { "#var=45w(#var,$)" });
 	}
 
 	@Test
@@ -116,5 +116,19 @@ public class InterpretationTest {
 		Main.main(new String[] {
 				"w(\"\\{This\\} \\'script\\'\\ncontains\\r\\\"all\\\" the\\tescape \\ characters!\",$)" });
 	}
+
+	@Test
+	void test12() throws InterpreterException {
+		// Test12 - Array set with variable
+		System.out.println("Test12");
+		Main.main(new String[] { "#num=5#array[#num]=\"Tjek\"w(\"num:\"+#array[#num])" });
+	}
+
+//	@Test
+//	void test11() throws InterpreterException {
+//		// Test11 - Test command result as conditional query
+//		System.out.println("Test11");
+//		Main.main(new String[] { "?(){w(\"OK\",$}" });
+//	}
 
 }
