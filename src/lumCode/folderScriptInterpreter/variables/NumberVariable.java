@@ -1,8 +1,8 @@
 package lumCode.folderScriptInterpreter.variables;
 
-import lumCode.folderScriptInterpreter.exceptions.LogicConversionException;
+import lumCode.folderScriptInterpreter.handlers.NumberNode;
 
-public class NumberVariable extends Variable {
+public class NumberVariable extends Variable implements NumberNode {
 	private long var;
 
 	public NumberVariable(long var) {
@@ -44,5 +44,10 @@ public class NumberVariable extends Variable {
 	@Override
 	public NumberVariable copy() {
 		return new NumberVariable(var);
+	}
+
+	@Override
+	public NumberVariable result() {
+		return this;
 	}
 }
