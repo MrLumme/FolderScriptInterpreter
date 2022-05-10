@@ -56,21 +56,12 @@ public abstract class Variable implements ResultantNode {
 
 	public static boolean exists(String in) {
 		try {
-			if (in.startsWith("#")) {
-				Main.lookUpVariable(in);
-				return true;
-			} else if (in.startsWith("a")) {
-				Main.lookUpArgument(in);
-				return true;
-			} else if (in.startsWith("i")) {
-				Main.lookUpIterator(in);
-				return true;
-			}
+			fetch(in);
+			return true;
 		} catch (VariableNotFoundException | ArgumentNotFoundException | IteratorNotFoundException
 				| ArrayPositionEmptyException e) {
 			return false;
 		}
-		return false;
 	}
 
 	public abstract Variable copy();
