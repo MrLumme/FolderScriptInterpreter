@@ -30,6 +30,8 @@ public class InterpretationTest {
 		assertTrue(new File(tf8.getAbsolutePath() + "/script.fs").exists());
 		assertTrue(new File(tf10.getAbsolutePath() + "/script.fs").exists());
 
+		Main.clear();
+
 		System.out.println();
 		System.out.println();
 	}
@@ -121,7 +123,7 @@ public class InterpretationTest {
 	void test12() throws InterpreterException {
 		// Test12 - Array set with variable
 		System.out.println("Test12");
-		Main.main(new String[] { "#num=5#array[#num]=\"Tjek\"w(\"num:\"+#array[#num])" });
+		Main.main(new String[] { "#num=5#array[#num]=\"Tjek\"w(\"num:\"+#array[#num], $)" });
 	}
 
 //	@Test
