@@ -10,6 +10,8 @@ public enum CommandType {
 	READ('r', 1), OPTIONS('o', 2), SLEEP('z', 1), EXIT('x', 1), GEN_MD5('g', 1);
 
 	public static EnumSet<CommandType> booleanOutputs = EnumSet.of(IS_AVAILABLE, IS_FILE, COPY, MOVE, DELETE);
+	public static EnumSet<CommandType> numberOutputs = EnumSet.of(SIZE);
+	public static EnumSet<CommandType> inputDependantNumberOutputs = EnumSet.of(RANDOM, SUBSTRING, REPLACE);
 	public static EnumSet<CommandType> outputs = EnumSet.of(NAME, EXTENSION, PARENT, LIST, SIZE, REPLACE, SUBSTRING,
 			RANDOM, READ, GEN_MD5);
 
@@ -54,5 +56,12 @@ public enum CommandType {
 	public boolean isBooleanOutput() {
 		return booleanOutputs.contains(this);
 	}
+
+	public boolean isNumberOutput() {
+		return isBooleanOutput() || numberOutputs.contains(this);
+	}
+
+	public boolean isInputDependantNumberOutput() {
+		return inputDependantNumberOutputs.contains(this);
 	}
 }
