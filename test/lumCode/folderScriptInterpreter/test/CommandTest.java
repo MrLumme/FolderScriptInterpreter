@@ -478,7 +478,7 @@ public class CommandTest {
 		lr.add(doc2);
 		Command r = new Command(CommandType.READ, lr);
 		r.action();
-		assertTrue(((TextVariable) r.result()).getVar()
+		assertTrue(((TextVariable) ((ArrayVariable) r.result()).getVar(0)).getVar()
 				.equals("This is a piece of text which will be outputted into a file."));
 
 		// MD5
