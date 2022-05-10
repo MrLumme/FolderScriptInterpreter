@@ -266,12 +266,12 @@ public class ScriptBuilder {
 		}
 		if (name.contains("[")) {
 			Node num = breakDownScript(Utilities.extractBracket(name, name.indexOf("[")));
-			if (!(num instanceof NumberNode)) {
+			if (!(num instanceof ResultantNode)) {
 				throw new ScriptErrorException(script.toString(),
 						"Syntax error; array does not receive a number value.");
 			}
 			name = name.substring(0, name.indexOf("["));
-			return new Declaration(name, (NumberNode) num, d, (ResultantNode) node);
+			return new Declaration(name, (ResultantNode) num, d, (ResultantNode) node);
 		} else {
 			return new Declaration(name, d, (ResultantNode) node);
 		}

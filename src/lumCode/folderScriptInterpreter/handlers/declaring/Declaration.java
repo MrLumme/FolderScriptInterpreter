@@ -2,9 +2,9 @@ package lumCode.folderScriptInterpreter.handlers.declaring;
 
 import lumCode.folderScriptInterpreter.Main;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
+import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.InvalidArrayPositionException;
 import lumCode.folderScriptInterpreter.exceptions.undefinedExceptions.UndefinedDeclaringException;
 import lumCode.folderScriptInterpreter.handlers.Node;
-import lumCode.folderScriptInterpreter.handlers.NumberNode;
 import lumCode.folderScriptInterpreter.handlers.ResultantNode;
 import lumCode.folderScriptInterpreter.variables.ArrayVariable;
 import lumCode.folderScriptInterpreter.variables.BooleanVariable;
@@ -13,7 +13,7 @@ import lumCode.folderScriptInterpreter.variables.Variable;
 
 public class Declaration implements Node {
 	private final String name;
-	private final NumberNode number;
+	private final ResultantNode number;
 	private final ResultantNode action;
 	private final DeclarationType type;
 
@@ -25,7 +25,7 @@ public class Declaration implements Node {
 		Main.setVariable(name, new NumberVariable(0));
 	}
 
-	public Declaration(String name, NumberNode number, DeclarationType type, ResultantNode action) {
+	public Declaration(String name, ResultantNode number, DeclarationType type, ResultantNode action) {
 		this.name = name;
 		this.number = number;
 		this.action = action;
@@ -49,8 +49,12 @@ public class Declaration implements Node {
 			Main.setVariable(name, var);
 		} else {
 			number.action();
-			NumberVariable num = number.result();
-			Main.setVariable(name, num, var);
+			Variable num = number.result();
+			if (num instanceof NumberVariable) {
+				Main.setVariable(name, (NumberVariable) num, var);
+			} else {
+				throw new InvalidArrayPositionException(num.toString());
+			}
 		}
 	}
 
