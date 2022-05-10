@@ -476,18 +476,22 @@ public class Main {
 		}
 	}
 
-	public static Variable lookUpVariable(String name) throws VariableNotFoundException, ArrayPositionEmptyException {
+	public static Variable lookUpVariable(String name) throws VariableNotFoundException {
 		if (name.contains("[")) {
-			int numb = Integer.parseInt(name.substring(name.indexOf('[') + 1, name.indexOf(']')));
-			Variable var = v.get(name.substring(0, name.indexOf('[')));
-			if (var != null && var instanceof ArrayVariable) {
-				return ((ArrayVariable) var).getVar(numb);
-			}
-		} else {
-			Variable var = v.get(name);
-			if (var != null) {
-				return var;
-			}
+			name = name.substring(0, name.indexOf('['));
+		}
+		Variable var = v.get(name);
+		if (var != null) {
+			return var;
+		}
+		throw new VariableNotFoundException(name);
+	}
+
+	public static Variable lookUpVariable(String name, int numb)
+			throws VariableNotFoundException, ArrayPositionEmptyException {
+		Variable var = lookUpVariable(name);
+		if (var != null && var instanceof ArrayVariable) {
+			return ((ArrayVariable) var).getVar(numb);
 		}
 		throw new VariableNotFoundException(name);
 	}

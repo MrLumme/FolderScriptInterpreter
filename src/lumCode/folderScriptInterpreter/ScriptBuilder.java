@@ -8,10 +8,10 @@ import java.util.regex.Pattern;
 import lumCode.folderScriptInterpreter.exceptions.BreakDownException;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.exceptions.ScriptErrorException;
+import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.InvalidArrayPositionException;
 import lumCode.folderScriptInterpreter.exceptions.notFoundExceptions.VariableNotFoundException;
 import lumCode.folderScriptInterpreter.handlers.BooleanNode;
 import lumCode.folderScriptInterpreter.handlers.Node;
-import lumCode.folderScriptInterpreter.handlers.NumberNode;
 import lumCode.folderScriptInterpreter.handlers.ResultantNode;
 import lumCode.folderScriptInterpreter.handlers.arithmetic.Arithmetic;
 import lumCode.folderScriptInterpreter.handlers.arithmetic.ArithmeticType;
@@ -28,6 +28,7 @@ import lumCode.folderScriptInterpreter.handlers.logic.LogicType;
 import lumCode.folderScriptInterpreter.handlers.test.Test;
 import lumCode.folderScriptInterpreter.variables.NumberVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
+import lumCode.folderScriptInterpreter.variables.lookUps.ArrayVariableLookUp;
 import lumCode.folderScriptInterpreter.variables.lookUps.EnvironmentLookUp;
 import lumCode.folderScriptInterpreter.variables.lookUps.EnvironmentType;
 import lumCode.folderScriptInterpreter.variables.lookUps.VariableLookUp;
@@ -249,9 +250,21 @@ public class ScriptBuilder {
 		return new Iteration(n, var, com);
 	}
 
-	private static Node breakDownVariable(String name) throws VariableNotFoundException {
+	private static Node breakDownVariable(String name) throws InterpreterException {
+		Node num = null;
+		if (name.contains("[") && !name.startsWith("a")) {
+			num = breakDownScript(name.substring(name.indexOf('[') + 1, name.lastIndexOf(']')));
+			if (!(num instanceof ResultantNode)) {
+				throw new InvalidArrayPositionException(num.toString());
+			}
+			name = name.substring(0, name.indexOf('['));
+		}
 		if (Variable.exists(name)) {
-			return new VariableLookUp(name);
+			if (num == null) {
+				return new VariableLookUp(name);
+			} else {
+				return new ArrayVariableLookUp(name, (ResultantNode) num);
+			}
 		} else {
 			throw new VariableNotFoundException(name);
 		}

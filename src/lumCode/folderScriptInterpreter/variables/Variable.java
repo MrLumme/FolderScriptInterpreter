@@ -45,7 +45,12 @@ public abstract class Variable implements ResultantNode {
 	public static Variable fetch(String in) throws VariableNotFoundException, ArgumentNotFoundException,
 			IteratorNotFoundException, ArrayPositionEmptyException {
 		if (in.startsWith("#")) {
-			return Main.lookUpVariable(in);
+			if (in.contains("[") && in.contains("]")) {
+				return Main.lookUpVariable(in,
+						Integer.parseInt(in.substring(in.indexOf('[') + 1, in.lastIndexOf(']'))));
+			} else {
+				return Main.lookUpVariable(in);
+			}
 		} else if (in.startsWith("a")) {
 			return Main.lookUpArgument(in);
 		} else if (in.startsWith("i")) {
