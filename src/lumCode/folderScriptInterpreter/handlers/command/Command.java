@@ -21,7 +21,7 @@ import lumCode.folderScriptInterpreter.Options;
 import lumCode.folderScriptInterpreter.Utilities;
 import lumCode.folderScriptInterpreter.exceptions.ArithmeticErrorException;
 import lumCode.folderScriptInterpreter.exceptions.CommandErrorException;
-import lumCode.folderScriptInterpreter.exceptions.IncorrentParameterAmountException;
+import lumCode.folderScriptInterpreter.exceptions.IncorrectParameterAmountException;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.exceptions.LogicConversionException;
 import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.ArrayPositionEmptyException;
@@ -53,13 +53,13 @@ public class Command implements ResultantNode {
 	private final List<Node> input;
 	private Variable output;
 
-	public Command(CommandType type, List<Node> input) throws IncorrentParameterAmountException, CommandErrorException {
+	public Command(CommandType type, List<Node> input) throws IncorrectParameterAmountException, CommandErrorException {
 		this.type = type;
 		this.input = input;
 		output = null;
 
 		if (type.getInput() != input.size()) {
-			throw new IncorrentParameterAmountException(type, input.size());
+			throw new IncorrectParameterAmountException(type, input.size());
 		}
 		for (Node i : input) {
 			if (!(i instanceof ResultantNode)) {
