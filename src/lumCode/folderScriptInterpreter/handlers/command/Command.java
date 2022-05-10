@@ -52,13 +52,11 @@ public class Command implements ResultantNode {
 	private final CommandType type;
 	private final List<Node> input;
 	private Variable output;
-	private Variable[] vars;
 
 	public Command(CommandType type, List<Node> input) throws IncorrentParameterAmountException, CommandErrorException {
 		this.type = type;
 		this.input = input;
 		output = null;
-		vars = null;
 
 		if (type.getInput() != input.size()) {
 			throw new IncorrentParameterAmountException(type, input.size());
@@ -73,7 +71,7 @@ public class Command implements ResultantNode {
 	@Override
 	public void action() throws InterpreterException {
 		// Fetch results
-		vars = new Variable[input.size()];
+		Variable[] vars = new Variable[input.size()];
 		for (int i = 0; i < input.size(); i++) {
 			input.get(i).action();
 			vars[i] = ((ResultantNode) input.get(i)).result();
@@ -152,64 +150,65 @@ public class Command implements ResultantNode {
 		}
 
 		if (type == CommandType.OPTIONS) {
-			optionsCommand();
+			optionsCommand(vars[0], vars[1]);
 		} else if (type == CommandType.RANDOM) {
-			output = randomCommand();
+			output = randomCommand(vars[0]);
 		} else if (type == CommandType.IS_FILE) {
-			output = isFileCommand();
+			output = isFileCommand(vars[0]);
 		} else if (type == CommandType.IS_AVAILABLE) {
-			output = isAvailableCommand();
+			output = isAvailableCommand((FolderVariable) vars[0]);
 		} else if (type == CommandType.NAME) {
-			output = nameCommand();
+			output = nameCommand((FolderVariable) vars[0]);
 		} else if (type == CommandType.PARENT) {
-			output = parentCommand();
+			output = parentCommand((FolderVariable) vars[0]);
 		} else if (type == CommandType.EXTENSION) {
-			output = extensionCommand();
+			output = extensionCommand((FileVariable) vars[0]);
 		} else if (type == CommandType.REPLACE) {
-			output = replaceCommand();
+			output = replaceCommand((TextVariable) vars[0], (TextVariable) vars[1], (TextVariable) vars[2]);
 		} else if (type == CommandType.SUBSTRING) {
-			output = substringCommand();
+			output = substringCommand((TextVariable) vars[0], vars[1], vars[2]);
 		} else if (type == CommandType.WRITE) {
-			writeCommand();
+			writeCommand(vars[0], vars[1]);
 		} else if (type == CommandType.MOVE) {
-			output = moveCommand();
+			output = moveCommand(vars[0], vars[1]);
 		} else if (type == CommandType.COPY) {
-			output = copyCommand();
+			output = copyCommand(vars[0], vars[1]);
 		} else if (type == CommandType.DELETE) {
-			output = deleteCommand();
+			output = deleteCommand(vars[0]);
 		} else if (type == CommandType.LIST) {
-			output = listCommand();
+			output = listCommand(vars[0], vars[1]);
 		} else if (type == CommandType.SIZE) {
-			output = sizeCommand();
+			output = sizeCommand(vars[0]);
 		} else if (type == CommandType.SLEEP) {
-			sleepCommmand();
+			sleepCommmand((NumberVariable) vars[0]);
 		} else if (type == CommandType.EXIT) {
-			exitCommand();
+			exitCommand((NumberVariable) vars[0]);
 		} else if (type == CommandType.READ) {
-			output = readCommand();
+			output = readCommand((FileVariable) vars[0]);
 		} else if (type == CommandType.GEN_MD5) {
-			output = genMD5Command();
+			output = genMD5Command(vars[0]);
 		} else {
 			throw new UndefinedCommandException(type, vars);
 		}
 	}
 
-	private Variable genMD5Command() throws CommandErrorException {
-		if (vars[0].type == VariableType.NUMBER) {
-			return new TextVariable(Utilities.getMD5("" + ((NumberVariable) vars[0]).getVar()));
-		} else if (vars[0].type == VariableType.FILE) {
-			return new TextVariable(Utilities.getMD5(((FileVariable) vars[0]).getVar()));
-		} else if (vars[0].type == VariableType.TEXT) {
-			return new TextVariable(Utilities.getMD5("" + ((TextVariable) vars[0]).getVar()));
-		} else if (vars[0].type == VariableType.SPECIAL) {
+	protected TextVariable genMD5Command(Variable var0) throws CommandErrorException {
+		if (var0.type == VariableType.NUMBER) {
+			return new TextVariable(Utilities.getMD5("" + ((NumberVariable) var0).getVar()));
+		} else if (var0.type == VariableType.FILE) {
+			return new TextVariable(Utilities.getMD5(((FileVariable) var0).getVar()));
+		} else if (var0.type == VariableType.TEXT) {
+			return new TextVariable(Utilities.getMD5("" + ((TextVariable) var0).getVar()));
+		} else if (var0.type == VariableType.SPECIAL) {
 			return new TextVariable(Utilities.getMD5(Main.script));
 		}
 		throw new CommandErrorException("Command '" + type.getChar() + "' does not supported variables of type '"
-				+ vars[0].type.name().toLowerCase() + "'.");
+				+ var0.type.name().toLowerCase() + "'.");
 	}
 
-	private Variable readCommand() throws CommandErrorException, DisallowedDataInArrayException {
-		File f = ((FileVariable) vars[0]).getVar();
+	protected ArrayVariable readCommand(FileVariable var0)
+			throws CommandErrorException, DisallowedDataInArrayException {
+		File f = var0.getVar();
 		ArrayVariable o = new ArrayVariable();
 		try {
 			BufferedReader r = new BufferedReader(new FileReader(f));
@@ -227,63 +226,61 @@ public class Command implements ResultantNode {
 		}
 	}
 
-	private ArrayVariable listCommand() throws CommandErrorException, DisallowedDataInArrayException {
+	protected ArrayVariable listCommand(Variable var0, Variable var1)
+			throws CommandErrorException, DisallowedDataInArrayException {
 		ArrayVariable out = new ArrayVariable();
-		if (vars[0].type == VariableType.NUMBER) {
-			if (((NumberVariable) vars[0]).getVar() < 0) {
-				if (vars[1] instanceof SpecialVariable) {
-					for (int i = 0; i >= (int) ((NumberVariable) vars[0]).getVar() + 1; i--) {
+		if (var0.type == VariableType.NUMBER) {
+			if (((NumberVariable) var0).getVar() < 0) {
+				if (var1 instanceof SpecialVariable) {
+					for (int i = 0; i >= (int) ((NumberVariable) var0).getVar() + 1; i--) {
 						out.setNextVar(new NumberVariable(i));
 					}
 				} else {
-					for (int i = (int) ((NumberVariable) vars[0]).getVar(); i < ((NumberVariable) vars[1])
-							.getVar(); i--) {
+					for (int i = (int) ((NumberVariable) var0).getVar(); i < ((NumberVariable) var1).getVar(); i--) {
 						out.setNextVar(new NumberVariable(i));
 					}
 				}
 			} else {
-				if (vars[1] instanceof SpecialVariable) {
-					for (int i = (int) ((NumberVariable) vars[0]).getVar() - 1; i >= 0; i--) {
+				if (var1 instanceof SpecialVariable) {
+					for (int i = (int) ((NumberVariable) var0).getVar() - 1; i >= 0; i--) {
 						out.setNextVar(new NumberVariable(i));
 					}
 				} else {
-					for (int i = (int) ((NumberVariable) vars[1]).getVar(); i < ((NumberVariable) vars[0])
-							.getVar(); i++) {
+					for (int i = (int) ((NumberVariable) var1).getVar(); i < ((NumberVariable) var0).getVar(); i++) {
 						out.setNextVar(new NumberVariable(i));
 					}
 				}
 			}
 			return out;
-		} else if (vars[0].type == VariableType.ARRAY) {
-			return Utilities.sortArray((ArrayVariable) vars[0],
-					vars[1] instanceof SpecialVariable ? -1 : (int) ((NumberVariable) vars[1]).getVar());
-		} else if (vars[0].type == VariableType.FOLDER) {
-			List<File> list = Utilities.listFolder(((FolderVariable) vars[0]).getVar(),
-					vars[1] instanceof SpecialVariable ? Integer.MAX_VALUE : (int) ((NumberVariable) vars[1]).getVar(),
+		} else if (var0.type == VariableType.ARRAY) {
+			return Utilities.sortArray((ArrayVariable) var0,
+					var1 instanceof SpecialVariable ? -1 : (int) ((NumberVariable) var1).getVar());
+		} else if (var0.type == VariableType.FOLDER) {
+			List<File> list = Utilities.listFolder(((FolderVariable) var0).getVar(),
+					var1 instanceof SpecialVariable ? Integer.MAX_VALUE : (int) ((NumberVariable) var1).getVar(),
 					Main.getOption(Options.RETURN_FOLDERS));
 			for (File f : list) {
 				out.setNextVar(f.isFile() ? new FileVariable(f) : new FolderVariable(f));
 			}
 			return out;
-		} else if (vars[0].type == VariableType.FILE) {
-			String[] spl = ((FileVariable) vars[0]).getVar().getAbsolutePath()
-					.split(System.getProperty("file.separator"));
+		} else if (var0.type == VariableType.FILE) {
+			String[] spl = ((FileVariable) var0).getVar().getAbsolutePath().split(System.getProperty("file.separator"));
 			for (String s : spl) {
 				out.setNextVar(Variable.fromString(s));
 			}
 			return out;
-		} else if (vars[0].type == VariableType.TEXT) {
-			String str = ((TextVariable) vars[0]).getVar();
-			if (vars[1] instanceof SpecialVariable) {
+		} else if (var0.type == VariableType.TEXT) {
+			String str = ((TextVariable) var0).getVar();
+			if (var1 instanceof SpecialVariable) {
 				for (char c : str.toCharArray()) {
 					out.setNextVar(new TextVariable("" + c));
 				}
-			} else if (((NumberVariable) vars[1]).getVar() > 0) {
-				for (int i = (int) ((NumberVariable) vars[1]).getVar(); i < str.length(); i++) {
+			} else if (((NumberVariable) var1).getVar() > 0) {
+				for (int i = (int) ((NumberVariable) var1).getVar(); i < str.length(); i++) {
 					out.setNextVar(new TextVariable("" + str.charAt(i)));
 				}
 			} else {
-				for (int i = 0; i < ((NumberVariable) vars[1]).getVar() && i < str.length(); i++) {
+				for (int i = 0; i < ((NumberVariable) var1).getVar() && i < str.length(); i++) {
 					out.setNextVar(new TextVariable("" + str.charAt(i)));
 				}
 			}
@@ -291,77 +288,77 @@ public class Command implements ResultantNode {
 		}
 		throw new CommandErrorException(
 				"Command '" + type.getChar() + "' does not supported variables of the type combination '"
-						+ vars[0].type.name().toLowerCase() + "' and '" + vars[1].type.name().toLowerCase() + "'.");
+						+ var0.type.name().toLowerCase() + "' and '" + var1.type.name().toLowerCase() + "'.");
 	}
 
-	private Variable sizeCommand() throws UnsupportedVariableTypeException, CommandErrorException {
+	protected NumberVariable sizeCommand(Variable var0) throws UnsupportedVariableTypeException, CommandErrorException {
 		try {
-			return new NumberVariable(Utilities.varSize(vars[0]));
+			return new NumberVariable(Utilities.varSize(var0));
 		} catch (FileNotFoundException e) {
 			throw new CommandErrorException("Command failed with message: " + e.getMessage());
 		}
 	}
 
-	private void sleepCommmand() {
+	protected void sleepCommmand(NumberVariable var0) {
 		try {
-			Thread.sleep(((NumberVariable) vars[0]).getVar());
+			Thread.sleep(var0.getVar());
 		} catch (InterruptedException e) {
 			// Do nothing
 		}
 	}
 
-	private void exitCommand() {
-		System.exit((int) ((NumberVariable) vars[0]).getVar());
+	protected void exitCommand(NumberVariable var0) {
+		System.exit((int) var0.getVar());
 	}
 
-	private Variable deleteCommand() {
-		if (vars[0] instanceof SpecialVariable) {
-			vars[0] = new FolderVariable(Main.tempDir);
+	protected BooleanVariable deleteCommand(Variable var0) {
+		if (var0 instanceof SpecialVariable) {
+			var0 = new FolderVariable(Main.tempDir);
 		}
 
 		if (Main.getOption(Options.DEBUG)) {
-			System.out.println("Delete " + (vars[0] instanceof FileVariable ? "file" : "folder") + " '"
-					+ ((FolderVariable) vars[0]).getVar().getAbsolutePath() + "'");
-			return new NumberVariable(1);
+			System.out.println("Delete " + (var0 instanceof FileVariable ? "file" : "folder") + " '"
+					+ ((FolderVariable) var0).getVar().getAbsolutePath() + "'");
+			return new BooleanVariable(true);
 		}
 
-		return new NumberVariable(FileUtils.deleteQuietly(((FolderVariable) vars[0]).getVar()) ? 1 : 0);
+		return new BooleanVariable(FileUtils.deleteQuietly(((FolderVariable) var0).getVar()));
 	}
 
-	private Variable copyCommand() throws UnsupportedCommandTypeException, CommandErrorException,
-			UnsupportedArithmeticTypeException, UndefinedArithmeticException, ArithmeticErrorException {
+	protected BooleanVariable copyCommand(Variable var0, Variable var1)
+			throws UnsupportedCommandTypeException, CommandErrorException, UnsupportedArithmeticTypeException,
+			UndefinedArithmeticException, ArithmeticErrorException {
 		try {
 			if (!Main.getOption(Options.OVERWRITE)) {
-				if (vars[1] instanceof SpecialVariable) {
-					if (vars[0] instanceof FileVariable) {
-						vars[1] = FileArithmeticHandler.calculate((FileVariable) vars[0], ArithmeticType.ADDITION,
+				if (var1 instanceof SpecialVariable) {
+					if (var0 instanceof FileVariable) {
+						var1 = FileArithmeticHandler.calculate((FileVariable) var0, ArithmeticType.ADDITION,
 								SpecialVariable.getInstance());
 					} else {
-						vars[1] = FolderArithmeticHandler.calculate((FolderVariable) vars[0], ArithmeticType.ADDITION,
+						var1 = FolderArithmeticHandler.calculate((FolderVariable) var0, ArithmeticType.ADDITION,
 								SpecialVariable.getInstance());
 					}
 				}
 
-				if (vars[1] instanceof FileVariable) {
-					if (vars[0] instanceof FileVariable) {
-						if (((FileVariable) vars[1]).getVar().exists()) {
+				if (var1 instanceof FileVariable) {
+					if (var0 instanceof FileVariable) {
+						if (((FileVariable) var1).getVar().exists()) {
 							return new BooleanVariable(false);
 						}
 					} else {
-						throw new CommandErrorException("Can not copy the folder \"" + vars[0].toString()
-								+ "\" to the file \"" + vars[0].toString() + "\".");
+						throw new CommandErrorException("Can not copy the folder \"" + var0.toString()
+								+ "\" to the file \"" + var0.toString() + "\".");
 					}
 				} else {
-					if (vars[0] instanceof FileVariable) {
-						FileVariable f = ((FileVariable) vars[0]);
-						if (new File(((FolderVariable) vars[1]).getPath() + f.getName() + f.getExtension()).exists()) {
+					if (var0 instanceof FileVariable) {
+						FileVariable f = ((FileVariable) var0);
+						if (new File(((FolderVariable) var1).getPath() + f.getName() + f.getExtension()).exists()) {
 							return new BooleanVariable(false);
 						}
 					} else {
-						List<File> l = Utilities.listFolder(((FolderVariable) vars[0]).getVar(), Integer.MAX_VALUE,
-								true);
-						String pR = ((FolderVariable) vars[1]).getPath();
-						String pO = ((FolderVariable) vars[0]).getParent().getAbsolutePath();
+						List<File> l = Utilities.listFolder(((FolderVariable) var0).getVar(), Integer.MAX_VALUE, true);
+						String pR = ((FolderVariable) var1).getPath();
+						String pO = ((FolderVariable) var0).getParent().getAbsolutePath();
 						for (File f : l) {
 							if (new File(f.getAbsolutePath().replace(pO, pR)).exists()) {
 								return new BooleanVariable(false);
@@ -371,81 +368,76 @@ public class Command implements ResultantNode {
 				}
 			}
 
-			if (vars[0] instanceof FileVariable) {
-				if (vars[1] instanceof FileVariable) {
+			if (var0 instanceof FileVariable) {
+				if (var1 instanceof FileVariable) {
 					if (!Main.getOption(Options.DEBUG)) {
-						FileUtils.copyFile(((FileVariable) vars[0]).getVar(), ((FileVariable) vars[1]).getVar(), true);
+						FileUtils.copyFile(((FileVariable) var0).getVar(), ((FileVariable) var1).getVar(), true);
 					} else {
-						System.out.println("Copy file '" + ((FileVariable) vars[0]).getVar().getAbsolutePath() + "'");
-						System.out.println("\tto file '" + ((FileVariable) vars[1]).getVar().getAbsolutePath() + "'");
+						System.out.println("Copy file '" + ((FileVariable) var0).getVar().getAbsolutePath() + "'");
+						System.out.println("\tto file '" + ((FileVariable) var1).getVar().getAbsolutePath() + "'");
 					}
 				} else {
 					if (!Main.getOption(Options.DEBUG)) {
-						FileUtils.copyFileToDirectory(((FileVariable) vars[0]).getVar(),
-								((FolderVariable) vars[1]).getVar(), true);
+						FileUtils.copyFileToDirectory(((FileVariable) var0).getVar(), ((FolderVariable) var1).getVar(),
+								true);
 					} else {
-						System.out.println("Copy file '" + ((FileVariable) vars[0]).getVar().getAbsolutePath() + "'");
-						System.out
-								.println("\tto folder '" + ((FolderVariable) vars[1]).getVar().getAbsolutePath() + "'");
+						System.out.println("Copy file '" + ((FileVariable) var0).getVar().getAbsolutePath() + "'");
+						System.out.println("\tto folder '" + ((FolderVariable) var1).getVar().getAbsolutePath() + "'");
 					}
 				}
 			} else {
-				if (vars[1] instanceof FileVariable) {
-					throw new CommandErrorException("Can not copy the folder \"" + vars[0].toString()
-							+ "\" to the file \"" + vars[0].toString() + "\".");
+				if (var1 instanceof FileVariable) {
+					throw new CommandErrorException("Can not copy the folder \"" + var0.toString() + "\" to the file \""
+							+ var0.toString() + "\".");
 				} else {
 					if (!Main.getOption(Options.DEBUG)) {
-						FileUtils.copyDirectory(((FolderVariable) vars[0]).getVar(),
-								((FolderVariable) vars[1]).getVar());
+						FileUtils.copyDirectory(((FolderVariable) var0).getVar(), ((FolderVariable) var1).getVar());
 					} else {
-						System.out
-								.println("Copy folder '" + ((FolderVariable) vars[0]).getVar().getAbsolutePath() + "'");
-						System.out
-								.println("\tto folder '" + ((FolderVariable) vars[1]).getVar().getAbsolutePath() + "'");
+						System.out.println("Copy folder '" + ((FolderVariable) var0).getVar().getAbsolutePath() + "'");
+						System.out.println("\tto folder '" + ((FolderVariable) var1).getVar().getAbsolutePath() + "'");
 					}
 				}
 			}
 		} catch (IOException e) {
-			throw new CommandErrorException(
-					"Can not copy \"" + vars[0].toString() + "\" to \"" + vars[0].toString() + "\".");
+			throw new CommandErrorException("Can not copy \"" + var0.toString() + "\" to \"" + var0.toString() + "\".");
 		}
 		return new BooleanVariable(true);
 	}
 
-	private Variable moveCommand() throws UnsupportedCommandTypeException, CommandErrorException,
-			UnsupportedArithmeticTypeException, UndefinedArithmeticException, ArithmeticErrorException {
+	protected BooleanVariable moveCommand(Variable var0, Variable var1)
+			throws UnsupportedCommandTypeException, CommandErrorException, UnsupportedArithmeticTypeException,
+			UndefinedArithmeticException, ArithmeticErrorException {
 		try {
 			if (!Main.getOption(Options.OVERWRITE)) {
-				if (vars[1] instanceof SpecialVariable) {
-					if (vars[0] instanceof FileVariable) {
-						vars[1] = FileArithmeticHandler.calculate((FileVariable) vars[0], ArithmeticType.ADDITION,
+				if (var1 instanceof SpecialVariable) {
+					if (var0 instanceof FileVariable) {
+						var1 = FileArithmeticHandler.calculate((FileVariable) var0, ArithmeticType.ADDITION,
 								SpecialVariable.getInstance());
 					} else {
-						vars[1] = FolderArithmeticHandler.calculate((FolderVariable) vars[0], ArithmeticType.ADDITION,
+						var1 = FolderArithmeticHandler.calculate((FolderVariable) var0, ArithmeticType.ADDITION,
 								SpecialVariable.getInstance());
 					}
 				}
 
-				if (vars[1] instanceof FileVariable) {
-					if (vars[0] instanceof FileVariable) {
-						if (((FileVariable) vars[1]).getVar().exists()) {
+				if (var1 instanceof FileVariable) {
+					if (var0 instanceof FileVariable) {
+						if (((FileVariable) var1).getVar().exists()) {
 							return new BooleanVariable(false);
 						}
 					} else {
-						throw new CommandErrorException("Can not move the folder \"" + vars[0].toString()
-								+ "\" to the file \"" + vars[0].toString() + "\".");
+						throw new CommandErrorException("Can not move the folder \"" + var0.toString()
+								+ "\" to the file \"" + var0.toString() + "\".");
 					}
 				} else {
-					if (vars[0] instanceof FileVariable) {
-						FileVariable f = ((FileVariable) vars[0]);
-						if (new File(((FolderVariable) vars[1]).getPath() + f.getName() + f.getExtension()).exists()) {
+					if (var0 instanceof FileVariable) {
+						FileVariable f = ((FileVariable) var0);
+						if (new File(((FolderVariable) var1).getPath() + f.getName() + f.getExtension()).exists()) {
 							return new BooleanVariable(false);
 						}
 					} else {
-						List<File> l = Utilities.listFolder(((FolderVariable) vars[0]).getVar(), Integer.MAX_VALUE,
-								true);
-						String pR = ((FolderVariable) vars[1]).getPath();
-						String pO = ((FolderVariable) vars[0]).getParent().getAbsolutePath();
+						List<File> l = Utilities.listFolder(((FolderVariable) var0).getVar(), Integer.MAX_VALUE, true);
+						String pR = ((FolderVariable) var1).getPath();
+						String pO = ((FolderVariable) var0).getParent().getAbsolutePath();
 						for (File f : l) {
 							if (new File(f.getAbsolutePath().replace(pO, pR)).exists()) {
 								return new BooleanVariable(false);
@@ -455,185 +447,181 @@ public class Command implements ResultantNode {
 				}
 			}
 
-			if (vars[0] instanceof FileVariable) {
-				if (vars[1] instanceof FileVariable) {
+			if (var0 instanceof FileVariable) {
+				if (var1 instanceof FileVariable) {
 					if (!Main.getOption(Options.DEBUG)) {
-						FileUtils.moveFile(((FileVariable) vars[0]).getVar(), ((FileVariable) vars[1]).getVar());
+						FileUtils.moveFile(((FileVariable) var0).getVar(), ((FileVariable) var1).getVar());
 					} else {
-						System.out.println("Move file '" + ((FileVariable) vars[0]).getVar().getAbsolutePath() + "'");
-						System.out.println("\tto file '" + ((FileVariable) vars[1]).getVar().getAbsolutePath() + "'");
+						System.out.println("Move file '" + ((FileVariable) var0).getVar().getAbsolutePath() + "'");
+						System.out.println("\tto file '" + ((FileVariable) var1).getVar().getAbsolutePath() + "'");
 					}
 				} else {
 					if (!Main.getOption(Options.DEBUG)) {
-						FileUtils.moveFileToDirectory(((FileVariable) vars[0]).getVar(),
-								((FolderVariable) vars[1]).getVar(), true);
+						FileUtils.moveFileToDirectory(((FileVariable) var0).getVar(), ((FolderVariable) var1).getVar(),
+								true);
 					} else {
-						System.out.println("Move file '" + ((FileVariable) vars[0]).getVar().getAbsolutePath() + "'");
-						System.out
-								.println("\tto folder '" + ((FolderVariable) vars[1]).getVar().getAbsolutePath() + "'");
+						System.out.println("Move file '" + ((FileVariable) var0).getVar().getAbsolutePath() + "'");
+						System.out.println("\tto folder '" + ((FolderVariable) var1).getVar().getAbsolutePath() + "'");
 					}
 				}
 			} else {
-				if (vars[1] instanceof FileVariable) {
-					throw new CommandErrorException("Can not move the folder \"" + vars[0].toString()
-							+ "\" to the file \"" + vars[0].toString() + "\".");
+				if (var1 instanceof FileVariable) {
+					throw new CommandErrorException("Can not move the folder \"" + var0.toString() + "\" to the file \""
+							+ var0.toString() + "\".");
 				} else {
 					if (!Main.getOption(Options.DEBUG)) {
-						FileUtils.moveDirectory(((FolderVariable) vars[0]).getVar(),
-								((FolderVariable) vars[1]).getVar());
+						FileUtils.moveDirectory(((FolderVariable) var0).getVar(), ((FolderVariable) var1).getVar());
 					} else {
-						System.out
-								.println("Move folder '" + ((FolderVariable) vars[0]).getVar().getAbsolutePath() + "'");
-						System.out
-								.println("\tto folder '" + ((FolderVariable) vars[1]).getVar().getAbsolutePath() + "'");
+						System.out.println("Move folder '" + ((FolderVariable) var0).getVar().getAbsolutePath() + "'");
+						System.out.println("\tto folder '" + ((FolderVariable) var1).getVar().getAbsolutePath() + "'");
 					}
 				}
 			}
 		} catch (IOException e) {
-			throw new CommandErrorException(
-					"Can not move \"" + vars[0].toString() + "\" to \"" + vars[0].toString() + "\".");
+			throw new CommandErrorException("Can not move \"" + var0.toString() + "\" to \"" + var0.toString() + "\".");
 		}
 		return new BooleanVariable(true);
 	}
 
-	private void writeCommand() throws UnsupportedCommandTypeException, CommandErrorException {
-		if (vars[1] instanceof SpecialVariable) {
+	protected void writeCommand(Variable var0, Variable var1)
+			throws UnsupportedCommandTypeException, CommandErrorException {
+		if (var1 instanceof SpecialVariable) {
 			if (Main.getOption(Options.WRITE_TO_LOG)) {
 				try {
 					if (Main.logFile.exists()) {
-						Files.write(Paths.get(Main.logFile.getAbsolutePath()), vars[0].toString().getBytes(),
+						Files.write(Paths.get(Main.logFile.getAbsolutePath()), var0.toString().getBytes(),
 								StandardOpenOption.APPEND);
 					} else {
 						Main.logFile.getParentFile().mkdirs();
-						Files.write(Paths.get(Main.logFile.getAbsolutePath()), vars[0].toString().getBytes(),
+						Files.write(Paths.get(Main.logFile.getAbsolutePath()), var0.toString().getBytes(),
 								StandardOpenOption.CREATE);
 					}
 				} catch (IOException e) {
 					throw new CommandErrorException(
-							"Can not print to log \"" + ((FileVariable) vars[1]).getVar().getAbsolutePath() + "\".");
+							"Can not print to log \"" + ((FileVariable) var1).getVar().getAbsolutePath() + "\".");
 				}
 			} else {
-				System.out.println(vars[0].toString());
+				System.out.println(var0.toString());
 			}
-		} else if (vars[1] instanceof FileVariable) {
-			File f = ((FileVariable) vars[1]).getVar();
+		} else if (var1 instanceof FileVariable) {
+			File f = ((FileVariable) var1).getVar();
 			try {
 				if (!Main.getOption(Options.DEBUG)) {
 					if (f.exists()) {
-						Files.write(Paths.get(f.getAbsolutePath()), vars[0].toString().getBytes(),
+						Files.write(Paths.get(f.getAbsolutePath()), var0.toString().getBytes(),
 								StandardOpenOption.APPEND);
 					} else {
 						f.getParentFile().mkdirs();
-						Files.write(Paths.get(f.getAbsolutePath()), vars[0].toString().getBytes(),
+						Files.write(Paths.get(f.getAbsolutePath()), var0.toString().getBytes(),
 								StandardOpenOption.CREATE);
 					}
 				} else {
-					System.out.println("Write '" + vars[0].toString() + "'");
+					System.out.println("Write '" + var0.toString() + "'");
 					System.out.println("\tto file '" + f.getAbsolutePath() + "'");
 				}
 			} catch (IOException e) {
 				throw new CommandErrorException(
-						"Can not print to file \"" + ((FileVariable) vars[1]).getVar().getAbsolutePath() + "\".");
+						"Can not print to file \"" + ((FileVariable) var1).getVar().getAbsolutePath() + "\".");
 			}
 		} else {
 			throw new CommandErrorException(
-					"Print location \"" + ((FileVariable) vars[1]).getVar().getAbsolutePath() + "\" is invalid.");
+					"Print location \"" + ((FileVariable) var1).getVar().getAbsolutePath() + "\" is invalid.");
 		}
 	}
 
-	private Variable replaceCommand() {
-		String base = ((TextVariable) vars[0]).getVar();
-		String look = ((TextVariable) vars[1]).getVar();
-		String replace = ((TextVariable) vars[2]).getVar();
+	protected Variable replaceCommand(TextVariable var0, TextVariable var1, TextVariable var2) {
 		String str;
-		if (((TextVariable) vars[1]).isRegex()) {
-			str = base.replaceAll(look, replace);
+		if (var1.isRegex()) {
+			str = var0.getVar().replaceAll(var1.getVar(), var2.getVar());
 		} else {
-			str = base.replace(look, replace);
+			str = var0.getVar().replace(var1.getVar(), var2.getVar());
 		}
 		return Variable.fromString(str);
 	}
 
-	private Variable substringCommand() throws UnsupportedCommandTypeException, CommandErrorException {
-		String base = ((TextVariable) vars[0]).getVar();
-		int arg[] = new int[2];
-		arg[0] = 0;
-		arg[1] = base.length();
+	protected Variable substringCommand(TextVariable var0, Variable var1, Variable var2)
+			throws UnsupportedCommandTypeException, CommandErrorException {
+		String base = var0.getVar();
+		int start = 0;
+		int end = base.length();
 
-		for (int i = 0; i < 2; i++) {
-			if (vars[i + 1] instanceof NumberVariable) {
-				arg[i] = (int) ((NumberVariable) vars[i + 1]).getVar();
-			} else if (!(vars[i + 1] instanceof SpecialVariable)) {
-				arg[i] = base.indexOf(((TextVariable) vars[i + 1]).getVar())
-						- ((TextVariable) vars[i + 1]).getVar().length();
-			}
+		if (var1 instanceof NumberVariable) {
+			start = (int) ((NumberVariable) var1).getVar();
+		} else if (!(var1 instanceof SpecialVariable)) {
+			start = base.indexOf(((TextVariable) var1).getVar()) - ((TextVariable) var1).getVar().length();
+		}
+		if (var2 instanceof NumberVariable) {
+			end = (int) ((NumberVariable) var2).getVar();
+		} else if (!(var2 instanceof SpecialVariable)) {
+			end = base.indexOf(((TextVariable) var2).getVar()) - ((TextVariable) var2).getVar().length();
 		}
 
 		try {
-			return Variable.fromString(base.substring(arg[0], arg[1]));
+			return Variable.fromString(base.substring(start, end));
 		} catch (StringIndexOutOfBoundsException e) {
 			throw new CommandErrorException(
-					"Can not get a substring of \"" + base + "\" taking from \"" + arg[0] + "\" to \"" + arg[1] + "\"");
+					"Can not get a substring of \"" + base + "\" taking from \"" + start + "\" to \"" + end + "\"");
 		}
 	}
 
-	private TextVariable nameCommand() {
-		return new TextVariable(((FolderVariable) vars[0]).getName());
+	protected TextVariable nameCommand(FolderVariable var0) {
+		return new TextVariable(var0.getName());
 	}
 
-	private FolderVariable parentCommand() {
-		return new FolderVariable(((FolderVariable) vars[0]).getParent());
+	protected FolderVariable parentCommand(FolderVariable var0) {
+		return new FolderVariable(var0.getParent());
 	}
 
-	private TextVariable extensionCommand() {
-		return new TextVariable(((FileVariable) vars[0]).getExtension());
+	protected TextVariable extensionCommand(FileVariable var0) {
+		return new TextVariable(var0.getExtension());
 	}
 
-	private NumberVariable isFileCommand() {
-		return new BooleanVariable(vars[0] instanceof FileVariable);
+	protected NumberVariable isFileCommand(Variable var0) {
+		return new BooleanVariable(var0 instanceof FileVariable);
 	}
 
-	private NumberVariable isAvailableCommand() {
-		return new BooleanVariable(((FolderVariable) vars[0]).getVar().exists());
+	protected NumberVariable isAvailableCommand(FolderVariable var0) {
+		return new BooleanVariable(var0.getVar().exists());
 	}
 
-	private Variable randomCommand() throws CommandErrorException, ArrayPositionEmptyException {
+	protected Variable randomCommand(Variable var0) throws CommandErrorException, ArrayPositionEmptyException {
 		Random r = new Random();
-		if (vars[0].type == VariableType.NUMBER) {
+		if (var0.type == VariableType.NUMBER) {
 			try {
-				int val = (int) ((NumberVariable) vars[0]).getVar();
+				int val = (int) ((NumberVariable) var0).getVar();
 				return new NumberVariable((val / Math.abs(val)) * r.nextInt(Math.abs(val)));
 			} catch (ArithmeticException e) {
 				return new NumberVariable(0);
 			}
-		} else if (vars[0].type == VariableType.ARRAY) {
-			Variable[] a = ((ArrayVariable) vars[0]).getAll().values().toArray(new Variable[0]);
+		} else if (var0.type == VariableType.ARRAY) {
+			Variable[] a = ((ArrayVariable) var0).getAll().values().toArray(new Variable[0]);
 			return a[r.nextInt(a.length)];
-		} else if (vars[0].type == VariableType.FOLDER) {
-			File[] fl = ((FolderVariable) vars[0]).getVar().listFiles();
+		} else if (var0.type == VariableType.FOLDER) {
+			File[] fl = ((FolderVariable) var0).getVar().listFiles();
 			File f = fl[r.nextInt(fl.length)];
 			return f.isFile() ? new FileVariable(f) : new FolderVariable(f);
-		} else if (vars[0].type == VariableType.TEXT) {
-			String s = ((TextVariable) vars[0]).getVar();
+		} else if (var0.type == VariableType.TEXT) {
+			String s = ((TextVariable) var0).getVar();
 			return new TextVariable("" + s.charAt(r.nextInt(s.length())));
 		}
 		throw new CommandErrorException(
-				"Command 'q' does not support input of type '" + vars[0].type.name().toLowerCase() + "'.");
+				"Command 'q' does not support input of type '" + var0.type.name().toLowerCase() + "'.");
 	}
 
-	private void optionsCommand() throws LogicConversionException, OptionNotFoundException {
-		if (Options.isValid((int) ((NumberVariable) vars[0]).getVar())) {
-			Main.options.put((int) ((NumberVariable) vars[0]).getVar(), ((BooleanVariable) vars[1]).asBoolean());
+	protected void optionsCommand(Variable var0, Variable var1)
+			throws LogicConversionException, OptionNotFoundException {
+		if (Options.isValid((int) ((NumberVariable) var0).getVar())) {
+			Main.options.put((int) ((NumberVariable) var0).getVar(), ((BooleanVariable) var1).asBoolean());
 		} else {
-			throw new OptionNotFoundException((int) ((NumberVariable) vars[0]).getVar());
+			throw new OptionNotFoundException((int) ((NumberVariable) var0).getVar());
 		}
 	}
 
-	private void externalCommand() throws CommandErrorException {
+	protected void externalCommand(FileVariable var0, Variable var1) throws CommandErrorException {
 		ArrayList<String> args = new ArrayList<String>();
-		args.add(((FileVariable) vars[0]).getVar().getAbsolutePath());
+		args.add(var0.getVar().getAbsolutePath());
 
-		args.addAll(Utilities.cleanArguments(vars[1]));
+		args.addAll(Utilities.cleanArguments(var1));
 
 		if (Main.getOption(Options.IMPORT_VARIABLES)) {
 			args.add("-key");
