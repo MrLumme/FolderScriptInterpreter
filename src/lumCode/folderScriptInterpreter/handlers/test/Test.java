@@ -5,7 +5,7 @@ import java.util.List;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.handlers.BooleanNode;
 import lumCode.folderScriptInterpreter.handlers.Node;
-import lumCode.folderScriptInterpreter.variables.NumberVariable;
+import lumCode.folderScriptInterpreter.variables.BooleanVariable;
 
 public class Test implements BooleanNode {
 	private final List<Node> script;
@@ -28,8 +28,8 @@ public class Test implements BooleanNode {
 	}
 
 	@Override
-	public NumberVariable result() {
-		return new NumberVariable(result ? 1 : 0);
+	public BooleanVariable result() {
+		return new BooleanVariable(result);
 	}
 
 	@Override

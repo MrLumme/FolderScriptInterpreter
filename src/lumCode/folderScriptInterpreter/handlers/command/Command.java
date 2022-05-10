@@ -345,7 +345,7 @@ public class Command implements ResultantNode {
 				if (vars[1] instanceof FileVariable) {
 					if (vars[0] instanceof FileVariable) {
 						if (((FileVariable) vars[1]).getVar().exists()) {
-							return new NumberVariable(0);
+							return new BooleanVariable(false);
 						}
 					} else {
 						throw new CommandErrorException("Can not copy the folder \"" + vars[0].toString()
@@ -355,7 +355,7 @@ public class Command implements ResultantNode {
 					if (vars[0] instanceof FileVariable) {
 						FileVariable f = ((FileVariable) vars[0]);
 						if (new File(((FolderVariable) vars[1]).getPath() + f.getName() + f.getExtension()).exists()) {
-							return new NumberVariable(0);
+							return new BooleanVariable(false);
 						}
 					} else {
 						List<File> l = Utilities.listFolder(((FolderVariable) vars[0]).getVar(), Integer.MAX_VALUE,
@@ -364,7 +364,7 @@ public class Command implements ResultantNode {
 						String pO = ((FolderVariable) vars[0]).getParent().getAbsolutePath();
 						for (File f : l) {
 							if (new File(f.getAbsolutePath().replace(pO, pR)).exists()) {
-								return new NumberVariable(0);
+								return new BooleanVariable(false);
 							}
 						}
 					}
@@ -409,7 +409,7 @@ public class Command implements ResultantNode {
 			throw new CommandErrorException(
 					"Can not copy \"" + vars[0].toString() + "\" to \"" + vars[0].toString() + "\".");
 		}
-		return new NumberVariable(1);
+		return new BooleanVariable(true);
 	}
 
 	private Variable moveCommand() throws UnsupportedCommandTypeException, CommandErrorException,
@@ -429,7 +429,7 @@ public class Command implements ResultantNode {
 				if (vars[1] instanceof FileVariable) {
 					if (vars[0] instanceof FileVariable) {
 						if (((FileVariable) vars[1]).getVar().exists()) {
-							return new NumberVariable(0);
+							return new BooleanVariable(false);
 						}
 					} else {
 						throw new CommandErrorException("Can not move the folder \"" + vars[0].toString()
@@ -439,7 +439,7 @@ public class Command implements ResultantNode {
 					if (vars[0] instanceof FileVariable) {
 						FileVariable f = ((FileVariable) vars[0]);
 						if (new File(((FolderVariable) vars[1]).getPath() + f.getName() + f.getExtension()).exists()) {
-							return new NumberVariable(0);
+							return new BooleanVariable(false);
 						}
 					} else {
 						List<File> l = Utilities.listFolder(((FolderVariable) vars[0]).getVar(), Integer.MAX_VALUE,
@@ -448,7 +448,7 @@ public class Command implements ResultantNode {
 						String pO = ((FolderVariable) vars[0]).getParent().getAbsolutePath();
 						for (File f : l) {
 							if (new File(f.getAbsolutePath().replace(pO, pR)).exists()) {
-								return new NumberVariable(0);
+								return new BooleanVariable(false);
 							}
 						}
 					}
@@ -493,7 +493,7 @@ public class Command implements ResultantNode {
 			throw new CommandErrorException(
 					"Can not move \"" + vars[0].toString() + "\" to \"" + vars[0].toString() + "\".");
 		}
-		return new NumberVariable(1);
+		return new BooleanVariable(true);
 	}
 
 	private void writeCommand() throws UnsupportedCommandTypeException, CommandErrorException {
@@ -590,11 +590,11 @@ public class Command implements ResultantNode {
 	}
 
 	private NumberVariable isFileCommand() {
-		return new NumberVariable(vars[0] instanceof FileVariable ? 1 : 0);
+		return new BooleanVariable(vars[0] instanceof FileVariable);
 	}
 
 	private NumberVariable isAvailableCommand() {
-		return new NumberVariable(((FolderVariable) vars[0]).getVar().exists() ? 1 : 0);
+		return new BooleanVariable(((FolderVariable) vars[0]).getVar().exists());
 	}
 
 	private Variable randomCommand() throws CommandErrorException, ArrayPositionEmptyException {

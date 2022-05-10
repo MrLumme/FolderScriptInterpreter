@@ -6,7 +6,7 @@ import lumCode.folderScriptInterpreter.exceptions.CommandErrorException;
 import lumCode.folderScriptInterpreter.exceptions.IncorrentParameterAmountException;
 import lumCode.folderScriptInterpreter.handlers.BooleanNode;
 import lumCode.folderScriptInterpreter.handlers.Node;
-import lumCode.folderScriptInterpreter.variables.NumberVariable;
+import lumCode.folderScriptInterpreter.variables.BooleanVariable;
 
 public class BooleanCommand extends Command implements BooleanNode {
 
@@ -20,7 +20,7 @@ public class BooleanCommand extends Command implements BooleanNode {
 	}
 
 	@Override
-	public NumberVariable result() {
-		return (NumberVariable) super.result();
+	public BooleanVariable result() {
+		return (BooleanVariable) super.result();
 	}
 }
