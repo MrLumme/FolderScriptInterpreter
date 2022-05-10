@@ -19,6 +19,7 @@ import lumCode.folderScriptInterpreter.handlers.Node;
 import lumCode.folderScriptInterpreter.handlers.command.Command;
 import lumCode.folderScriptInterpreter.handlers.command.CommandType;
 import lumCode.folderScriptInterpreter.variables.ArrayVariable;
+import lumCode.folderScriptInterpreter.variables.BooleanVariable;
 import lumCode.folderScriptInterpreter.variables.FileVariable;
 import lumCode.folderScriptInterpreter.variables.FolderVariable;
 import lumCode.folderScriptInterpreter.variables.NumberVariable;
@@ -666,14 +667,14 @@ public class CommandTest {
 		// Overwrite
 		ArrayList<Node> aw = new ArrayList<Node>();
 		aw.add(new NumberVariable(1));
-		aw.add(new NumberVariable(1));
+		aw.add(new BooleanVariable(true));
 		Command w = new Command(CommandType.OPTIONS, aw);
 		w.action();
 		assertTrue(Main.getOption(Options.OVERWRITE));
 
 		ArrayList<Node> aw2 = new ArrayList<Node>();
 		aw2.add(new NumberVariable(1));
-		aw2.add(new NumberVariable(0));
+		aw2.add(new BooleanVariable(false));
 		Command w2 = new Command(CommandType.OPTIONS, aw2);
 		w2.action();
 		assertFalse(Main.getOption(Options.OVERWRITE));

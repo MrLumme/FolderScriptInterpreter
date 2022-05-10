@@ -150,7 +150,7 @@ public class Command implements ResultantNode {
 		}
 
 		if (type == CommandType.OPTIONS) {
-			optionsCommand(vars[0], vars[1]);
+			optionsCommand((NumberVariable) vars[0], (BooleanVariable) vars[1]);
 		} else if (type == CommandType.RANDOM) {
 			output = randomCommand(vars[0]);
 		} else if (type == CommandType.IS_FILE) {
@@ -608,12 +608,12 @@ public class Command implements ResultantNode {
 				"Command 'q' does not support input of type '" + var0.type.name().toLowerCase() + "'.");
 	}
 
-	protected void optionsCommand(Variable var0, Variable var1)
+	protected void optionsCommand(NumberVariable var0, BooleanVariable var1)
 			throws LogicConversionException, OptionNotFoundException {
-		if (Options.isValid((int) ((NumberVariable) var0).getVar())) {
-			Main.options.put((int) ((NumberVariable) var0).getVar(), ((BooleanVariable) var1).asBoolean());
+		if (Options.isValid((int) var0.getVar())) {
+			Main.options.put((int) var0.getVar(), var1.asBoolean());
 		} else {
-			throw new OptionNotFoundException((int) ((NumberVariable) var0).getVar());
+			throw new OptionNotFoundException((int) var0.getVar());
 		}
 	}
 
