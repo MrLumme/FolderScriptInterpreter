@@ -17,6 +17,10 @@ public class VariableLookUp extends LookUp {
 
 	@Override
 	public String toString() {
+		return getName();
+	}
+
+	public String getName() {
 		return name;
 	}
 
