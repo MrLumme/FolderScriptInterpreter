@@ -54,5 +54,4 @@ public enum CommandType {
 	public boolean isBooleanOutput() {
 		return booleanOutputs.contains(this);
 	}
-	}
 }
