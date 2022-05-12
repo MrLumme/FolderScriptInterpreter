@@ -115,6 +115,8 @@ public class ScriptBuilder {
 				char d = script.charAt(name.length());
 				if (DeclarationType.valid(d)) {
 					return breakDownDeclaration(name, DeclarationType.fromChar(d), script.substring(name.length() + 1));
+				} else if (d == '[') {
+					return breakDownVariable(script);
 				} else {
 					throw new ScriptErrorException(script, "Invalid character in variable name or declaration.");
 				}
