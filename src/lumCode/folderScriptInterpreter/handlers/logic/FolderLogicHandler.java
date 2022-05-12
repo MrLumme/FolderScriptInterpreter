@@ -9,6 +9,7 @@ import lumCode.folderScriptInterpreter.exceptions.undefinedExceptions.UndefinedL
 
 public class FolderLogicHandler {
 
+	@SuppressWarnings("incomplete-switch")
 	protected static boolean Interpret(File left, LogicType operator, File right)
 			throws UndefinedLogicException, UnsupportedLogicTypeException, FileNotFoundException {
 		switch (operator) {
