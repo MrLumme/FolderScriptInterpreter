@@ -15,7 +15,7 @@ public class SpecialArithmeticHandler {
 			String r = ((TextVariable) right).getVar();
 			switch (type) {
 			case ADDITION:
-				return new TextVariable("$" + r);
+				return Variable.fromString("$" + r);
 			case DIVISION:
 				// Not defined
 				break;

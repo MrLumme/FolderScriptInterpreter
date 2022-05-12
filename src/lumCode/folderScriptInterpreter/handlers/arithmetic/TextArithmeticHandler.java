@@ -20,7 +20,7 @@ public class TextArithmeticHandler {
 			long r = ((NumberVariable) right).getVar();
 			switch (type) {
 			case ADDITION:
-				return new TextVariable(left.getVar() + r);
+				return Variable.fromString(left.getVar() + r);
 			case DIVISION:
 				// Not defined
 				break;
@@ -31,7 +31,7 @@ public class TextArithmeticHandler {
 				// Not defined
 				break;
 			case SUBTRACTION:
-				return new TextVariable(l.substring(0, (int) (l.length() - r)));
+				return Variable.fromString(l.substring(0, (int) (l.length() - r)));
 			default:
 				throw new UnsupportedArithmeticTypeException(type);
 			}
@@ -39,7 +39,7 @@ public class TextArithmeticHandler {
 			String r = ((TextVariable) right).getVar();
 			switch (type) {
 			case ADDITION:
-				return new TextVariable(left.getVar() + r);
+				return Variable.fromString(left.getVar() + r);
 			case DIVISION:
 				// Not defined
 				break;
@@ -50,7 +50,7 @@ public class TextArithmeticHandler {
 				// Not defined
 				break;
 			case SUBTRACTION:
-				return new TextVariable(l.replace(r, ""));
+				return Variable.fromString(l.replace(r, ""));
 			default:
 				throw new UnsupportedArithmeticTypeException(type);
 			}
@@ -58,7 +58,7 @@ public class TextArithmeticHandler {
 			File r = ((FolderVariable) right).getVar();
 			switch (type) {
 			case ADDITION:
-				return new TextVariable(l + r.getAbsolutePath());
+				return Variable.fromString(l + r.getAbsolutePath());
 			case DIVISION:
 				// Not defined
 				break;
@@ -69,7 +69,7 @@ public class TextArithmeticHandler {
 				// Not defined
 				break;
 			case SUBTRACTION:
-				return new TextVariable(l.replace(r.getAbsolutePath(), ""));
+				return Variable.fromString(l.replace(r.getAbsolutePath(), ""));
 			default:
 				throw new UnsupportedArithmeticTypeException(type);
 			}
@@ -87,7 +87,7 @@ public class TextArithmeticHandler {
 				// Not defined
 				break;
 			case SUBTRACTION:
-				return new TextVariable(l.replace("$", ""));
+				return Variable.fromString(l.replace("$", ""));
 			default:
 				throw new UnsupportedArithmeticTypeException(type);
 			}
@@ -104,7 +104,7 @@ public class TextArithmeticHandler {
 				if (rem) {
 					str = str.substring(0, str.length() - 2);
 				}
-				return new TextVariable(str);
+				return Variable.fromString(str);
 			case DIVISION:
 				// Not defined
 				break;
@@ -118,7 +118,7 @@ public class TextArithmeticHandler {
 				for (Variable v : r.getAll().values()) {
 					str = str.replace(v.toString(), "");
 				}
-				return new TextVariable(str);
+				return Variable.fromString(str);
 			default:
 				throw new UnsupportedArithmeticTypeException(type);
 			}
