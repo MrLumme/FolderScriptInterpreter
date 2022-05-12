@@ -258,9 +258,35 @@ public class Utilities {
 	}
 
 	public static String collapseEscapeCharacters(String var) {
-		var = var.replace("\\{", "{").replace("\\}", "}").replace("\\t", "\t").replace("\\r", "\r").replace("\\n", "\n")
-				.replace("\\f", "\f").replace("\\\"", "\"").replace("\\'", "'").replace("\\\\", "\\");
-		return var;
+		String out = "";
+		for (int i = 0; i < var.length(); i++) {
+			if (var.charAt(i) == '\\' && var.length() > i) {
+				if (var.charAt(i + 1) == '{') {
+					out += '{';
+				} else if (var.charAt(i + 1) == '}') {
+					out += '}';
+				} else if (var.charAt(i + 1) == 't') {
+					out += '\t';
+				} else if (var.charAt(i + 1) == 'r') {
+					out += '\r';
+				} else if (var.charAt(i + 1) == 'n') {
+					out += '\n';
+				} else if (var.charAt(i + 1) == 'f') {
+					out += '\f';
+				} else if (var.charAt(i + 1) == '\'') {
+					out += '\'';
+				} else {
+					out += '\\';
+					if (var.charAt(i + 1) != '\\') {
+						i -= 1;
+					}
+				}
+				i += 1;
+			} else {
+				out += var.charAt(i);
+			}
+		}
+		return out;
 	}
 
 	public static List<String> commandSplitter(String script) throws ScriptErrorException {
