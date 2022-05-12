@@ -162,42 +162,50 @@ public class Utilities {
 
 	public static String cleanAndValidateScript(String script) throws ScriptErrorException {
 		String rem = "";
-		String[] spl = script.split("\\^");
-		if (spl.length % 2 == 0) {
-			throw new ScriptErrorException(script, "The script contains an uneven amount of comment characters ('^').");
-		}
-		for (int i = 0; i < spl.length; i++) {
-			if (i % 2 == 0) {
-				rem += spl[i];
-			}
-		}
 
+		// Check for uneven text variables and remove comments and white spaces outside
+		// texts.
 		String noText = "";
 		boolean inString = false;
-		for (int i = 0; i < rem.length(); i++) {
-			if (rem.charAt(i) == '\"' && (i < 1 || rem.charAt(i - 1) != '\\')) {
+		boolean inComment = false;
+		boolean escapeNext = false;
+		for (int i = 0; i < script.length(); i++) {
+			if (script.charAt(i) == '\"' && !escapeNext && !inComment) {
 				inString = !inString;
-			} else if (!inString) {
-				if (rem.charAt(i) == ' ' || rem.charAt(i) == '\n' || rem.charAt(i) == '\t' || rem.charAt(i) == '\r'
-						|| rem.charAt(i) == '\f') {
-					rem = rem.substring(0, i) + rem.substring(i + 1);
-					i--;
+			} else if (script.charAt(i) == '^' && !inString) {
+				inComment = !inComment;
+				i++;
+			}
+			if (!inComment) {
+				if (!inString) {
+					if (script.charAt(i) != ' ' && script.charAt(i) != '\n' && script.charAt(i) != '\t'
+							&& script.charAt(i) != '\r' && script.charAt(i) != '\f') {
+						noText += script.charAt(i);
+						rem += script.charAt(i);
+					}
 				} else {
-					noText += rem.charAt(i);
+					rem += script.charAt(i);
 				}
+			}
+			if (escapeNext) {
+				escapeNext = false;
+			} else if (script.charAt(i) == '\\') {
+				escapeNext = true;
 			}
 		}
 		if (inString == true) {
 			throw new ScriptErrorException(script, "The script contains uneven amount of quotes ('\"').");
+		} else if (inComment == true) {
+			throw new ScriptErrorException(script, "The script contains uneven amount of comment markers ('^').");
 		}
 
+		// Check if brackets are even
 		int inputB = 0;
 		int inputE = 0;
 		int comB = 0;
 		int comE = 0;
 		int arrayB = 0;
 		int arrayE = 0;
-
 		for (int i = 0; i < noText.length(); i++) {
 			if (noText.charAt(i) == BracketType.INPUT.begin) {
 				inputB++;
@@ -213,7 +221,6 @@ public class Utilities {
 				comE++;
 			}
 		}
-
 		if (inputB != inputE) {
 			throw new ScriptErrorException(script, "The script contains unfinished of input backets ('(', ')').");
 		} else if (comB != comE) {
@@ -222,7 +229,31 @@ public class Utilities {
 			throw new ScriptErrorException(script, "The script contains unfinished of array backets ('[', ']').");
 		}
 
-		return rem;
+		inString = false;
+		escapeNext = false;
+		String str = "";
+		String out = "";
+		for (int i = 0; i < rem.length(); i++) {
+			if (rem.charAt(i) == '\"' && !escapeNext) {
+				inString = !inString;
+				if (!inString) {
+					out += collapseEscapeCharacters(str);
+					str = "";
+				}
+			}
+			if (inString) {
+				str += rem.charAt(i);
+			} else {
+				out += rem.charAt(i);
+			}
+			if (escapeNext) {
+				escapeNext = false;
+			} else if (rem.charAt(i) == '\\') {
+				escapeNext = true;
+			}
+		}
+
+		return out;
 	}
 
 	public static List<String> charSplitter(String string, char c) throws ScriptErrorException {
