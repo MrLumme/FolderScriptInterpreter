@@ -28,6 +28,7 @@ import lumCode.folderScriptInterpreter.handlers.command.CommandType;
 import lumCode.folderScriptInterpreter.handlers.logic.LogicType;
 import lumCode.folderScriptInterpreter.variables.ArrayVariable;
 import lumCode.folderScriptInterpreter.variables.NumberVariable;
+import lumCode.folderScriptInterpreter.variables.TextVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 import lumCode.folderScriptInterpreter.variables.lookUps.EnvironmentType;
 
@@ -64,12 +65,15 @@ public class Main {
 				detailedHelp(help.charAt(help.length() - 1));
 			}
 		} else {
-
 			for (int i = 1; i < args.length; i++) {
 				if (args[i].equals("-key") && args.length > i && key == null) {
 					key = UUID.fromString(args[i + 1]);
 				} else {
-					a.put(i - (key == null ? 1 : 3), Variable.fromString(args[i]));
+					Variable var = Variable.fromString(args[i]);
+					if (var instanceof TextVariable) {
+						((TextVariable) var).setVar(Utilities.collapseEscapeCharacters(((TextVariable) var).getVar()));
+					}
+					a.put(i - (key == null ? 1 : 3), var);
 				}
 			}
 
