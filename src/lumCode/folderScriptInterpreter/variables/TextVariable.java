@@ -5,9 +5,7 @@ public class TextVariable extends Variable {
 	private boolean regex;
 
 	public TextVariable(String var) {
-		super(VariableType.TEXT);
-		this.var = var;
-		this.regex = false;
+		this(var, false);
 	}
 
 	private TextVariable(String var, boolean regex) {
