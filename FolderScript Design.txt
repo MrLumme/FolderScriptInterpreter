@@ -57,7 +57,7 @@ o(,)	options		o(0,1) ^Changes an option in the options table. 0 is debug mode, 1
 k(,)	external	k(a[0],#args) ^Runs an external program or script.^
 
 Available letters:
-jk
+j
 Available symbols:
 ';@
 Available ideas:
