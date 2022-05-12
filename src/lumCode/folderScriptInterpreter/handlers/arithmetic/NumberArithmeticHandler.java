@@ -37,7 +37,7 @@ public class NumberArithmeticHandler {
 			String r = ((TextVariable) right).getVar();
 			switch (type) {
 			case ADDITION:
-				return new TextVariable("" + l + ((TextVariable) right).getVar());
+				return Variable.fromString("" + l + r);
 			case DIVISION:
 				// Not defined
 				break;
