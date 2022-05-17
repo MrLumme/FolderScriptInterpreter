@@ -126,33 +126,63 @@ public class Utilities {
 
 		String out = "";
 		int level = 0;
+		boolean inString = false;
+		boolean escapeNext = false;
 		if (!backward) {
 			while (position < str.length() - 1) {
 				position++;
 				char c = str.charAt(position);
-				if (level == 0 && c == type.end) {
+
+				if (c == '\"' && !escapeNext) {
+					inString = !inString;
+				}
+
+				if (level == 0 && c == type.end && !inString) {
 					return out;
 				} else {
 					out += c;
-					if (c == type.begin) {
-						level++;
-					} else if (c == type.end) {
-						level--;
+					if (!inString) {
+						if (c == type.begin) {
+							level++;
+						} else if (c == type.end) {
+							level--;
+						}
 					}
+				}
+
+				if (escapeNext) {
+					escapeNext = false;
+				} else if (c == '\\') {
+					escapeNext = true;
 				}
 			}
 		} else {
 			while (position > 0) {
 				position--;
 				char c = str.charAt(position);
-				if (level == 0 && str.charAt(position) == type.begin) {
+
+				if (c == '\"') {
+					if (escapeNext) {
+						escapeNext = false;
+					} else {
+						if (position > 0 && str.charAt(position - 1) == '\\') {
+							escapeNext = true;
+						} else {
+							inString = !inString;
+						}
+					}
+				}
+
+				if (level == 0 && str.charAt(position) == type.begin && !inString) {
 					return out;
 				} else {
 					out = c + out;
-					if (c == type.end) {
-						level++;
-					} else if (c == type.begin) {
-						level--;
+					if (!inString) {
+						if (c == type.end) {
+							level++;
+						} else if (c == type.begin) {
+							level--;
+						}
 					}
 				}
 			}
