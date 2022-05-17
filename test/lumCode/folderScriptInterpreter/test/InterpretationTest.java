@@ -126,6 +126,20 @@ public class InterpretationTest {
 		Main.main(new String[] { "#num=5#array[#num]=\"Tjek\"w(\"num:\"+#array[#num], $)" });
 	}
 
+	@Test
+	void test13() throws InterpreterException {
+		// Test13 - Modulo with logic test
+		System.out.println("Test13");
+		Main.main(new String[] { "?(4%7=3){w(\"Succes!\",$):w(\"Failed :(\",$)}" });
+	}
+
+	@Test
+	void test14() throws InterpreterException {
+		// Test14 - Logic with variable
+		System.out.println("Test14");
+		Main.main(new String[] { "#num=5?(#num>3){w(\"Succes!\",$):w(\"Failed :(\",$)}" });
+	}
+
 //	@Test
 //	void test11() throws InterpreterException {
 //		// Test11 - Test command result as conditional query
