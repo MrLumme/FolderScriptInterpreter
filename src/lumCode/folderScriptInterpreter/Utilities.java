@@ -421,9 +421,9 @@ public class Utilities {
 		return false;
 	}
 
-	public static boolean isLogicExpression(String string) {
+	public static boolean isLogicExpression(String string, boolean expectLogic) {
 		boolean inString = false;
-		if (string.charAt(0) == '#') {
+		if (string.charAt(0) == '#' && !expectLogic) {
 			return false;
 		}
 		for (int i = 0; i < string.length(); i++) {

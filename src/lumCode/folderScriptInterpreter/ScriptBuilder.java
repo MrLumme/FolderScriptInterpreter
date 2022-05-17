@@ -51,9 +51,13 @@ public class ScriptBuilder {
 	}
 
 	private static Node breakDownScript(String script) throws InterpreterException {
+		return breakDownScript(script, false);
+	}
+
+	private static Node breakDownScript(String script, boolean expectLogic) throws InterpreterException {
 		char c = script.charAt(0);
 
-		if (Utilities.isLogicExpression(script)) {
+		if (Utilities.isLogicExpression(script, expectLogic)) {
 			// Logic logic
 			List<String> logic = Utilities.splitLogically(script);
 
@@ -173,7 +177,7 @@ public class ScriptBuilder {
 	}
 
 	private static Node breakDownConditional(String query, String script) throws InterpreterException {
-		Node node = breakDownScript(query);
+		Node node = breakDownScript(query, true);
 		if (!(node instanceof BooleanNode)) {
 			throw new ScriptErrorException(script,
 					"Syntax error; conditional ('?') must have an input capable of giving a boolean result (true / false).");
