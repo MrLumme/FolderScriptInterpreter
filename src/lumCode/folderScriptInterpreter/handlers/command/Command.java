@@ -318,7 +318,9 @@ public class Command implements ResultantNode {
 
 		if (Main.getOption(Options.DEBUG)) {
 			System.out.println("Delete " + (var0 instanceof FileVariable ? "file" : "folder") + " '"
-					+ ((FolderVariable) var0).getVar().getAbsolutePath() + "'");
+					+ (((FolderVariable) var0).getVar() == null ? "null"
+							: ((FolderVariable) var0).getVar().getAbsolutePath())
+					+ "'");
 			return new BooleanVariable(true);
 		}
 
