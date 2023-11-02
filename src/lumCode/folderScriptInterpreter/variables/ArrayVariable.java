@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 
 import lumCode.folderScriptInterpreter.Main;
 import lumCode.folderScriptInterpreter.Options;
+import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.ArrayNotEmptyException;
 import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.ArrayPositionEmptyException;
 import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.DisallowedDataInArrayException;
 
@@ -91,5 +92,13 @@ public class ArrayVariable extends Variable {
 		a.vars.putAll(vars);
 		a.next = next;
 		return a;
+	}
+
+	public void setType(VariableType type) throws ArrayNotEmptyException {
+		if (vars.isEmpty()) {
+			data = type;
+		} else {
+			throw new ArrayNotEmptyException("can not assign array data type");
+		}
 	}
 }

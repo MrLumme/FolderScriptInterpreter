@@ -24,6 +24,7 @@ import lumCode.folderScriptInterpreter.exceptions.CommandErrorException;
 import lumCode.folderScriptInterpreter.exceptions.IncorrectParameterAmountException;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.exceptions.LogicConversionException;
+import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.ArrayNotEmptyException;
 import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.ArrayPositionEmptyException;
 import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.DisallowedDataInArrayException;
 import lumCode.folderScriptInterpreter.exceptions.notFoundExceptions.OptionNotFoundException;
@@ -227,7 +228,7 @@ public class Command implements ResultantNode {
 	}
 
 	protected ArrayVariable listCommand(Variable var0, Variable var1)
-			throws CommandErrorException, DisallowedDataInArrayException {
+			throws CommandErrorException, DisallowedDataInArrayException, ArrayNotEmptyException {
 		ArrayVariable out = new ArrayVariable();
 		if (var0.type == VariableType.NUMBER) {
 			if (((NumberVariable) var0).getVar() < 0) {
@@ -260,7 +261,14 @@ public class Command implements ResultantNode {
 					var1 instanceof SpecialVariable ? Integer.MAX_VALUE : (int) ((NumberVariable) var1).getVar(),
 					Main.getOption(Options.RETURN_FOLDERS));
 			for (File f : list) {
-				out.setNextVar(f.isFile() ? new FileVariable(f) : new FolderVariable(f));
+				if (Main.getOption(Options.STRICT_ARRAY_DATA) && !Main.getOption(Options.RETURN_FOLDERS)) {
+					out.setType(VariableType.FILE);
+				}
+				try {
+					out.setNextVar(f.isFile() ? new FileVariable(f) : new FolderVariable(f));
+				} catch (DisallowedDataInArrayException e) {
+					// Ignore and do not insert
+				}
 			}
 			return out;
 		} else if (var0.type == VariableType.FILE) {

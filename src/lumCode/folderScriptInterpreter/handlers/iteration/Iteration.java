@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.TreeMap;
 
 import lumCode.folderScriptInterpreter.Main;
+import lumCode.folderScriptInterpreter.Options;
+import lumCode.folderScriptInterpreter.Utilities;
 import lumCode.folderScriptInterpreter.exceptions.InfiniteLoopException;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.exceptions.typeExceptions.IteratorTypeException;
@@ -81,9 +83,14 @@ public class Iteration implements Node {
 				}
 			}
 		} else if (type == IterationType.FOLDER_ITERATION) {
-			File[] list = ((FolderVariable) var).getVar().listFiles();
+			List<File> list = Utilities.listFolder(((FolderVariable) var).getVar(), 0,
+					Main.getOption(Options.RETURN_FOLDERS));
 			for (File f : list) {
-				((FileVariable) Main.i.get(number)).setVar(f);
+				if (f.isDirectory()) {
+					Main.i.put(number, new FolderVariable(f));
+				} else {
+					Main.i.put(number, new FileVariable(f));
+				}
 				for (Node n : script) {
 					if (!breakCalled) {
 						n.action();
