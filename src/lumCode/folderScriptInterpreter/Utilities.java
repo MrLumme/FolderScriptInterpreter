@@ -57,7 +57,7 @@ public class Utilities {
 
 			if (f.isFile() && !dirs) {
 				out.add(f);
-			} else if (f.isDirectory() && dirs) {
+			} else if (f.isDirectory()) {
 				out.add(f);
 			}
 		}
