@@ -12,6 +12,7 @@ import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.exceptions.typeExceptions.IteratorTypeException;
 import lumCode.folderScriptInterpreter.handlers.Node;
 import lumCode.folderScriptInterpreter.handlers.ResultantNode;
+import lumCode.folderScriptInterpreter.handlers.breaking.Break;
 import lumCode.folderScriptInterpreter.variables.ArrayVariable;
 import lumCode.folderScriptInterpreter.variables.FileVariable;
 import lumCode.folderScriptInterpreter.variables.FolderVariable;
@@ -21,8 +22,6 @@ import lumCode.folderScriptInterpreter.variables.TextVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 
 public class Iteration implements Node {
-	public static boolean breakCalled = false;
-
 	private final int number;
 	private final ResultantNode iterant;
 	private final List<Node> script;
@@ -64,14 +63,14 @@ public class Iteration implements Node {
 			int till = (int) ((NumberVariable) var).getVar();
 			while (((NumberVariable) Main.i.get(number)).getVar() < till) {
 				for (Node n : script) {
-					if (!breakCalled) {
+					if (!Break.isCalled()) {
 						n.action();
 					} else {
 						break;
 					}
 				}
-				if (breakCalled) {
-					breakCalled = false;
+				if (Break.isCalled()) {
+					Break.handled();
 					break;
 				}
 				if (till > 0) {
@@ -92,14 +91,14 @@ public class Iteration implements Node {
 					Main.i.put(number, new FileVariable(f));
 				}
 				for (Node n : script) {
-					if (!breakCalled) {
+					if (!Break.isCalled()) {
 						n.action();
 					} else {
 						break;
 					}
 				}
-				if (breakCalled) {
-					breakCalled = false;
+				if (Break.isCalled()) {
+					Break.handled();
 					break;
 				}
 			}
@@ -108,14 +107,14 @@ public class Iteration implements Node {
 			for (char c : seq) {
 				((TextVariable) Main.i.get(number)).setVar("" + c);
 				for (Node n : script) {
-					if (!breakCalled) {
+					if (!Break.isCalled()) {
 						n.action();
 					} else {
 						break;
 					}
 				}
-				if (breakCalled) {
-					breakCalled = false;
+				if (Break.isCalled()) {
+					Break.handled();
 					break;
 				}
 			}
@@ -125,14 +124,14 @@ public class Iteration implements Node {
 			for (Variable v : list.values()) {
 				Main.i.put(number, v);
 				for (Node n : script) {
-					if (!breakCalled) {
+					if (!Break.isCalled()) {
 						n.action();
 					} else {
 						break;
 					}
 				}
-				if (breakCalled) {
-					breakCalled = false;
+				if (Break.isCalled()) {
+					Break.handled();
 					break;
 				}
 			}
@@ -142,14 +141,14 @@ public class Iteration implements Node {
 				Main.i.put(number, new NumberVariable(v));
 				v++;
 				for (Node n : script) {
-					if (!breakCalled) {
+					if (!Break.isCalled()) {
 						n.action();
 					} else {
 						break;
 					}
 				}
-				if (breakCalled) {
-					breakCalled = false;
+				if (Break.isCalled()) {
+					Break.handled();
 					break;
 				}
 			}
@@ -181,9 +180,5 @@ public class Iteration implements Node {
 		s = s.substring(0, s.length() - 1);
 
 		return "i" + number + "(" + iterant.toString() + ")" + "{" + s + "}";
-	}
-
-	public static void callBreak() {
-		breakCalled = true;
 	}
 }
