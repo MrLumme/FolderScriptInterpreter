@@ -61,7 +61,7 @@ public class Declaration implements Node {
 	@Override
 	public String toString() {
 		String res = action.toString();
-		if (number != null) {
+		if (number == null) {
 			return name + type.getChar() + res;
 		} else {
 			return name + "[" + number.toString() + "]" + type.getChar() + res;
