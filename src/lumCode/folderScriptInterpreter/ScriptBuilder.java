@@ -50,6 +50,30 @@ public class ScriptBuilder {
 		return buildNodeTree(script);
 	}
 
+	public static Method buildMethod(String script) throws InterpreterException {
+		Pattern p = Pattern.compile("^@[A-Za-z0-9_]{1,}(?=\\(|\\[)");
+		Matcher m = p.matcher(script);
+		String name;
+		if (m.find()) {
+			name = m.group(0).substring(1);
+		} else {
+			throw new ScriptErrorException(script, "Syntax error; could not interpret method ('@').");
+		}
+		methodName = name;
+		methodOutput = new MethodOutput();
+
+		int inputCount;
+		try {
+			inputCount = Integer.parseInt(Utilities.extractBracket(script, script.indexOf('(')));
+		} catch (NumberFormatException e) {
+			throw new MethodErrorException(name, "Definition input is not a number.");
+		}
+
+		List<Node> commands = buildNodeTree(Utilities.extractBracket(script, script.lastIndexOf('}')));
+
+		return new Method(name, commands, inputCount, methodOutput);
+	}
+
 	private static List<Node> buildNodeTree(String script) throws InterpreterException {
 		List<String> sec = Utilities.commandSplitter(script);
 
