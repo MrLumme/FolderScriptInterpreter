@@ -288,6 +288,24 @@ public class Utilities {
 		return out;
 	}
 
+	public static List<String> extractMethods(String script) throws MethodErrorException {
+		ArrayList<String> out = new ArrayList<String>();
+
+		if (!script.contains("@")) {
+			return out;
+		}
+
+		List<String> sections = commandSplitter(script);
+
+		for (String sec : sections) {
+			if (sec.matches("^@[A-Za-z0-9_]{1,}\\(.{1,}\\)\\{.{1,}\\}$")) {
+				out.add(sec);
+			}
+		}
+
+		return out;
+	}
+
 	public static List<String> charSplitter(String string, char c) throws ScriptErrorException {
 		ArrayList<String> out = new ArrayList<String>();
 
