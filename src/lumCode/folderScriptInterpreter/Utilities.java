@@ -294,9 +294,9 @@ public class Utilities {
 		}
 
 		String cur = "";
-		boolean inString = false;
+		boolean inText = false;
 		for (int i = 0; i < string.length(); i++) {
-			if (!inString && string.charAt(i) == c) {
+			if (!inText && string.charAt(i) == c) {
 				out.add(cur);
 				cur = "";
 				i++;
@@ -305,8 +305,8 @@ public class Utilities {
 			cur += string.charAt(i);
 
 			if (string.charAt(i) == '\"' && (i < 1 || string.charAt(i - 1) != '\\')) {
-				inString = !inString;
-			} else if (!inString
+				inText = !inText;
+			} else if (!inText
 					&& (string.charAt(i) == BracketType.INPUT.begin || string.charAt(i) == BracketType.COMMAND.begin)) {
 				String br = extractBracket(string, i);
 				cur += br;
