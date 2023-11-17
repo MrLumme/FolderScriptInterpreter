@@ -93,6 +93,14 @@ public class Main {
 			}
 			script = Utilities.cleanAndValidateScript(script);
 
+			// Construct methods
+			List<String> methodScripts = Utilities.extractMethods(script);
+			for (String method : methodScripts) {
+				script = script.replace(method, "");
+				Method met = ScriptBuilder.buildMethod(method);
+				m.put(met.getName(), met);
+			}
+
 			// Construct node tree
 			nodes.addAll(ScriptBuilder.buildNodeTree(script));
 
