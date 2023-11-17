@@ -8,10 +8,12 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
+import lumCode.folderScriptInterpreter.exceptions.MethodErrorException;
 import lumCode.folderScriptInterpreter.exceptions.ScriptErrorException;
 import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.DisallowedDataInArrayException;
 import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedVariableTypeException;
@@ -350,13 +352,14 @@ public class Utilities {
 		return out;
 	}
 
-	public static List<String> commandSplitter(String script) throws ScriptErrorException {
+	public static List<String> commandSplitter(String script) throws MethodErrorException {
 		ArrayList<String> out = new ArrayList<String>();
 
 		String cur = "";
 		boolean inText = false;
+		boolean inMethod = false;
 		for (int i = 0; i < script.length(); i++) {
-			if (!inText && !cur.isEmpty()) {
+			if (!inText && !inMethod && !cur.isEmpty()) {
 				if (i + 1 < script.length() && isCharFolderScriptOperator(script.charAt(i))
 						&& (script.charAt(i + 1) == BracketType.INPUT.begin
 								|| script.charAt(i + 1) == BracketType.COMMAND.begin)
@@ -377,8 +380,8 @@ public class Utilities {
 				} else if (script.charAt(i) == 'b') {
 					out.add(cur);
 					cur = "";
-				} else if (i > 0 && script.charAt(i) == '#' && !LogicType.valid(script.charAt(i - 1))
-						&& !ArithmeticType.valid(script.charAt(i - 1))) {
+				} else if (i > 0 && (script.charAt(i) == '#' || script.charAt(i) == '@')
+						&& !LogicType.valid(script.charAt(i - 1)) && !ArithmeticType.valid(script.charAt(i - 1))) {
 					out.add(cur);
 					cur = "";
 				}
@@ -397,17 +400,48 @@ public class Utilities {
 				String br = extractBracket(script, i);
 				cur += br;
 				i += br.length();
+
+				inMethod = false;
+			} else if (script.charAt(i) == '@') {
+				inMethod = true;
 			}
 		}
 		out.add(cur);
 
-		return out;
+		// Post split combining
+		Iterator<String> it = out.iterator();
+		String pre = it.next();
+		int prePos = 0;
+		while (it.hasNext()) {
+			String line = it.next();
+			if (ArithmeticType.valid(line.charAt(0)) | LogicType.valid(line.charAt(0))) {
+				line = pre + line;
+				out.set(prePos, line);
+				it.remove();
+			} else {
+				prePos++;
+			}
+			pre = line;
+		}
 
+		// Last checks
+		for (String s : out) {
+			if (s.matches("^@[A-Za-z0-9_]{1,}\\(.{1,}\\)\\{.{1,}\\}$")) {
+				String name = s.substring(0, s.indexOf('(') + 1);
+				String rest = s.substring(s.indexOf('(') + 1);
+				if (rest.contains(name)) {
+					throw new MethodErrorException(name.substring(1, name.length() - 1),
+							"Can not call from within same method.");
+				}
+			}
+		}
+
+		return out;
 	}
 
 	private static boolean isCharFolderScriptOperator(char c) {
-		if (CommandType.valid(c) || ArithmeticType.valid(c) || LogicType.valid(c) || c == '?' || c == 'i' || c == 't'
-				|| c == 'b' || c == '#' || c == 'a') {
+		if (CommandType.valid(c) || ArithmeticType.valid(c) || LogicType.valid(c) || c == '?' || c == '@' || c == 'i'
+				|| c == 't' || c == 'b' || c == '#' || c == 'a') {
 			return true;
 		}
 		return false;
@@ -453,7 +487,7 @@ public class Utilities {
 
 	public static boolean isLogicExpression(String string, boolean expectLogic) {
 		boolean inString = false;
-		if (string.charAt(0) == '#' && !expectLogic) {
+		if ((string.charAt(0) == '#' || string.charAt(0) == '@') && !expectLogic) {
 			return false;
 		}
 		for (int i = 0; i < string.length(); i++) {
