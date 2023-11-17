@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import lumCode.folderScriptInterpreter.Main;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
+import lumCode.folderScriptInterpreter.exceptions.MethodErrorException;
 
 public class InterpretationTest {
 	private static final File tf2 = new File("resources/interpretationTest/test2");
@@ -138,6 +139,29 @@ public class InterpretationTest {
 		// Test14 - Logic with variable
 		System.out.println("Test14");
 		Main.main(new String[] { "#num=5?(#num>3){w(\"Succes!\",$):w(\"Failed :(\",$)}" });
+	}
+
+	@Test
+	void test15() throws InterpreterException {
+		// Test15 - Method interpretation and use
+		System.out.println("Test15");
+		Main.main(new String[] {
+				"#test=5@name(#test)@name(1){?(@name[0]>10){w(@name[0] + \" above 10\",$):w(@name[0] + \" is equal to or below 10\",$)}}" });
+	}
+
+	@Test
+	void test16() throws InterpreterException {
+		// Test16 - Method recursion failure
+		System.out.println("Test15");
+		boolean test = true;
+		try {
+			Main.main(new String[] {
+					"#test=0@name(5)@name(1){w(@name[0],$)?(@name[0]>10){@name=@name[0]b:@name(@name[0]+1)}}" });
+			test = false;
+		} catch (MethodErrorException e) {
+			// Do nothing
+		}
+		assertTrue(test);
 	}
 
 //	@Test
