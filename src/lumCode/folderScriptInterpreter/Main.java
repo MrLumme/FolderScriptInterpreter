@@ -20,12 +20,14 @@ import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.DisallowedData
 import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.NotArrayException;
 import lumCode.folderScriptInterpreter.exceptions.notFoundExceptions.ArgumentNotFoundException;
 import lumCode.folderScriptInterpreter.exceptions.notFoundExceptions.IteratorNotFoundException;
+import lumCode.folderScriptInterpreter.exceptions.notFoundExceptions.MethodNotFoundException;
 import lumCode.folderScriptInterpreter.exceptions.notFoundExceptions.VariableNotFoundException;
 import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedTypeException;
 import lumCode.folderScriptInterpreter.handlers.Node;
 import lumCode.folderScriptInterpreter.handlers.arithmetic.ArithmeticType;
 import lumCode.folderScriptInterpreter.handlers.command.CommandType;
 import lumCode.folderScriptInterpreter.handlers.logic.LogicType;
+import lumCode.folderScriptInterpreter.handlers.method.Method;
 import lumCode.folderScriptInterpreter.variables.ArrayVariable;
 import lumCode.folderScriptInterpreter.variables.NumberVariable;
 import lumCode.folderScriptInterpreter.variables.TextVariable;
@@ -46,6 +48,7 @@ public class Main {
 	public static final HashMap<Integer, Variable> a = new HashMap<Integer, Variable>();
 	public static final HashMap<Integer, Variable> i = new HashMap<Integer, Variable>();
 	public static final HashMap<String, Variable> v = new HashMap<String, Variable>();
+	public static final HashMap<String, Method> m = new HashMap<String, Method>();
 	public static final List<Node> nodes = new ArrayList<>();
 
 	public static void main(String[] args) throws InterpreterException {
@@ -517,6 +520,14 @@ public class Main {
 			return var;
 		}
 		throw new IteratorNotFoundException(n);
+	}
+
+	public static Method lookUpMethod(String name) throws MethodNotFoundException {
+		Method var = m.get(name);
+		if (var != null) {
+			return var;
+		}
+		throw new MethodNotFoundException(name);
 	}
 
 	public static void setVariable(String name, Variable value) {
