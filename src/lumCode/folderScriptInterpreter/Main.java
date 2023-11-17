@@ -102,7 +102,7 @@ public class Main {
 			}
 
 			// Construct node tree
-			nodes.addAll(ScriptBuilder.buildNodeTree(script));
+			nodes.addAll(ScriptBuilder.buildProgram(script));
 
 			// Execute program
 			for (Node n : nodes) {

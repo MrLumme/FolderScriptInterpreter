@@ -34,8 +34,15 @@ import lumCode.folderScriptInterpreter.variables.lookUps.EnvironmentType;
 import lumCode.folderScriptInterpreter.variables.lookUps.VariableLookUp;
 
 public class ScriptBuilder {
+	private static String methodName;
 
-	public static List<Node> buildNodeTree(String script) throws InterpreterException {
+	public static List<Node> buildProgram(String script) throws InterpreterException {
+		methodName = null;
+
+		return buildNodeTree(script);
+	}
+
+	private static List<Node> buildNodeTree(String script) throws InterpreterException {
 		List<String> sec = Utilities.commandSplitter(script);
 
 		ArrayList<Node> out = new ArrayList<Node>();
