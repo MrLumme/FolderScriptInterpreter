@@ -7,11 +7,13 @@ import java.util.regex.Pattern;
 
 import lumCode.folderScriptInterpreter.exceptions.BreakDownException;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
+import lumCode.folderScriptInterpreter.exceptions.MethodErrorException;
 import lumCode.folderScriptInterpreter.exceptions.ScriptErrorException;
 import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.InvalidArrayPositionException;
 import lumCode.folderScriptInterpreter.exceptions.notFoundExceptions.VariableNotFoundException;
 import lumCode.folderScriptInterpreter.handlers.BooleanNode;
 import lumCode.folderScriptInterpreter.handlers.Node;
+import lumCode.folderScriptInterpreter.handlers.NumberNode;
 import lumCode.folderScriptInterpreter.handlers.ResultantNode;
 import lumCode.folderScriptInterpreter.handlers.arithmetic.Arithmetic;
 import lumCode.folderScriptInterpreter.handlers.arithmetic.ArithmeticType;
@@ -25,16 +27,22 @@ import lumCode.folderScriptInterpreter.handlers.declaring.DeclarationType;
 import lumCode.folderScriptInterpreter.handlers.iteration.Iteration;
 import lumCode.folderScriptInterpreter.handlers.logic.Logic;
 import lumCode.folderScriptInterpreter.handlers.logic.LogicType;
+import lumCode.folderScriptInterpreter.handlers.method.Method;
+import lumCode.folderScriptInterpreter.handlers.method.MethodOutput;
 import lumCode.folderScriptInterpreter.handlers.test.Test;
 import lumCode.folderScriptInterpreter.variables.NumberVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
 import lumCode.folderScriptInterpreter.variables.lookUps.ArrayVariableLookUp;
 import lumCode.folderScriptInterpreter.variables.lookUps.EnvironmentLookUp;
 import lumCode.folderScriptInterpreter.variables.lookUps.EnvironmentType;
+import lumCode.folderScriptInterpreter.variables.lookUps.MethodInputLookUp;
+import lumCode.folderScriptInterpreter.variables.lookUps.MethodLookUp;
+import lumCode.folderScriptInterpreter.variables.lookUps.MethodOutputLookUp;
 import lumCode.folderScriptInterpreter.variables.lookUps.VariableLookUp;
 
 public class ScriptBuilder {
 	private static String methodName;
+	private static MethodOutput methodOutput;
 
 	public static List<Node> buildProgram(String script) throws InterpreterException {
 		methodName = null;
@@ -95,6 +103,49 @@ public class ScriptBuilder {
 		} else if (c == 'a') {
 			// Argument logic
 			return breakDownVariable(script);
+		} else if (c == '@') {
+			// Method logic
+			Pattern p = Pattern.compile("^@[A-Za-z0-9_]{1,}(?=\\(|\\[|=)");
+			Matcher m = p.matcher(script);
+			String name;
+			if (m.find()) {
+				name = m.group(0).substring(1);
+			} else {
+				throw new ScriptErrorException(script, "Syntax error; could not interpret method ('@').");
+			}
+
+			if (script.charAt(name.length() + 1) == '=') {
+				if (!methodName.equals(name)) {
+					throw new MethodErrorException(name, "Can not declare method output while outside method.");
+				} else {
+					Node node = breakDownScript(script.substring(name.length() + 2));
+					if (!(node instanceof ResultantNode)) {
+						throw new MethodErrorException(name, "Method output does not recieve a value.");
+					} else {
+						return new MethodOutputLookUp(name, (ResultantNode) node);
+					}
+				}
+			} else {
+				String param = Utilities.extractBracket(script, name.length() + 1);
+				BracketType type = BracketType.getType(script.charAt(name.length() + 1));
+
+				if (type == BracketType.INPUT) {
+					// Call method logic
+					return breakDownMethodCall(name, Utilities.charSplitter(param, ','));
+				} else {
+					// Method internal input logic
+					if (!methodName.equals(name)) {
+						throw new MethodErrorException(name, "Can not access method input while outside method.");
+					} else {
+						Node node = breakDownScript(param, false);
+						if (!(node instanceof NumberNode)) {
+							throw new MethodErrorException(name, "Method input must be accessed with a number.");
+						} else {
+							return new MethodInputLookUp(name, (NumberNode) node);
+						}
+					}
+				}
+			}
 		} else if (CommandType.valid(c)) {
 			// Command logic
 			if (script.charAt(1) != '(') {
@@ -312,5 +363,18 @@ public class ScriptBuilder {
 			return new BooleanCommand(c, ins);
 		}
 		return new Command(c, ins);
+	}
+
+	private static Node breakDownMethodCall(String name, List<String> inputs) throws InterpreterException {
+		List<ResultantNode> ins = new ArrayList<ResultantNode>();
+		for (String input : inputs) {
+			Node in = breakDownScript(input);
+			if (!(in instanceof ResultantNode)) {
+				throw new MethodErrorException(name, "Method input '" + input + "' does not return a value.");
+			} else {
+				ins.add((ResultantNode) in);
+			}
+		}
+		return new MethodLookUp(name, ins);
 	}
 }
