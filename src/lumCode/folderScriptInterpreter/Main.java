@@ -198,6 +198,22 @@ public class Main {
 			for (EnvironmentType t : EnvironmentType.values()) {
 				System.out.println(t.getId() + ": " + t.toString());
 			}
+		} else if (c == '@') {
+			// Method
+			System.out.println("~ Method ~");
+			System.out.println("Syntax:\tfx:");
+			System.out.println("@fx(num){prg}\t@fx(1){w(\"Hello World!\",@fx[0])@fx=5}");
+			System.out.println("@fx(var)\t#out=@fx($)");
+			System.out.println();
+			System.out
+					.println("A Method is a piece of code that can be executed with an interchangable set of inputs.");
+			System.out.println(
+					"It is defined by first giving it a name (after the '@' symbol), then the amount of inputs it takes (inside the input brackets; '(' and ')'), and then the code to run (inside the command brackets; '{' and '}').");
+			System.out.println(
+					"Accessing the inputs from inside the method is done with an array-like structure; '@name[num]', where 'num' is the input number just like an array.");
+			System.out.println(
+					"Note that naming of a method follows the same criteria as naming of a variable (see '#').");
+			System.out.println("Also note that methods may not call themselves.");
 		} else if (c == 'h') {
 			// Help
 			System.out.println("~ Help ~");
