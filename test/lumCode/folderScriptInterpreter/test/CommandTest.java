@@ -330,8 +330,8 @@ public class CommandTest {
 
 	@Test
 	void ioTest() throws InterpreterException, IOException {
-		FileVariable doc1 = new FileVariable(new File(fs2.getAbsolutePath() + "/doc1.txt"));
-		FileVariable doc2 = new FileVariable(new File(fs2.getAbsolutePath() + "/doc2.txt"));
+		FileVariable doc1 = new FileVariable(new File(fs2.getAbsolutePath() + "/dok1.txt"));
+		FileVariable doc2 = new FileVariable(new File(fs2.getAbsolutePath() + "/dok2.txt"));
 		FolderVariable fol = new FolderVariable(new File(fs2.getAbsolutePath() + "/folder"));
 		FileVariable doc3 = new FileVariable(new File(fol.getVar().getAbsolutePath() + "/" + doc1.getVar().getName()));
 		TextVariable txt = new TextVariable("This is a piece of text which will be outputted into a file.");
@@ -383,14 +383,14 @@ public class CommandTest {
 		ll.add(new NumberVariable(0));
 		Command l = new Command(CommandType.LIST, ll);
 		l.action();
-		assertTrue(((ArrayVariable) l.result()).getAll().size() == 1);
+		assertTrue(((ArrayVariable) l.result()).getAll().size() == 2);
 
 		ArrayList<Node> ll2 = new ArrayList<Node>();
 		ll2.add(new FolderVariable(fs2));
 		ll2.add(SpecialVariable.getInstance());
 		Command l2 = new Command(CommandType.LIST, ll2);
 		l2.action();
-		assertTrue(((ArrayVariable) l2.result()).getAll().size() == 2);
+		assertTrue(((ArrayVariable) l2.result()).getAll().size() == 3);
 
 		Main.options.put(Options.RETURN_FOLDERS.getId(), true);
 		ArrayList<Node> ll2a = new ArrayList<Node>();
