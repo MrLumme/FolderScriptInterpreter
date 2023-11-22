@@ -13,8 +13,8 @@ public enum CommandType {
 	public static EnumSet<CommandType> outputs = EnumSet.of(NAME, EXTENSION, PARENT, LIST, SIZE, REPLACE, SUBSTRING,
 			RANDOM, READ, GEN_MD5);
 
-	private char symbol;
-	private int input;
+	private final char symbol;
+	private final int input;
 
 	private CommandType(char symbol, int input) {
 		this.symbol = symbol;
