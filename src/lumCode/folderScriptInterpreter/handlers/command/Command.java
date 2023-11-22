@@ -12,7 +12,6 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 
@@ -91,6 +90,8 @@ public class Command implements ResultantNode {
 						|| type == CommandType.SLEEP || type == CommandType.EXIT || type == CommandType.OPTIONS
 						|| type == CommandType.GEN_MD5) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
+				} else if (i == 0 && (type == CommandType.EXTERNAL)) {
+					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 1 && (type == CommandType.LIST || type == CommandType.WRITE)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
@@ -112,7 +113,7 @@ public class Command implements ResultantNode {
 						|| type == CommandType.MOVE || type == CommandType.DELETE || type == CommandType.READ
 						|| type == CommandType.REPLACE) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
-				} else if (i == 0 && (type == CommandType.SUBSTRING)) {
+				} else if (i == 0 && (type == CommandType.SUBSTRING || type == CommandType.EXTERNAL)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 1 && (type == CommandType.WRITE)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
@@ -123,6 +124,8 @@ public class Command implements ResultantNode {
 						|| type == CommandType.MOVE || type == CommandType.DELETE || type == CommandType.READ
 						|| type == CommandType.REPLACE || type == CommandType.SUBSTRING) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
+				} else if (i == 0 && (type == CommandType.EXTERNAL)) {
+					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 1 && (type == CommandType.WRITE)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
@@ -132,6 +135,8 @@ public class Command implements ResultantNode {
 						|| type == CommandType.MOVE || type == CommandType.DELETE || type == CommandType.READ
 						|| type == CommandType.GEN_MD5 || type == CommandType.REPLACE || type == CommandType.SUBSTRING
 						|| type == CommandType.SLEEP || type == CommandType.EXIT || type == CommandType.OPTIONS) {
+					throw new IncorrectParameterTypeException(type, vars[i]);
+				} else if (i == 0 && (type == CommandType.EXTERNAL)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 1 && (type == CommandType.LIST || type == CommandType.WRITE)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
@@ -144,7 +149,7 @@ public class Command implements ResultantNode {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 0 && (type == CommandType.SUBSTRING || type == CommandType.LIST
 						|| type == CommandType.WRITE || type == CommandType.DELETE || type == CommandType.COPY
-						|| type == CommandType.MOVE)) {
+						|| type == CommandType.MOVE || type == CommandType.EXTERNAL)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
 			}
@@ -188,6 +193,8 @@ public class Command implements ResultantNode {
 			output = readCommand((FileVariable) vars[0]);
 		} else if (type == CommandType.GEN_MD5) {
 			output = genMD5Command(vars[0]);
+		} else if (type == CommandType.EXTERNAL) {
+			output = externalCommand(vars[0], vars[1]);
 		} else {
 			throw new UndefinedCommandException(type, vars);
 		}
@@ -627,19 +634,25 @@ public class Command implements ResultantNode {
 		}
 	}
 
-	protected void externalCommand(FileVariable var0, Variable var1) throws CommandErrorException {
+	protected NumberVariable externalCommand(Variable var0, Variable var1) throws CommandErrorException {
 		ArrayList<String> args = new ArrayList<String>();
-		args.add(var0.getVar().getAbsolutePath());
+		args.add(var0.toString());
 
 		args.addAll(Utilities.cleanArguments(var1));
 
-		if (Main.getOption(Options.IMPORT_VARIABLES)) {
-			args.add("-key");
-			args.add(UUID.randomUUID().toString());
-		}
+//		if (Main.getOption(Options.IMPORT_VARIABLES)) {
+//			args.add("-key");
+//			args.add(UUID.randomUUID().toString());
+//		}
 
 		ProcessBuilder pb = new ProcessBuilder(args);
-		pb.redirectOutput(Redirect.PIPE);
+
+		if (Main.getOption(Options.OUTPUT_EXTERNAL_LOG)) {
+			pb.redirectOutput(Redirect.PIPE);
+		} else {
+			pb.redirectOutput(Redirect.DISCARD);
+		}
+
 		try {
 			Process p = pb.start();
 			while (p.isAlive()) {
@@ -649,9 +662,8 @@ public class Command implements ResultantNode {
 					// Do nothing
 				}
 			}
-//			while (p.getInputStream()) {
-//				
-//			}
+			return new NumberVariable(p.exitValue());
+
 		} catch (IOException e) {
 			throw new CommandErrorException("Command 'k' failed with the following message: " + e.getMessage());
 		}
