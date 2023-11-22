@@ -679,6 +679,14 @@ public class CommandTest {
 		w2.action();
 		assertFalse(Main.getOption(Options.OVERWRITE));
 
+		// External
+		ArrayList<Node> ae1 = new ArrayList<Node>();
+		ae1.add(new TextVariable("explorer.exe"));
+		ae1.add(new TextVariable(""));
+		Command e1 = new Command(CommandType.EXTERNAL, ae1);
+		e1.action();
+		assertTrue(e1.result().toString().equals("1"));
+
 		// Exit
 //		ArrayList<Node> ax = new ArrayList<Node>();
 //		ax.add(new NumberVariable(1337));
