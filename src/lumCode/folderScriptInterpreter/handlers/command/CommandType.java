@@ -7,11 +7,11 @@ import lumCode.folderScriptInterpreter.exceptions.typeExceptions.UnsupportedType
 public enum CommandType {
 	NAME('n', 1), EXTENSION('e', 1), PARENT('p', 1), IS_FILE('f', 1), IS_AVAILABLE('v', 1), COPY('c', 2), MOVE('m', 2),
 	DELETE('d', 1), LIST('l', 2), WRITE('w', 2), SIZE('s', 1), REPLACE('y', 3), SUBSTRING('u', 3), RANDOM('q', 1),
-	READ('r', 1), OPTIONS('o', 2), SLEEP('z', 1), EXIT('x', 1), GEN_MD5('g', 1);
+	READ('r', 1), OPTIONS('o', 2), SLEEP('z', 1), EXIT('x', 1), GEN_MD5('g', 1), EXTERNAL('k', 2);
 
-	public static EnumSet<CommandType> booleanOutputs = EnumSet.of(IS_AVAILABLE, IS_FILE, COPY, MOVE, DELETE);
-	public static EnumSet<CommandType> outputs = EnumSet.of(NAME, EXTENSION, PARENT, LIST, SIZE, REPLACE, SUBSTRING,
-			RANDOM, READ, GEN_MD5);
+	public final static EnumSet<CommandType> booleanOutputs = EnumSet.of(IS_AVAILABLE, IS_FILE, COPY, MOVE, DELETE);
+	public final static EnumSet<CommandType> outputs = EnumSet.of(NAME, EXTENSION, PARENT, LIST, SIZE, REPLACE,
+			SUBSTRING, RANDOM, READ, GEN_MD5, EXTERNAL);
 
 	private final char symbol;
 	private final int input;
