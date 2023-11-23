@@ -4,7 +4,7 @@ a[]		argument	a[0]
 
 ?(){:}	conditional	?(a[1] = ""){^do stuff^:^do other stuff^}
 i0(){}	iterate		i2(a[0]){^do stuff^}
-b		break loop
+b		break out
 t{}		test		#bool = t{c(a[0], #file)} ^Returns '0' if an error occured, '1' otherwise^
 h		help		h c
 ,		separator	^funtions as an input separator^
@@ -53,26 +53,30 @@ q()		random		q(5) ^Gives either a random whole number between 0 and the input nu
 
 z()		sleep		z(1000) ^sleeps for 1 second^
 x()		exit		x(0)
-o(,)	options		o(0,1) ^Changes an option in the options table. 0 is debug mode, 1 is overwrite allowed, 2 list on folders return sub-folders instead of a mix, 3 restrict arrays to only one type of data, 4 routes all console writing to the log file^
+o(,)	options		o(0,1) ^Changes an option in the options table. 0 is debug mode, 1 is overwrite allowed, 2 list on folders return only sub-folders instead of mix, 3 restrict arrays to only one type of data, 4 routes external log into program^
 k(,)	external	k(a[0],#args) ^Runs an external program or script.^
+
+@fu(){}	method def	@name(1){w(@name[0], $) ?(@name[0] > 10){@name = @name[0]+1 b : @name(@name[0])}}
+@fu()	method call	#num = @name(15)
 
 Available letters:
 j
 Available symbols:
-';@
-Available ideas:
-Zipping and unzipping, execute external program with arguments (fx with @), custom methods
+';
+Ideas pool:
+Zipping and unzipping, ability to 'bridge' between script, that is run scripts from within script and access internal variables at that end.
 
 Example:
+
+w("Hallo World!", $)
+^ Classic Hallo World! program^
+
+i0(100){?(i0 % 15 = 0){w("FizzBuzz",$):?(i0 % 3 = 0){w("Fizz",$): ?(i0 % 5 = 0){w("Buzz", $):w(i0, $)}}}}
+^ Simple implementation of FizzBuzz program. ^
+
 i0(l(a[0],$)){?(n(i0)=a[1]){d(i0)}}
-
-iterates through files in the first argument and all
-subdirectories and if the file's name is equal to the
-second argument, the file is deleted
+^ iterates through files in the first argument and all subdirectories and if the file's name is equal to the second argument, the file is deleted.^
 
 
-i0(l(a[0],0)){w(i0+"\r",a[1]),w(i0+"\r",$)};
-
-lists all files in a folder given by the first argument
-and writes it to a file given by the second argument and
-outputs the file to the console
+i0(l(a[0],0)){w(i0+"\r",a[1]),w(i0+"\r",$)}
+^ lists all files in a folder given by the first argument and writes it to a file given by the second argument and outputs the file to the console.^
