@@ -299,6 +299,15 @@ public class Help {
 				System.out.println("Is affected by the option '" + Options.DEBUG.toString() + "' ("
 						+ Options.DEBUG.getId() + ") which forces it to write to the console.");
 				break;
+			case EXTERNAL:
+				System.out.println("~ External ~");
+				System.out.println("Syntax:\tfx:");
+				System.out.println("k(fil/txt,txt)\t#exit=k(\"explorer.exe\",\"\")");
+				System.out.println();
+				System.out.println("Executes a given external file or external, with a given set or arguments.");
+				System.out.println("It waits until the execution is finished, then returns exit code.");
+				System.out.println("Note that the second input must be present, but can just be empty (fx.: \"\").");
+				break;
 
 			}
 		} else if (LogicType.valid(c)) {
