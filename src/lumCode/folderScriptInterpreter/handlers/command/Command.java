@@ -12,6 +12,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 
 import org.apache.commons.io.FileUtils;
 
@@ -143,7 +144,7 @@ public class Command implements ResultantNode {
 				}
 			} else if (vars[i].type == VariableType.SPECIAL) {
 				if (type == CommandType.NAME || type == CommandType.EXTENSION || type == CommandType.PARENT
-						|| type == CommandType.IS_FILE || type == CommandType.IS_AVAILABLE || type == CommandType.READ
+						|| type == CommandType.IS_FILE || type == CommandType.IS_AVAILABLE
 						|| type == CommandType.REPLACE || type == CommandType.SUBSTRING || type == CommandType.RANDOM
 						|| type == CommandType.SLEEP || type == CommandType.EXIT || type == CommandType.OPTIONS) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
@@ -190,7 +191,7 @@ public class Command implements ResultantNode {
 		} else if (type == CommandType.EXIT) {
 			exitCommand((NumberVariable) vars[0]);
 		} else if (type == CommandType.READ) {
-			output = readCommand((FileVariable) vars[0]);
+			output = readCommand(vars[0]);
 		} else if (type == CommandType.GEN_MD5) {
 			output = genMD5Command(vars[0]);
 		} else if (type == CommandType.EXTERNAL) {
@@ -214,23 +215,35 @@ public class Command implements ResultantNode {
 				+ var0.type.name().toLowerCase() + "'.");
 	}
 
-	protected ArrayVariable readCommand(FileVariable var0)
-			throws CommandErrorException, DisallowedDataInArrayException {
-		File f = var0.getVar();
-		ArrayVariable o = new ArrayVariable();
-		try {
-			BufferedReader r = new BufferedReader(new FileReader(f));
-			String l = r.readLine();
-			while (l != null) {
-				o.setNextVar(Variable.fromString(l));
-				l = r.readLine();
+	protected Variable readCommand(Variable var0) throws CommandErrorException, DisallowedDataInArrayException {
+		if (var0 instanceof SpecialVariable) {
+			Scanner sc = new Scanner(System.in);
+			while (!sc.hasNext()) {
+				// Wait for input
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					// Do nothing
+				}
 			}
-			r.close();
-			return o;
-		} catch (FileNotFoundException e) {
-			throw new CommandErrorException("File '" + f.getAbsolutePath() + "' could not be found.");
-		} catch (IOException e) {
-			throw new CommandErrorException("Encountered a reading error on file '" + f.getAbsolutePath() + "'.");
+			return new TextVariable(sc.nextLine());
+		} else {
+			File f = ((FileVariable) var0).getVar();
+			ArrayVariable o = new ArrayVariable();
+			try {
+				BufferedReader r = new BufferedReader(new FileReader(f));
+				String l = r.readLine();
+				while (l != null) {
+					o.setNextVar(Variable.fromString(l));
+					l = r.readLine();
+				}
+				r.close();
+				return o;
+			} catch (FileNotFoundException e) {
+				throw new CommandErrorException("File '" + f.getAbsolutePath() + "' could not be found.");
+			} catch (IOException e) {
+				throw new CommandErrorException("Encountered a reading error on file '" + f.getAbsolutePath() + "'.");
+			}
 		}
 	}
 

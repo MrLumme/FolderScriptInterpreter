@@ -264,7 +264,8 @@ public class Help {
 				System.out.println("Syntax:\tfx:");
 				System.out.println("r(fil)\t#contents=r(file.txt)");
 				System.out.println();
-				System.out.println("Returns the content of a given file.");
+				System.out.println(
+						"Returns the content of a given file as an array, or if the input is a special variable ($) the program wait for a user input and returns it.");
 				break;
 			case REPLACE:
 				System.out.println("~ Replace ~");
