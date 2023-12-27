@@ -115,6 +115,21 @@ public class Help {
 			System.out.println();
 			System.out.println(
 					"Attempts to execute a piece of program code and returns if it was completed ('1') or errored ('0')");
+		} else if (c == '$') {
+			// Test
+			System.out.println("~ Special Variable ~");
+			System.out.println("Syntax:\tfx:");
+			System.out.println("$\t#w(\"Hallo World!\", $)");
+			System.out.println();
+			System.out.println(
+					"Special variable that can be given as input to some commands to modify command behavior.");
+			System.out.println("Write (w) and Read (r) can use it to read/write from/to the console.");
+			System.out.println(
+					"List (l) can use it to reverse the order entries in arrays, or list a number to zero, or look through all subdirectories of a folder, or list all characters of a string of text.");
+			System.out
+					.println("Gen MD5 (g) generates a MD5 checksum of its program's own script if given a $ as input.");
+			System.out.println("Delete (d) can use $ to delete the program's temp folder");
+			System.out.println("Copy (c) renames a given file or folder to the same name, but with a suffixed '$'.");
 		} else if (CommandType.valid(c)) {
 			// Command
 			switch (CommandType.fromChar(c)) {
