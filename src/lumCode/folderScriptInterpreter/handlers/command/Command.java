@@ -50,6 +50,8 @@ import lumCode.folderScriptInterpreter.variables.Variable;
 import lumCode.folderScriptInterpreter.variables.VariableType;
 
 public class Command implements ResultantNode {
+	private static final Scanner sc = new Scanner(System.in);
+
 	private final CommandType type;
 	private final List<Node> input;
 	private Variable output;
@@ -217,7 +219,6 @@ public class Command implements ResultantNode {
 
 	protected Variable readCommand(Variable var0) throws CommandErrorException, DisallowedDataInArrayException {
 		if (var0 instanceof SpecialVariable) {
-			Scanner sc = new Scanner(System.in);
 			while (!sc.hasNext()) {
 				// Wait for input
 				try {
