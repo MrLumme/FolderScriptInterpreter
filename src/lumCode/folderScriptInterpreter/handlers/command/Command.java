@@ -114,7 +114,7 @@ public class Command implements ResultantNode {
 						|| type == CommandType.MOVE || type == CommandType.DELETE || type == CommandType.READ
 						|| type == CommandType.REPLACE) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
-				} else if (i == 0 && (type == CommandType.SUBSTRING || type == CommandType.EXTERNAL)) {
+				} else if (i == 0 && (type == CommandType.EXTERNAL)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 1 && (type == CommandType.WRITE)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
@@ -173,7 +173,7 @@ public class Command implements ResultantNode {
 		} else if (type == CommandType.REPLACE) {
 			output = replaceCommand((TextVariable) vars[0], (TextVariable) vars[1], (TextVariable) vars[2]);
 		} else if (type == CommandType.SUBSTRING) {
-			output = substringCommand((TextVariable) vars[0], vars[1], vars[2]);
+			output = substringCommand(vars[0], vars[1], vars[2]);
 		} else if (type == CommandType.WRITE) {
 			writeCommand(vars[0], vars[1]);
 		} else if (type == CommandType.MOVE) {
@@ -569,9 +569,9 @@ public class Command implements ResultantNode {
 		return Variable.fromString(str);
 	}
 
-	protected Variable substringCommand(TextVariable var0, Variable var1, Variable var2)
+	protected Variable substringCommand(Variable var0, Variable var1, Variable var2)
 			throws UnsupportedCommandTypeException, CommandErrorException {
-		String base = var0.getVar();
+		String base = var0.toString();
 		int start = 0;
 		int end = base.length();
 
