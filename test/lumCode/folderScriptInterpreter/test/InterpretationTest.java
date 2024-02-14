@@ -31,8 +31,6 @@ public class InterpretationTest {
 		assertTrue(new File(tf8.getAbsolutePath() + "/script.fs").exists());
 		assertTrue(new File(tf10.getAbsolutePath() + "/script.fs").exists());
 
-		Main.clear();
-
 		System.out.println();
 		System.out.println();
 	}

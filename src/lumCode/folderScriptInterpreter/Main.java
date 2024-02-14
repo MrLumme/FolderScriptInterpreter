@@ -117,9 +117,6 @@ public class Main {
 		}
 	}
 
-
-	}
-
 	public static Variable lookUpVariable(String name) throws VariableNotFoundException {
 		if (name.contains("[")) {
 			name = name.substring(0, name.indexOf('['));
