@@ -227,7 +227,7 @@ public class Command implements ResultantNode {
 					// Do nothing
 				}
 			}
-			return new TextVariable(sc.nextLine());
+			return Variable.fromString(sc.nextLine());
 		} else {
 			File f = ((FileVariable) var0).getVar();
 			ArrayVariable o = new ArrayVariable();
