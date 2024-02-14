@@ -428,7 +428,9 @@ public class Utilities {
 				inMethod = true;
 			}
 		}
-		out.add(cur);
+		if (!cur.isEmpty()) {
+			out.add(cur);
+		}
 
 		// Post split combining
 		Iterator<String> it = out.iterator();
