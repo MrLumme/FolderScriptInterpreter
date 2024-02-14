@@ -52,16 +52,20 @@ public class Utilities {
 
 	public static List<File> listFolder(File fol, int depth, boolean dirs) {
 		ArrayList<File> out = new ArrayList<File>();
-		for (File f : fol.listFiles()) {
-			if (f.isDirectory() && depth > 0) {
-				out.addAll(listFolder(f, depth - 1, dirs));
-			}
+		try {
+			for (File f : fol.listFiles()) {
+				if (f.isDirectory() && depth > 0) {
+					out.addAll(listFolder(f, depth - 1, dirs));
+				}
 
-			if (f.isFile() && !dirs) {
-				out.add(f);
-			} else if (f.isDirectory()) {
-				out.add(f);
+				if (f.isFile() && !dirs) {
+					out.add(f);
+				} else if (f.isDirectory()) {
+					out.add(f);
+				}
 			}
+		} catch (NullPointerException e) {
+			// return empty list
 		}
 		return out;
 	}
