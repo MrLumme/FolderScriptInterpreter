@@ -25,7 +25,8 @@ public abstract class Variable implements ResultantNode {
 				return new NumberVariable(Long.parseLong(var));
 			}
 		} else if (var.matches("^([A-Za-z]{1}:|\\\\)(\\\\|\\/)[^:\"?|*<>]{1,}$")) {
-			if (var.contains(".")) {
+			var = var.replace("\\", "/");
+			if (var.contains(".") && var.lastIndexOf(".") > var.lastIndexOf("/")) {
 				return new FileVariable(new File(var));
 			} else {
 				return new FolderVariable(new File(var));
