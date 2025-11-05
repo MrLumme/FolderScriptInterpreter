@@ -72,16 +72,16 @@ public class Utilities {
 
 	public static ArrayVariable sortArray(ArrayVariable array, int mode) throws DisallowedDataInArrayException {
 		ArrayVariable out = new ArrayVariable();
-		ArrayList<Variable> l = new ArrayList<Variable>(array.getAll().values());
+		ArrayList<Variable> list = new ArrayList<>(array.getAll().values());
 		if (mode == 0) {
-			Collections.sort(l, new VariableSizeComparator<Variable>());
-			Collections.sort(l, new VariableTypeComparator());
+			list.sort(new VariableSizeComparator<>());
+			list.sort(new VariableTypeComparator());
 		} else if (mode == 1) {
-			Collections.sort(l, new VariableValueComparator<Variable>());
+			list.sort(new VariableValueComparator<>());
 		} else if (mode == -1) {
-			Collections.reverse(l);
+			Collections.reverse(list);
 		}
-		for (Variable e : l) {
+		for (Variable e : list) {
 			out.setNextVar(e);
 		}
 		return out;
