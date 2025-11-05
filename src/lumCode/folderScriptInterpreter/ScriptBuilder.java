@@ -10,6 +10,7 @@ import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.exceptions.MethodErrorException;
 import lumCode.folderScriptInterpreter.exceptions.ScriptErrorException;
 import lumCode.folderScriptInterpreter.exceptions.arrayExceptions.InvalidArrayPositionException;
+import lumCode.folderScriptInterpreter.exceptions.notFoundExceptions.AttributeNotFoundException;
 import lumCode.folderScriptInterpreter.exceptions.notFoundExceptions.VariableNotFoundException;
 import lumCode.folderScriptInterpreter.handlers.BooleanNode;
 import lumCode.folderScriptInterpreter.handlers.Node;
@@ -32,13 +33,7 @@ import lumCode.folderScriptInterpreter.handlers.method.MethodOutput;
 import lumCode.folderScriptInterpreter.handlers.test.Test;
 import lumCode.folderScriptInterpreter.variables.NumberVariable;
 import lumCode.folderScriptInterpreter.variables.Variable;
-import lumCode.folderScriptInterpreter.variables.lookUps.ArrayVariableLookUp;
-import lumCode.folderScriptInterpreter.variables.lookUps.EnvironmentLookUp;
-import lumCode.folderScriptInterpreter.variables.lookUps.EnvironmentType;
-import lumCode.folderScriptInterpreter.variables.lookUps.MethodInputLookUp;
-import lumCode.folderScriptInterpreter.variables.lookUps.MethodLookUp;
-import lumCode.folderScriptInterpreter.variables.lookUps.MethodOutputLookUp;
-import lumCode.folderScriptInterpreter.variables.lookUps.VariableLookUp;
+import lumCode.folderScriptInterpreter.variables.lookUps.*;
 
 public class ScriptBuilder {
 	private static String methodName;
@@ -201,7 +196,7 @@ public class ScriptBuilder {
 				char d = script.charAt(name.length());
 				if (DeclarationType.valid(d)) {
 					return breakDownDeclaration(name, DeclarationType.fromChar(d), script.substring(name.length() + 1));
-				} else if (d == '[') {
+				} else if (d == '[' || d == '\'') {
 					return breakDownVariable(script);
 				} else {
 					throw new ScriptErrorException(script, "Invalid character in variable name or declaration.");
@@ -340,6 +335,18 @@ public class ScriptBuilder {
 
 	private static Node breakDownVariable(String name) throws InterpreterException {
 		Node num = null;
+		Integer attribute = null;
+
+		Pattern p = Pattern.compile("'[0-9]{1,}$");
+		Matcher m = p.matcher(name);
+		if (m.find()) {
+			String att = m.group(0);
+			attribute = Integer.parseInt(att.substring(1));
+			name = name.substring(0, name.length() - att.length());
+			if (!AttributeType.isValid(attribute)) {
+				throw new AttributeNotFoundException(attribute);
+			}
+		}
 		if (name.contains("[") && !name.startsWith("a")) {
 			num = breakDownScript(name.substring(name.indexOf('[') + 1, name.lastIndexOf(']')));
 			if (!(num instanceof ResultantNode)) {
@@ -348,10 +355,15 @@ public class ScriptBuilder {
 			name = name.substring(0, name.indexOf('['));
 		}
 		if (Variable.exists(name)) {
-			if (num == null) {
-				return new VariableLookUp(name);
-			} else {
+			if (attribute != null) {
+				if (num != null) {
+					name += "[" + num + "]";
+				}
+				return new AttributeLookup(name, AttributeType.get(attribute));
+			} else if (num != null) {
 				return new ArrayVariableLookUp(name, (ResultantNode) num);
+			} else {
+				return new VariableLookUp(name);
 			}
 		} else {
 			throw new VariableNotFoundException(name);
