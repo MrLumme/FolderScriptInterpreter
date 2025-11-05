@@ -2,12 +2,14 @@ package lumCode.folderScriptInterpreter.variables.lookUps;
 
 import lumCode.folderScriptInterpreter.exceptions.notFoundExceptions.AttributeNotFoundException;
 
+import java.util.EnumSet;
+
 public enum AttributeType {
-	HIDDEN(0), LINK(1), CREATION_TIME(2), LAST_MODIFIED_TIME(3), LAST_ACCESSED_TIME(4);
+	IS_HIDDEN(0), IS_LINK(1), LAST_MODIFIED_TIME(2), LAST_ACCESS_TIME(3), CREATION_TIME(4);
 
 	private int id;
 
-	private AttributeType(int id) {
+	AttributeType(int id) {
 		this.id = id;
 	}
 

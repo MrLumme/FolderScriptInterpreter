@@ -1,13 +1,11 @@
 package lumCode.folderScriptInterpreter.variables.lookUps;
 
-import lumCode.folderScriptInterpreter.Main;
+import lumCode.folderScriptInterpreter.exceptions.AttributeLookupErrorException;
 import lumCode.folderScriptInterpreter.exceptions.InterpreterException;
 import lumCode.folderScriptInterpreter.exceptions.typeExceptions.IncorrectVariableTypeException;
 import lumCode.folderScriptInterpreter.variables.*;
 
-import java.io.File;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.io.IOException;
 
 public class AttributeLookup extends VariableLookUp {
 
@@ -26,23 +24,11 @@ public class AttributeLookup extends VariableLookUp {
 			throw new IncorrectVariableTypeException(type, var);
 		}
 
-		// TODO Fill cases
-		switch (type) {
-			case HIDDEN:
-				setResult(new BooleanVariable(false));
-				break;
-			case LINK:
-				setResult(new BooleanVariable(false));
-				break;
-			case CREATION_TIME:
-				setResult(new TextVariable("empty"));
-				break;
-			case LAST_MODIFIED_TIME:
-				setResult(new TextVariable("empty"));
-				break;
-			case LAST_ACCESSED_TIME:
-				setResult(new TextVariable("empty"));
-				break;
+		FolderVariable folder = ((FolderVariable) var);
+		try {
+			setResult(folder.getAttribute(type));
+		} catch (IOException e) {
+			throw new AttributeLookupErrorException(folder);
 		}
 	}
 
