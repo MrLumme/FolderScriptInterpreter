@@ -152,7 +152,7 @@ public class Command implements ResultantNode {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				} else if (i == 0 && (type == CommandType.SUBSTRING || type == CommandType.LIST
 						|| type == CommandType.WRITE || type == CommandType.DELETE || type == CommandType.COPY
-						|| type == CommandType.MOVE || type == CommandType.EXTERNAL)) {
+						|| type == CommandType.MOVE)) {
 					throw new IncorrectParameterTypeException(type, vars[i]);
 				}
 			}
@@ -650,17 +650,17 @@ public class Command implements ResultantNode {
 
 	protected NumberVariable externalCommand(Variable var0, Variable var1) throws CommandErrorException {
 		ArrayList<String> args = new ArrayList<String>();
-		args.add(var0.toString());
 
+		if (var0 instanceof SpecialVariable) {
+			args.add("java");
+			args.add("-jar");
+			args.add(System.getProperty("sun.java.command"));
+		} else {
+			args.add(var0.toString());
+		}
 		args.addAll(Utilities.cleanArguments(var1));
 
-//		if (Main.getOption(Options.IMPORT_VARIABLES)) {
-//			args.add("-key");
-//			args.add(UUID.randomUUID().toString());
-//		}
-
 		ProcessBuilder pb = new ProcessBuilder(args);
-
 		if (Main.getOption(Options.OUTPUT_EXTERNAL_LOG)) {
 			pb.redirectOutput(Redirect.PIPE);
 		} else {
