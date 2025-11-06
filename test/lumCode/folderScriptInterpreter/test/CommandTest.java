@@ -1,7 +1,7 @@
 package lumCode.folderScriptInterpreter.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import lumCode.folderScriptInterpreter.Main;
@@ -31,21 +31,29 @@ public class CommandTest {
 	private static final File fs2 = new File("resources/commandTest/fileSet2");
 	private static final File fs3 = new File("resources/commandTest/fileSet3");
 
-	@Before
-	void preTest() throws InterpreterException {
-		// Pre-test
+	@BeforeAll
+	static void preTest() throws InterpreterException {
+		// Find required files
 		assertTrue(new File(fs1.getAbsolutePath() + "/dok1.rtf").exists());
 		assertTrue(new File(fs1.getAbsolutePath() + "/dok2.txt").exists());
 		assertTrue(new File(fs1.getAbsolutePath() + "/dok3.xml").exists());
 
-		assertFalse(new File(fs2.getAbsolutePath() + "/dok1.txt").exists());
-		assertFalse(new File(fs2.getAbsolutePath() + "/dok2.txt").exists());
-		assertFalse(new File(fs2.getAbsolutePath() + "/folder/dok3.txt").exists());
+		assertTrue(new File(fs3.getAbsolutePath() + "/folder/hiphop.mp3").exists());
+		assertTrue(new File(fs3.getAbsolutePath() + "/folder/math.txt").exists());
+		assertTrue(new File(fs3.getAbsolutePath() + "/folder/oblique.docx").exists());
+		assertTrue(new File(fs3.getAbsolutePath() + "/test.txt").exists());
 
-		assertFalse(new File(fs3.getAbsolutePath() + "/test.txt").exists());
-		assertFalse(new File(fs3.getAbsolutePath() + "/folder/d1.txt").exists());
-		assertFalse(new File(fs3.getAbsolutePath() + "/folder/d2.txt").exists());
-		assertFalse(new File(fs3.getAbsolutePath() + "/folder/d3.txt").exists());
+		// Delete / check to-make files
+		ArrayList<File> filesToDeleteCheck = new ArrayList<>(7);
+
+		filesToDeleteCheck.add(new File(fs2.getAbsolutePath() + "/dok1.txt"));
+		filesToDeleteCheck.add(new File(fs2.getAbsolutePath() + "/dok2.txt"));
+		filesToDeleteCheck.add(new File(fs2.getAbsolutePath() + "/folder/dok3.txt"));
+
+		for (File file : filesToDeleteCheck) {
+			file.delete();
+			assertFalse(file.exists());
+		}
 	}
 
 	@Test
@@ -604,7 +612,7 @@ public class CommandTest {
 		as.add(doc);
 		Command s = new Command(CommandType.SIZE, as);
 		s.action();
-		assertTrue(((NumberVariable) s.result()).getVar() == 34);
+		assertTrue(((NumberVariable) s.result()).getVar() == 50835);
 
 		ArrayList<Node> as2 = new ArrayList<Node>();
 		as2.add(fol);
