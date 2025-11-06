@@ -53,6 +53,7 @@ public class Method implements ResultantNode {
 			if (!Break.isCalled()) {
 				n.action();
 			} else {
+				Break.handled();
 				break;
 			}
 		}
