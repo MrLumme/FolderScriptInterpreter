@@ -10,11 +10,11 @@ public class FileVariable extends FolderVariable {
 
 	@Override
 	public String getName() {
-		return getVar().getName().substring(0, getVar().getName().indexOf('.'));
+		return getVar().getName().substring(0, getVar().getName().lastIndexOf('.'));
 	}
 
 	public String getExtension() {
-		return getVar().getName().substring(getVar().getName().indexOf('.'));
+		return getVar().getName().substring(getVar().getName().lastIndexOf('.'));
 	}
 
 	@Override
