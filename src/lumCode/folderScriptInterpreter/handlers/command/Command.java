@@ -6,13 +6,18 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
 
@@ -653,37 +658,55 @@ public class Command implements ResultantNode {
 	}
 
 	protected NumberVariable externalCommand(Variable var0, Variable var1) throws CommandErrorException {
-		ArrayList<String> args = new ArrayList<String>();
+		ArrayList<String> args = new ArrayList<>();
 
 		if (var0 instanceof SpecialVariable) {
 			args.add("java");
 			args.add("-jar");
-			args.add(System.getProperty("sun.java.command"));
+
+			try {
+				ProtectionDomain pd = Main.class.getProtectionDomain();
+				CodeSource cs = pd.getCodeSource();
+				URI uri = cs.getLocation().toURI();
+				if (uri.getPath().matches("^/[A-Z]:.*")) {
+					args.add(uri.getPath().substring(1));
+				} else {
+					args.add(uri.getPath());
+				}
+			} catch (URISyntaxException | NullPointerException e) {
+				throw new CommandErrorException("Command 'k' could not find location of FolderScript executable: " + e.getMessage());
+			}
 		} else {
 			args.add(var0.toString());
 		}
 		args.addAll(Utilities.cleanArguments(var1));
 
-		ProcessBuilder pb = new ProcessBuilder(args);
-		if (Main.getOption(Options.OUTPUT_EXTERNAL_LOG)) {
-			pb.redirectOutput(Redirect.PIPE);
+		if (Main.getOption(Options.DEBUG)) {
+			String cmd = args.stream().collect(Collectors.joining(" "));
+			System.out.println("Run command '" + cmd + "', assumes exit value 0");
+			return new NumberVariable(0);
 		} else {
-			pb.redirectOutput(Redirect.DISCARD);
-		}
-
-		try {
-			Process p = pb.start();
-			while (p.isAlive()) {
-				try {
-					Thread.sleep(100);
-				} catch (InterruptedException e) {
-					// Do nothing
-				}
+			ProcessBuilder pb = new ProcessBuilder(args);
+			if (Main.getOption(Options.OUTPUT_EXTERNAL_LOG)) {
+				pb.redirectOutput(Redirect.PIPE);
+			} else {
+				pb.redirectOutput(Redirect.DISCARD);
 			}
-			return new NumberVariable(p.exitValue());
 
-		} catch (IOException e) {
-			throw new CommandErrorException("Command 'k' failed with the following message: " + e.getMessage());
+			try {
+				Process p = pb.start();
+				while (p.isAlive()) {
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e) {
+						// Do nothing
+					}
+				}
+				return new NumberVariable(p.exitValue());
+
+			} catch (IOException e) {
+				throw new CommandErrorException("Command 'k' failed with the following message: " + e.getMessage());
+			}
 		}
 	}
 
