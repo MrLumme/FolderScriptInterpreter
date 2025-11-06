@@ -629,8 +629,12 @@ public class Command implements ResultantNode {
 			return a[r.nextInt(a.length)];
 		} else if (var0.type == VariableType.FOLDER) {
 			File[] fl = ((FolderVariable) var0).getVar().listFiles();
-			File f = fl[r.nextInt(fl.length)];
-			return f.isFile() ? new FileVariable(f) : new FolderVariable(f);
+			if (fl.length > 0) {
+				File f = fl[r.nextInt(fl.length)];
+				return f.isFile() ? new FileVariable(f) : new FolderVariable(f);
+			} else {
+				throw new CommandErrorException("Can not find random file from folder \"" + var0.toString() + "\" as it is empty.");
+			}
 		} else if (var0.type == VariableType.TEXT) {
 			String s = ((TextVariable) var0).getVar();
 			return new TextVariable("" + s.charAt(r.nextInt(s.length())));
