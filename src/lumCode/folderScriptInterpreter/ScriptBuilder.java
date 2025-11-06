@@ -255,6 +255,9 @@ public class ScriptBuilder {
 
 	private static Node breakDownConditional(String query, String script) throws InterpreterException {
 		Node node = breakDownScript(query, true);
+		if (node instanceof VariableLookUp) {
+			node = breakDownLogic("1", LogicType.EQUAL, query);
+		}
 		if (!(node instanceof BooleanNode)) {
 			throw new ScriptErrorException(script,
 					"Syntax error; conditional ('?') must have an input capable of giving a boolean result (true / false).");
