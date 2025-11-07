@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +37,7 @@ public class Main {
 			System.getProperty("java.io.tmpdir") + "FolderScript-" + UUID.randomUUID());
 	public static final File logFile = new File(
 			System.getProperty("java.io.tmpdir") + "FolderScript-" + System.currentTimeMillis() + ".log");
-	public static final DateTimeFormatter dateFormater = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	public static final DateTimeFormatter dateFormater = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.systemDefault());
 
 	public static final String version = "0.9.2";
 
