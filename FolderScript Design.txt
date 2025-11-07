@@ -37,7 +37,7 @@ $		special
 '0		attribute	#hidden=#file'0 ^Returns environment variables. 0: is hidden, 1: is link, 2: last modified, 3: last accessed, 4: creation time^
 
 n()		name
-e()		extension	e(a[0])
+e()		extension	e(a[0]) ^This also return the '.' symbol, such that a file and be reconstructed from: p(#file) + n(#file) + e(#file)^
 p()		parent		p(a[0]) ^Returns the parent folder of the first argument^
 f()		is file		f(a[0]) 
 v()		is available
@@ -58,19 +58,19 @@ q()		random		q(5) ^Gives either a random whole number between 0 and the input nu
 z()		sleep		z(1000) ^sleeps for 1 second^
 x()		exit		x(0)
 o(,)	options		o(0,1) ^Changes an option in the options table. 0 is debug mode, 1 is overwrite allowed, 2 list on folders return only sub-folders instead of mix, 3 restrict arrays to only one type of data, 4 routes external log into program^
-k(,)	external	k(a[0],#args) ^Runs an external program or script.^
+k(,)	external	k(a[0],#args) ^Runs an external program or script. Use '$' as the program defaults to running FolderScript^
 
 
 Available letters:
 j
 
 Available symbols:
-;§ 
+;§
 
 Ideas pool:
 - Zipping and unzipping (Should take j as it is a proper command)
-- Ability to 'bridge' between script, that is run scripts from within script and access internal variables at that end. (Abandoned as it gives too many potential problems compared to the few solutions it gives. Possible just give k(,) an '$' option for the first argument, which would be 'run FolderScript internally'; use 'System.getProperty("sun.java.command")' to get executing file)
-- Accessing file metadata; https://docs.oracle.com/javase/tutorial/essential/io/fileAttr.html (Should take ' as it is a special feature akind more akind to environment variables than to methods; "C:/folder/file.mp3"'4 i0'1 #file'0)
+- Make dates a datatype, which can then be sorted and compared
+
 Example:
 
 w("Hallo World!", $)
