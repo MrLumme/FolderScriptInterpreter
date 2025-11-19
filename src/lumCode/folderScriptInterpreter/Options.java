@@ -6,7 +6,7 @@ import java.util.Map;
 import lumCode.folderScriptInterpreter.exceptions.notFoundExceptions.OptionNotFoundException;
 
 public enum Options {
-	DEBUG(0), OVERWRITE(1), RETURN_FOLDERS(2), STRICT_ARRAY_DATA(3), WRITE_TO_LOG(4), OUTPUT_EXTERNAL_LOG(5);
+	DEBUG(0), OVERWRITE(1), RETURN_FOLDERS(2), STRICT_ARRAY_DATA(3), WRITE_TO_LOG(4), OUTPUT_EXTERNAL_LOG(5), DO_NOT_WAIT_FOR_EXTERNAL(6);
 
 	private int id;
 	private boolean def;

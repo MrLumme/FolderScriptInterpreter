@@ -695,15 +695,18 @@ public class Command implements ResultantNode {
 
 			try {
 				Process p = pb.start();
-				while (p.isAlive()) {
-					try {
-						Thread.sleep(10);
-					} catch (InterruptedException e) {
-						// Do nothing
+				if (Main.getOption(Options.DO_NOT_WAIT_FOR_EXTERNAL)) {
+					return new NumberVariable(0);
+				} else {
+					while (p.isAlive()) {
+						try {
+							Thread.sleep(10);
+						} catch (InterruptedException e) {
+							// Do nothing
+						}
 					}
+					return new NumberVariable(p.exitValue());
 				}
-				return new NumberVariable(p.exitValue());
-
 			} catch (IOException e) {
 				throw new CommandErrorException("Command 'k' failed with the following message: " + e.getMessage());
 			}
